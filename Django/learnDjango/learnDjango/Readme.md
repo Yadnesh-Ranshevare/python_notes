@@ -1,6 +1,6 @@
 # Views and url mapping
 
-#### view
+#### view( views.py )
 view is a function or class that receives a web request and returns a web response. The response can contain HTML content, redirections, images, JSON data, or any other form of content.
 ```python
 from django.http import  HttpResponse
@@ -31,7 +31,7 @@ def template(request):
     return render(request, 'template_path')
 ```
 
-#### url mapping
+#### url mapping( urls.py )
 URL mapping in Django refers to the process of linking a specific URL (Uniform Resource Locator) pattern to a corresponding view function or class
 example considering above view
 ```python
