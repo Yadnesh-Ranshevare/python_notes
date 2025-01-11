@@ -67,7 +67,7 @@ cd <project_name>
 ```bash
 python manage.py runserver
 ```
-it will also create the db.sqlite3 file which is default database use in django
+it will also create the db.sqlite3 file which is default database use in django and show a warning 
 
 ---
 
