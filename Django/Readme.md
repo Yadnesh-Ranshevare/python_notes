@@ -306,6 +306,10 @@ Password (again):
 ```
 now you can use admin interface to perform CURD operation on models registered with the admin. By logging in with your respective `Username` and `Password`
 
+incase if you forgot your password Django  gives you a option to change your password
+```bash
+python manage.py changepassword <Username>
+```
 
 ---
 
