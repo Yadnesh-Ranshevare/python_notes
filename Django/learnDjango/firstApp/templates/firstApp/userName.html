@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>user name image is</h1>
+
+    <h2>{{user.name}}</h2>
+    <img src="{{user.image.url}}" alt="" style="width: 100px;">
+{% endblock %}

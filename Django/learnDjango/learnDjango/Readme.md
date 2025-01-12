@@ -209,3 +209,128 @@ from .models import UserModel     # Import the UserModel from models.py
 admin.site.register(UserModel)  # Register UserModel with the admin site
 ```
 - After logging into the admin panel, Under the firstApp section, you will see the UserModel listed. by clicking on add button you can store the data into database for that model
+
+### connecting frontend
+- `views.py`
+```python
+from .models import UserModel #imports the UserModel class, which represents the users in your database.
+
+def user(request):
+    user = UserModel.objects.all()  # Query all users from the database
+    return render(request, 'firstApp/user.html', {'users': user}) #The template will receive this data and display it in the HTML using the users context variable.
+```
+
+- `urls.py`
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('users', views.user, name="users"),
+]
+```
+- `user.html`
+```html
+{% extends "layout.html" %}
+
+{% block title %}
+users
+{% endblock %}
+
+{% block content %} 
+
+{% for user in users %}  <!--for loop in Django templates-->
+ <div>
+    <img src="{{user.image.url}}" alt="" style="width: 100px;">
+    <p>{{user.name}}</p>
+ </div>
+{% endfor %}
+
+{% endblock %}
+```
+
+### dynamic routing
+- `urls.py`
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('users', views.user, name="users"),
+    path('users/<str:userName>/', views.userName, name="userName"),
+]
+```
+
+
+- `views.py`
+```python
+from django.shortcuts import render
+from .models import UserModel 
+from django.shortcuts import get_object_or_404
+
+def user(request):
+    user = UserModel.objects.all()
+    return render(request, 'firstApp/user.html', {'users': user})
+```
+- `UserModel.objects.all()` It retrieves all user records from the UserModel table and returns a queryset containing all the user entries in the database.
+
+
+
+- `user.html`
+```html
+{% extends "layout.html" %}
+
+{% block title %}
+users
+{% endblock %}
+
+{% block content %}
+<h1>content of layout.html</h1>
+
+
+{% for user in users %}
+ <div>
+    <a href= "{% url 'userName' user.name  %}">{{user.name}}</a>
+ </div>
+{% endfor %}
+
+{% endblock %}
+```
+
+- `{% url 'userName' user.name %}` is a Django template tag that generates the URL
+
+- The `'userName'` is the name of the URL pattern (from urls.py), 
+
+- `user.name` is the dynamic value passed along with URL.
+- `genrated url`: in our example
+```bash
+.../users/<user.name>/
+```
+
+- `urls.py`
+this url will be handled by this function
+```python
+path('users/<str:userName>/', views.userName, name="userName"),
+```
+
+- The `<str:userName>` part indicates that the userName portion of the URL will be captured and passed as a parameter
+- `views.py`
+```python
+def userName(request,userName):
+    user = get_object_or_404(UserModel, name=userName)
+    return render(request, 'firstApp/userName.html', {'user': user})
+```
+- accept the url parameter along with the request
+- `get_object_or_404` is a utility function that attempts to retrieve a single object from the database. If the object is not found, it raises an HTTP 404 error
+
+- `userName.html`
+```html
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1>user name image is</h1>
+
+    <h2>{{user.name}}</h2>
+    <img src="{{user.image.url}}" alt="" style="width: 100px;">
+{% endblock %}
+```

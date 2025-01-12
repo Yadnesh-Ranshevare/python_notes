@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}
+users
+{% endblock %}
+
+{% block content %}
+<h1>content of layout.html</h1>
+
+
+{% for user in users %}
+ <div>
+    <a href= "{% url 'userName' user.name  %}">{{user.name}}</a>
+ </div>
+{% endfor %}
+
+{% endblock %}
