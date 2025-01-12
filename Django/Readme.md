@@ -221,6 +221,92 @@ Django has a built-in testing framework for writing and running tests. It is imp
 
 ### Key Points:
 - The test code is typically placed in the `tests.py` file of an app.
-- Django’s test framework is built on top of Python’s standard `unittest` module, and you can write test cases for models, views, forms, etc.
+- Django’s test framework is built on top of Python’s standard `unittest` module, and you can write test cases for `models`, views, forms, etc.
 
 ---
+
+
+# Admin panel in Django
+
+
+In `Django`, the admin interface is a powerful tool for managing the data in your application through a web-based interface. It is automatically available as part of `Django’s` default setup, allowing you to perform CRUD (Create, Read, Update, Delete) operations on your models. The `Django` admin site is a great way to interact with your app's data without needing to manually interact with the database.
+
+The message you're seeing when aur run the `Django` indicates that there are unapplied `database` migrations in your `Django` project. Migrations are used by `Django` to propagate changes made to your `models` (i.e., your `database` schema) into your `database`. Until you apply those migrations, your project may not work as expected, because the `database` will not have the required tables and schema that correspond to your `models`.
+
+
+```error
+You have 18 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.
+Run 'python manage.py migrate' to apply them.
+```
+
+to solve this issue run this command into your main project:-
+```bash
+python manage.py migrate
+```
+
+after this you can visit the admin page
+```bash
+http://127.0.0.1:8000/admin
+```
+
+this url is already available in `urls.py` files of your main project
+```python
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+]
+```
+
+#### AUTH_PASSWORD_VALIDATORS
+The setting in Django is a list of password validation rules that Django uses to check the strength of user passwords when they are set or changed. These validators help ensure that users create secure passwords by enforcing various rules and policies.
+```python
+#in settings.py 
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+```
+
+#### 1. UserAttributeSimilarityValidator:  
+ This validator ensures that the password is not too similar to the user’s attributes, such as their username, email address, or first and last names. This helps prevent users from choosing weak passwords that are easy to guess based on their personal information.
+
+#### 2. MinimumLengthValidator:
+  This validator ensures that passwords meet a minimum length requirement. By default, the minimum length is set to 8 characters, but you can adjust this setting by configuring PASSWORD_MIN_LENGTH in your settings.py.
+
+#### 3. CommonPasswordValidator:
+This validator checks the password against a list of common passwords (e.g., "password123", "qwerty", "123456") and prevents users from using these easily guessable passwords.
+
+#### 4. NumericPasswordValidator:
+  This validator ensures that the password is not entirely numeric (i.e., composed only of numbers). Passwords consisting only of numbers are generally considered weak because they are easier to guess (e.g., "123456").
+
+### The superuser is the only user that automatically has all permissions in Django to use Django admin interface
+
+to create super user run following command
+```bash
+python manage.py createsuperuser
+```
+it will ask following questions:-
+```bash
+Username (leave blank to use 'default_name'): 
+Email address:
+Password:
+Password (again):
+```
+now you can use admin interface to perform CURD operation on models registered with the admin. By logging in with your respective `Username` and `Password`
+
+
+---
+
+
