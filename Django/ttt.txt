@@ -1,0 +1,15 @@
+to create new django app
+python manage.py startapp <-app name->
+
+this command will create a new django app folder having following directories
+>app_name
+    >migrations
+    -__init__.py
+    -admin.py
+    -app.py
+    -models.py
+    -test.py
+    -views.py
+
+
+note:- django only creates this app but wont install it into your main project therefor our main project is unaware about our new apps and we have to aware our main project about this new app by configuring settings.py in main project

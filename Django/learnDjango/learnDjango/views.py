@@ -12,3 +12,6 @@ def contact(request):
 
 def template(request):
     return render(request, 'index.html')
+
+def useLayout(request):
+    return render(request, 'useLayout.html')

@@ -224,4 +224,3 @@ Django has a built-in testing framework for writing and running tests. It is imp
 - Django’s test framework is built on top of Python’s standard `unittest` module, and you can write test cases for models, views, forms, etc.
 
 ---
-
