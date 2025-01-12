@@ -17,7 +17,7 @@ To install `uv`, use the following command:
 ```bash
 pip install uv
 ```
-this step is optional and if you skip it just remove the `uv` prefix for `pip` install commands.
+##### this step is optional and if you skip it just remove the `uv` prefix for `pip` install commands.
 
 
 

@@ -48,7 +48,7 @@ in above case declare view as follows
 def template(request):
     return render(request,'child/index.html')
 ```
-
+`note-` settings.py remains the same
 
 ## how to load static aset
 
