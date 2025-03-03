@@ -96,3 +96,4 @@ urlpatterns = [
 ]
 ```
 This means the path home/ is already prefixed by firstApp/ based on how it's included in the main urls.py, so you don’t have to specify firstApp/ in the app's urls.py.
+ 

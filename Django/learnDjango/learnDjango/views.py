@@ -15,3 +15,4 @@ def template(request):
 
 def useLayout(request):
     return render(request, 'useLayout.html')
+
