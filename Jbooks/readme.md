@@ -4,7 +4,7 @@
 ```bash
 python -m venv venv
 ```
-2. go into the virtual environment
+2. activate the virtual environment
 ```bash
 venv\scripts\activate       # for window
 source env/bin/activate   # on Mac/Linux
