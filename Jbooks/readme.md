@@ -34,12 +34,12 @@ pip install jupyterlab
 - **Although it is possible to arrange the cell in unordered format** i.e, use the library in first cell then import them in second cell ( first run the second cell then run the first cell to successful execution )  **always arrange the cells in proper order** eg., load the library in first cell and use that library in second cell( as by default file run from top to bottom ). 
 
 ### Keyboard  shortcut (use in command mode)
-1. `shift + enter:` execute the enter into the new cell
-2. `clt + enter:` execute and stay into the same cell ( press enter to go into the edit mode again )
+1. `shift + enter:` execute then enter into the new cell
+2. `clt + enter:` execute and stay into the same cell ( press enter to go into the edit/code mode again )
 3. `b:` to create the cell bellow the working cell
 4. `a:` to create the cell above the working cell
-5. `m:` to convert the current working cell into markdown cell ( press enter to accept the cell change )
-6. `y:` to convert the current working cell into code cell ( press enter to accept the cell change )
-7. `up/down arrow:` to navigate through the cells ( press the enter to enter into the navigated cell, can also use the j instead of down key and k instead of up key )
+5. `m:` to convert the current working cell into markdown cell ( press enter to accept the cell change and enter the edit/code mode )
+6. `y:` to convert the current working cell into code cell ( press enter to accept the cell change and enter the edit/code mode )
+7. `up/down arrow:` to navigate through the cells ( press the enter to enter into the edit/code mode of navigated cell, can also use the j instead of down key and k instead of up key )
 8. `dd:` to delete the particular cell 
 
