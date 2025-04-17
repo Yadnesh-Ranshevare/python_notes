@@ -3,7 +3,7 @@
 2. [Installation](#installation)
 3. [NumPy Array ](#numpy-array)
 4. [Array function](#array-function)
-
+5. [Array operation](#array-operation)
 
 # Introduction
 
@@ -390,6 +390,98 @@ transposed array
  [ 2  6 10]
  [ 3  7 11]]
 ```
+
+[Go to Top](#content)
+
+---
+
+# Array Operation
+
+## Array slicing
+```py
+arr = np.arange(12)
+print("original array",arr)
+print("basics slicing",arr[2:7])  # 7 excluded
+print("with step slicing",arr[2:10:2])
+print("negative indexing",arr[-3])
+```
+**output**
+```
+original array [ 0  1  2  3  4  5  6  7  8  9 10 11]
+basics slicing [2 3 4 5 6]
+with step slicing [2 4 6 8]
+negative indexing 9
+```
+
+## Element access
+```py
+arr = np.array([[1,2,3],[4,5,6],[7,8,9]])
+print("original array\n",arr)
+print("specific element",arr[1,2])  # row_index x column_index
+print("entire row",arr[1])  # to access the row at 1st index
+print("entire column",arr[:,1]) # to access the column at 1st index
+```
+**output:**
+```
+original array
+ [[1 2 3]
+ [4 5 6]
+ [7 8 9]]
+specific element 6
+entire row [4 5 6]
+entire column [2 5 8]
+```
+**Note: indexing start from zero for both row and columns**
+
+
+## Array sorting
+1. basics sorting using `.sort` method
+```py
+unsortedArr = np.array([4,2,6,1,3,5])
+sortedArr = np.sort(unsortedArr)
+
+print("unsorted array",unsortedArr)
+print("sorted array",sortedArr)
+```
+**output:**
+```
+unsorted array [4 2 6 1 3 5]
+sorted array [1 2 3 4 5 6]
+```
+
+2. 2D array sorting
+
+**axis = 0:** column wise sorting\
+**axis = 1:** row wise sorting
+```py
+unsortedArr_2d = np.array([[4,2,6],[1,3,5],[9,8,7]])
+
+row_sortedArr_2d = np.sort(unsortedArr_2d,axis=1)
+col_sortedArr_2d = np.sort(unsortedArr_2d,axis=0)
+
+print("unsorted 2d array\n",unsortedArr_2d)
+
+print("\nrow wise sorted 2d array\n",row_sortedArr_2d)
+print("\ncolumn wise sorted 2d array\n",col_sortedArr_2d)
+```
+**output:**
+```
+unsorted 2d array
+ [[4 2 6]
+ [1 3 5]
+ [9 8 7]]
+
+row wise sorted 2d array
+ [[2 4 6]
+ [1 3 5]
+ [7 8 9]]
+
+column wise sorted 2d array
+ [[1 2 5]
+ [4 3 6]
+ [9 8 7]]
+```
+
 
 [Go to Top](#content)
  
