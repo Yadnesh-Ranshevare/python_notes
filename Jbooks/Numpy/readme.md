@@ -42,6 +42,8 @@ Framework | Purpose
 **OpenCV** | Computer vision (images as NumPy arrays)
 
 
+[Go to Top](#content)
+
 ---
 
 # Installation
@@ -60,6 +62,8 @@ source env/bin/activate   # on Mac/Linux
 ```bash
 pip install numpy
 ```
+
+[Go to Top](#content)
 
 ---
 
@@ -146,6 +150,8 @@ time require to to perform the list multiplication 0.11458492279052734
 time require to to perform the array multiplication 0.0391087532043457
 ```
 **note: this time can be vary because of various reason but in most of the cases array perform the multiplication in less time than that of list**
+
+[Go to Top](#content)
 
 ---
 
@@ -248,8 +254,142 @@ print("data type",arr.dtype)
 ```
 data type int64
 ```
+### 10. `.reshape(row,column):` 
+convert the provided array into given row x column format
+```py
+arr = np.arange(12)
+print("original array",arr)
 
- 
+reshaped = arr.reshape(3,4)
+print("3 x 4 reshaped array \n",reshaped)
 
+reshaped = arr.reshape(4,3)
+print("4 x 3 reshaped array \n",reshaped)
+```
+**output:**
+```
+original array [ 0  1  2  3  4  5  6  7  8  9 10 11]
+3 x 4 reshaped array 
+ [[ 0  1  2  3]
+ [ 4  5  6  7]
+ [ 8  9 10 11]]
+4 x 3 reshaped array 
+ [[ 0  1  2]
+ [ 3  4  5]
+ [ 6  7  8]
+ [ 9 10 11]]
+```
+**Note: make sure that provided reshape is valid for the array if its  not then the code will through error cannot reshape array**
+```py
+arr = np.arange(12)
+print("original array",arr)
 
+reshaped = arr.reshape(4,4) # this will through an error as we cannot have 4 x 4 array with just 12 element
+print("4 x 4 reshaped array \n",reshaped)
+```
+
+### 11. `.flatten():` 
+convert the n dimension array into 1D array
+```py
+arr = np.array([[1,2,3],[4,5,6]])
+print("original array\n",arr)
+
+arr = arr.flatten()
+print("flattened array",arr)
+```
+**output:**
+```
+original array
+ [[1 2 3]
+ [4 5 6]]
+flattened array [1 2 3 4 5 6]
+```
+**Note:**
+- **Returns a copy of the original array.**
+
+- **The original array is not affected if you change the flattened one.**
+```py
+a = np.array([[1, 2], [3, 4]])
+b = a.flatten()
+
+b[0] = 100
+print("Original array:\n", a)  # a is not changed
+print("\nFlattened copy:\n", b)
+```
+**output:**
+```bash
+Original array:
+ [[1 2]
+ [3 4]]
+
+Flattened copy:
+ [100   2   3   4]
+```
+
+### 12. `.ravel():` 
+convert the n dimension array into 1D array
+```py
+arr = np.array([[1,2,3],[4,5,6]])
+print("original array\n",arr)
+
+arr = arr.ravel()
+print("ravel array",arr)
+```
+**output:**
+```
+original array
+ [[1 2 3]
+ [4 5 6]]
+ravel array [1 2 3 4 5 6]
+```
+**Note:**
+- **Returns a view (when possible) of the original array.**
+
+- **If you modify the result, the original array may change too (if it's a view).**
+- **Faster because it avoids copying when possible.**
+- **doesn’t always return a view. If the array is not contiguous in memory, it will return a copy instead.**
+```py
+a = np.array([[1, 2], [3, 4]])
+b = a.ravel()
+
+b[0] = 100
+print("Original array:\n", a)  # a *may* change if b is a view
+print("\nRaveled view:\n", b)
+```
+**output:**
+```bash
+Original array:
+ [[100   2]
+ [  3   4]]
+
+Raveled view:
+ [100   2   3   4]
+```
+
+### 13. `.T:`
+return the transpose of the given array
+```py
+arr = np.arange(12)
+
+reshaped = arr.reshape(3,4)
+print("3 x 4 reshaped array \n",reshaped)
+
+transpose = reshaped.T
+print("\ntransposed array\n",transpose)
+```
+**output:**
+```
+3 x 4 reshaped array 
+ [[ 0  1  2  3]
+ [ 4  5  6  7]
+ [ 8  9 10 11]]
+
+transposed array
+ [[ 0  4  8]
+ [ 1  5  9]
+ [ 2  6 10]
+ [ 3  7 11]]
+```
+
+[Go to Top](#content)
  
