@@ -483,5 +483,122 @@ column wise sorted 2d array
 ```
 
 
+## Filtration
+
+### Normal Filtrating
+```py
+arr = np.arange(12)
+print("original array",arr)
+
+even_arr = arr[arr%2==0]    # need to use same name inside the square bracket
+print("even number array",even_arr)
+```
+
+**output:**
+```
+original array [ 0  1  2  3  4  5  6  7  8  9 10 11]
+even number array [ 0  2  4  6  8 10]
+```
+
+### Mask:
+creates a array of True and false on the basic of condition which then pass as a prop for filtering the array
+```py
+arr = np.arange(12)
+print("original array",arr)
+
+mask = arr%2==0
+
+print("mask array",mask)
+print("filtered array",arr[mask])
+```
+**output:**
+```
+original array [ 0  1  2  3  4  5  6  7  8  9 10 11]
+mask array [ True False  True False  True False  True False  True False  True False]
+filtered array [ 0  2  4  6  8 10]
+```
+### np.where()
+returns the array containing the index where condition becomes true
+```py
+arr = np.arange(12)
+print("original array\n",arr)
+
+where_result = np.where(arr%2==0)
+
+print("where result\n",where_result)
+print("selected element\n",arr[where_result])
+```
+**output:**
+```
+original array
+ [ 0  1  2  3  4  5  6  7  8  9 10 11]
+where result
+ (array([ 0,  2,  4,  6,  8, 10]),)
+selected element
+ [ 0  2  4  6  8 10]
+```
+**you can also manipulate the where_result array by passing the x and y parameter**
+```py
+arr = np.arange(12)
+print("original array\n",arr)
+
+where_result = np.where(arr%2==0,"x","Y")
+print("where result\n",where_result)
+```
+**If `arr%2==0` condition becomes true then it will return the "X" and if the condition becomes false it will return the "Y" this syntax works similar to if-else statements**
+
+**output:**
+```
+original array
+ [ 0  1  2  3  4  5  6  7  8  9 10 11]
+where result
+ ['x' 'Y' 'x' 'Y' 'x' 'Y' 'x' 'Y' 'x' 'Y' 'x' 'Y']
+``` 
+**Note: you have to provide both x and y parameter or nighter of them, it doesn't work with only one parameter**\
+**In case, if you want to give only one parameter you can pass original array as another parameter**
+```py
+arr = np.arange(12)
+print("original array\n",arr)
+
+where_result = np.where(arr%2==0,'X',arr)   # passing the original array as i want to provide only x parameter
+print("where result\n",where_result)
+```
+**If condition becomes true it will return the 'X' else it return the original value**
+**output:**
+```
+original array
+ [ 0  1  2  3  4  5  6  7  8  9 10 11]
+where result
+ ['X' '1' 'X' '3' 'X' '5' 'X' '7' 'X' '9' 'X' '11']
+```
+**Note: numPy is efficient for dealing with similar datatype so if you provide the different datatype it tries to convert them into similar datatype**
+
+
+## Indexing
+
+```py
+arr = np.arange(1,20,2)
+print("original array\n",arr)
+
+idx = [1,4,6,8]
+print("index array\n",idx)
+
+print("selected element\n",arr[idx])
+```
+**output:**
+```
+original array
+ [ 1  3  5  7  9 11 13 15 17 19]
+index array
+ [1, 4, 6, 8]
+selected element
+ [ 3  9 13 17]
+```
+prints the array containing the element present at index mention in idx array
+
+
+
+
+
 [Go to Top](#content)
  
