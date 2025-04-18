@@ -563,7 +563,7 @@ where result
 arr = np.arange(12)
 print("original array\n",arr)
 
-where_result = np.where(arr%2==0,'X',arr)   # passing the original array as i want to provide only x parameter
+where_result = np.where(arr%2==0,'X',arr)   # passing the original array as I want to provide only x parameter
 print("where result\n",where_result)
 ```
 **If condition becomes true it will return the 'X' else it return the original value**
