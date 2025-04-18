@@ -125,6 +125,8 @@ array multiplication [[ 2  4  6]
 ```
 **To perform element-wise multiplication of lists (or arrays) in Python, you need to use something that supports element-wise operations, such as NumPy.**
 
+**`broadcast:` when we perform any mathematical operation ( +, -, /, * ) between vector ( 1D array ) and scalar this operation will be executed on each element of that vector**
+
 #### Time Comparison
 ```py
 import time
@@ -390,6 +392,183 @@ transposed array
  [ 2  6 10]
  [ 3  7 11]]
 ```
+
+### 14. np.sum():
+- use to calculate the sum of the row or column of an array
+- it return the array having sum of each column or row init
+1. **1D array:**
+```py
+# data structure: [ 2021, 2022, 2023, 2024]
+sales_data = np.array([ 100, 200, 300, 400])
+
+
+# final = total_sales.sum()
+final = np.sum(total_sales)
+print("\ntotal sales per restaurant:\n", final)
+```
+**output:**
+```
+total sales per restaurant:
+ 7000
+```
+2. **2D array**\
+**axis = 0:** column wise adding\
+**axis = 1:** row wise adding
+```py
+# data structure: [ 2021, 2022, 2023, 2024]
+sales_data = np.array([
+    [ 100, 200, 300, 400], # shop 1
+    [ 150, 250, 350, 450], # shop 2
+    [ 200, 300, 400, 500], # shop 3
+    [ 250, 350, 450, 550], # shop 4
+    [ 300, 400, 500, 600]  # shop 5
+])
+
+# total scales per year
+
+# total_sales = sales_data.sum(axis=0)
+total_sales = np.sum(sales_data, axis=0)
+print("\ntotal sales per year:\n", total_sales)
+```
+**output:**
+```
+total sales per year:
+ [1000 1500 2000 2500]
+```
+
+### 15. np.min() vs np.max() vs np.mean()
+- `np.min():` return the minimum value either from row or column
+- `np.max():` return the maximum value either from row or column
+- `np.mean():` return the average value of the row or the column
+1. **1D array**
+```py
+# data structure: [ 2021, 2022, 2023, 2024]
+sales_data = np.array([ 100, 200, 300, 400])
+
+# minimum sales per shop
+min_sales = np.min(sales_data)
+print("\nminimum sales per shop:\n", min_sales)
+
+# maximum sales per year
+max_sales = np.max(sales_data)
+print("\nmaximum sales per year:\n", max_sales)
+
+# avg sales pre shop
+avg_sales = np.mean(sales_data)
+print("\navg sales per shop:\n", avg_sales)
+```
+**output:**
+```
+minimum sales per shop:
+ 100
+
+maximum sales per year:
+ 400
+
+avg sales per shop:
+ 250.0
+```
+2. **2D array**\
+**axis = 0:** column wise operation\
+**axis = 1:** row wise operation
+```py
+# data structure: [ 2021, 2022, 2023, 2024]
+sales_data = np.array([
+    [ 100, 200, 300, 400], # shop 1
+    [ 150, 250, 350, 450], # shop 2
+    [ 200, 300, 400, 500], # shop 3
+    [ 250, 350, 450, 550], # shop 4
+    [ 300, 400, 500, 600]  # shop 5
+])
+
+# minimum sales per shop
+min_sales = np.min(sales_data, axis=1)
+print("\nminimum sales per shop:\n", min_sales)
+
+# maximum sales per year
+max_sales = np.max(sales_data, axis=0)
+print("\nmaximum sales per year:\n", max_sales)
+
+# avg sales pre shop
+avg_sales = np.mean(sales_data, axis=1)
+print("\navg sales per shop:\n", avg_sales)
+```
+**output:**
+```
+minimum sales per shop:
+ [100 150 200 250 300]
+
+maximum sales per year:
+ [300 400 500 600]
+
+avg sales per shop:
+ [250. 300. 350. 400. 450.]
+```
+### 15. np.cumsum():
+used to perform the cumulative sum ( adds each element to the sum of all previous elements )\
+eg.,\
+Suppose you have a list of numbers:
+```py
+a = np.array([10, 20, 30, 40])
+```
+If you do:
+```py
+np.cumsum(a)
+```
+You get:
+```py
+array([10, 30, 60, 100])
+```
+Here's what happens:
+
+- 10 → just the first number
+- 10 + 20 = 30
+- 30 + 30 = 60
+- 60 + 40 = 100
+
+**For 2D array**\
+**axis = 0:** column wise operation\
+**axis = 1:** row wise operation
+```py
+# data structure: [ 2021, 2022, 2023, 2024]
+sales_data = np.array([
+    [ 100, 200, 300, 400], # shop 1
+    [ 150, 250, 350, 450], # shop 2
+    [ 200, 300, 400, 500], # shop 3
+    [ 250, 350, 450, 550], # shop 4
+    [ 300, 400, 500, 600]  # shop 5
+])
+
+# cumulative sum
+cumulative_sum = np.cumsum(sales_data, axis=1)
+print("\ncumulative sum:\n", cumulative_sum)
+```
+**output:**
+```
+cumulative sum:
+ [[ 100  300  600 1000]
+ [ 150  400  750 1200]
+ [ 200  500  900 1400]
+ [ 250  600 1050 1600]
+ [ 300  700 1200 1800]]
+```
+
+### 16. np.vectorize():
+- used to create the custom vector methods which on applying on array performs an operation on every element of that array
+- `np.vectorize()` accept any python code and later on execute that code on every element of array
+```py
+shops = ["shop1", "shop2", "shop3", "shop4", "shop5"]
+
+vectorize_upper = np.vectorize(str.upper)
+
+shops = vectorize_upper(shops)
+print(shops)
+```
+**output:**
+```
+['SHOP1' 'SHOP2' 'SHOP3' 'SHOP4' 'SHOP5']
+```
+
 
 [Go to Top](#content)
 
