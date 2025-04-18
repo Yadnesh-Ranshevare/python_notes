@@ -393,7 +393,7 @@ transposed array
  [ 3  7 11]]
 ```
 
-### 14. np.sum():
+### `14. np.sum():`
 - use to calculate the sum of the row or column of an array
 - it return the array having sum of each column or row init
 1. **1D array:**
@@ -436,7 +436,7 @@ total sales per year:
  [1000 1500 2000 2500]
 ```
 
-### 15. np.min() vs np.max() vs np.mean()
+### `15. np.min() vs np.max() vs np.mean():`
 - `np.min():` return the minimum value either from row or column
 - `np.max():` return the maximum value either from row or column
 - `np.mean():` return the average value of the row or the column
@@ -504,7 +504,7 @@ maximum sales per year:
 avg sales per shop:
  [250. 300. 350. 400. 450.]
 ```
-### 15. np.cumsum():
+### `15. np.cumsum():`
 used to perform the cumulative sum ( adds each element to the sum of all previous elements )\
 eg.,\
 Suppose you have a list of numbers:
@@ -553,7 +553,7 @@ cumulative sum:
  [ 300  700 1200 1800]]
 ```
 
-### 16. np.vectorize():
+### `16. np.vectorize():`
 - used to create the custom vector methods which on applying on array performs an operation on every element of that array
 - `np.vectorize()` accept any python code and later on execute that code on every element of array
 ```py
