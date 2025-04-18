@@ -485,7 +485,8 @@ column wise sorted 2d array
 
 ## Filtration
 
-### Normal Filtrating
+Normal Filtrating
+---
 ```py
 arr = np.arange(12)
 print("original array",arr)
@@ -500,7 +501,8 @@ original array [ 0  1  2  3  4  5  6  7  8  9 10 11]
 even number array [ 0  2  4  6  8 10]
 ```
 
-### Mask:
+ Mask:
+ ---
 creates a array of True and false on the basic of condition which then pass as a prop for filtering the array
 ```py
 arr = np.arange(12)
@@ -517,7 +519,8 @@ original array [ 0  1  2  3  4  5  6  7  8  9 10 11]
 mask array [ True False  True False  True False  True False  True False  True False]
 filtered array [ 0  2  4  6  8 10]
 ```
-### np.where()
+np.where()
+---
 returns the array containing the index where condition becomes true
 ```py
 arr = np.arange(12)
@@ -597,8 +600,147 @@ selected element
 prints the array containing the element present at index mention in idx array
 
 
+## Adding new element
+
+1. **1D array**\
+you can not use + operator to concatenate the two array as it will perform the basic array addition instead of concatenating the two 1D array\
+`.concatenate():`
+```py
+arr1 = np.array([1,2,3])
+arr2 = np.array([4,5,6])
+
+print("adding two array",arr1+arr2)  # array addition
+print("concatenated array",np.concatenate((arr1,arr2)))
+``` 
+**output:**
+```
+adding two array [5 7 9]
+concatenated array [1 2 3 4 5 6]
+```
+2. **2D array**\
+we can either perform the row addition or column addition
+
+`.vstack():` used to add new row in original array
+```py
+arr_2d = np.array([[1,2,3],[4,5,6]])
+new_row = np.array([7,8,9])
+
+with_new_row = np.vstack((arr_2d,new_row))
+
+print("original array\n",arr_2d)
+print("with new row\n",with_new_row)
+```
+**output:**
+```
+original array
+ [[1 2 3]
+ [4 5 6]]
+with new row
+ [[1 2 3]
+ [4 5 6]
+ [7 8 9]]
+```
+`.hstack():` used to add new column in original array
+```py
+arr_2d = np.array([[1,2,3],[4,5,6]])
+new_column = np.array([[7],[8]])
 
 
+with_new_column = np.hstack((arr_2d,new_column))
+
+print("original array\n",arr_2d)
+print("with new column\n",with_new_column)
+```
+**output:**
+```
+original array
+ [[1 2 3]
+ [4 5 6]]
+with new column
+ [[1 2 3 7]
+ [4 5 6 8]]
+```
+**Note: in both the .vstack() and .hstack() make sure the added row or column is marinating the respective dimension of the original array i.e, if you are adding the new row make sure new row has same number of element as that of the row of original array same goes for column**
+
+## Removing / np.delete()
+1. **1D array**\
+pass the array and the index of the element to delete that element for the array 
+```py
+arr = np.array([[1,2,3, 4,5,6]])
+
+deleted_arr = np.delete(arr,1)
+
+print("deleted column\n",deleted_arr)
+```
+**output:**
+```
+deleted column
+ [1 3 4 5 6]
+```
+
+
+2. **2D array**\
+pass an axis extra argument along with array and index\
+`axis=0:` index refers to the row\
+`axis=1:` index refers to the column
+
+**Note: index will be of the row index or column index**
+```py
+arr = np.array([[1,2,3],[4,5,6]])
+print("original array\n",arr)
+
+deleted = np.delete(arr,1,axis=0)
+print("deleted row\n",deleted)
+
+deleted = np.delete(arr,1,axis=1)
+print("deleted column\n",deleted)
+```
+**output:**
+```
+original array
+ [[1 2 3]
+ [4 5 6]]
+deleted row
+ [[1 2 3]]
+deleted column
+ [[1 3]
+ [4 6]]
+```
+
+Note: you can pass index in the form of array to delete the multiple element for the array
+--
+```py
+arr_1D = np.array([[1,2,3, 4,5,6]])
+
+deleted_arr = np.delete(arr_1D,[1,3])  # delete the element st the 1st and 3rd index of arr_1D
+
+print("original 1D array\n",arr_1D)
+print("deleted column\n",deleted_arr)
+
+
+arr_2D = np.array([[1,2,3],[4,5,6]])
+
+deleted = np.delete(arr_2d,[1,2],axis=1) #delete the column at index 1 and 2 from arr_2D
+
+print("\noriginal 2D array\n",arr_2D)
+print("deleted column\n",deleted)
+```
+**output:**
+```
+original 1D array
+ [[1 2 3 4 5 6]]
+deleted column
+ [1 3 5 6]
+
+original 2D array
+ [[1 2 3]
+ [4 5 6]]
+deleted column
+ [[1]
+ [4]]
+```
 
 [Go to Top](#content)
+
+---
  
