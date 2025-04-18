@@ -403,13 +403,13 @@ sales_data = np.array([ 100, 200, 300, 400])
 
 
 # final = total_sales.sum()
-final = np.sum(total_sales)
+final = np.sum(sales_data)
 print("\ntotal sales per restaurant:\n", final)
 ```
 **output:**
 ```
 total sales per restaurant:
- 7000
+ 1000
 ```
 2. **2D array**\
 **axis = 0:** column wise adding\
