@@ -485,8 +485,8 @@ column wise sorted 2d array
 
 ## Filtration
 
-Normal Filtrating
----
+### Normal Filtrating
+
 ```py
 arr = np.arange(12)
 print("original array",arr)
@@ -501,8 +501,8 @@ original array [ 0  1  2  3  4  5  6  7  8  9 10 11]
 even number array [ 0  2  4  6  8 10]
 ```
 
- Mask:
- ---
+ ### Mask:
+ 
 creates a array of True and false on the basic of condition which then pass as a prop for filtering the array
 ```py
 arr = np.arange(12)
@@ -519,8 +519,8 @@ original array [ 0  1  2  3  4  5  6  7  8  9 10 11]
 mask array [ True False  True False  True False  True False  True False  True False]
 filtered array [ 0  2  4  6  8 10]
 ```
-np.where()
----
+### np.where()
+
 returns the array containing the index where condition becomes true
 ```py
 arr = np.arange(12)
