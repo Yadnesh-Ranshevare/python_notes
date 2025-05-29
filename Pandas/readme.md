@@ -1,6 +1,7 @@
 # Content
 1. [Introduction](#introduction)
 2. [Installation](#installation)
+3. [Read files](#read-external-files)
 
 
 # Introduction
@@ -138,15 +139,15 @@ import pandas as pb
 
 we have to create the DataFrame to read the specific file
 
-**Syntax:**
+**Syntax: 1**
 ```py
 df = pb_function("file path")
 ```
 
 by simply using this syntax we might encounter a error related to encoding methods because Pandas is trying to read the file using the wrong character encoding, and some characters in the file can't be interpreted properly.
 
-to solve this error we mention encoding method in our syntax
-**Syntax:**
+to solve this error we mention encoding method in our syntax\
+**Syntax: 2**
 ```py
 df = pb_function("file path", encoding="your encoding method")
 ```
