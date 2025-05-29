@@ -2,6 +2,7 @@
 1. [Introduction](#introduction)
 2. [Installation](#installation)
 3. [Read files](#read-external-files)
+4. [save file](#save-file)
 
 
 # Introduction
@@ -160,7 +161,6 @@ there are two different encoding methods i.e,
 ```py
 import pandas as pb
 
-# read data from csv file into dataframe
 df_csv = pb.read_csv('./Dataset/sales_data_sample.csv', encoding='latin1')  # in my device utf-8 doesn't work but latin1 work
 
 df_json = pb.read_json('./Dataset/sample_Data.json') # coe run without mentioning any method 
@@ -178,6 +178,122 @@ you can read more files by using:
 | SQL       | `.read_sql()`   | 
 
 
+### head() vs tail()
+this are the special method us to display the part (limited number of rows) of dataset
+
+- **head(n):** will display the first `n` entries from the dataset
+- **tail(n):** will display the last `n` entries from the dataset
+- default value of `n` is `5` that is if we use only `head()` and `tail()` without mentioning the limit then it will only display first and last 5 entries from the dataset
+- example:
+```py
+import pandas as pb
+
+df_json = pb.read_json('./Dataset/sample_Data.json')
+
+print(df_json.head())
+```
+this code will display the first 5 rows from the `sample_Data.json` dataset
+
 [Go To Top](#content)
 
 ---
+
+# Save file
+
+1. **create the dictionary of the data you want to save**
+```py
+data = {
+    "Name":["ram", 'sham', 'yash'],
+    "Age":[20, 21, 22],
+    "City":["kalyan", 'pune', 'mumbai']
+}
+```
+2. **create the new dataFrame with this data**
+```py
+df = pb.DataFrame(data)
+```
+if try and print this `df` object the our output is as follow
+```
+   Name  Age    City
+0   ram   20  kalyan
+1  sham   21    pune
+2  yash   22  mumbai
+```
+here you can see a extra felid in first column that represent the numbering of row
+
+3. **save this dataFrame into any format you want**
+
+
+```py
+df.to_csv('./Dataset/new_data.csv') 
+```
+if you save file like this it may contain that extra numbering felid as well therefor to remove that extra felid we add `index = false`
+```py
+df.to_csv('./Dataset/new_data.csv', index=False)
+```
+this create the `new_data.csv` file in `Dataset` folder containing our data we mention in dictionary from step 1
+
+| **File Type** | **Method**       | **File Extension** |
+| ------------- | ---------------- | ------------------ |
+| CSV           | `to_csv()`       | `.csv`             |
+| Excel         | `to_excel()`     | `.xlsx`            |
+| JSON          | `to_json()`      | `.json`            |
+| HTML          | `to_html()`      | `.html`            |
+| SQL           | `to_sql()`       | (SQL table)        |
+| Pickle        | `to_pickle()`    | `.pkl`             |
+| Parquet       | `to_parquet()`   | `.parquet`         |
+| Stata         | `to_stata()`     | `.dta`             |
+| Feather       | `to_feather()`   | `.feather`         |
+| LaTeX         | `to_latex()`     | `.tex`             |
+| Clipboard     | `to_clipboard()` | *(none)*           |
+| Markdown      | `to_markdown()`  | *(none)*           |
+
+
+**Note: while writing the name of the file make sure that you also mention the valid extension for respective file format in that name**
+
+
+### .info()
+it will give you the overall summary of your dataset
+
+```py
+data = {
+    "Name":["ram", 'sham', 'yash'],
+    "Age":[20, 21, 22],
+    "City":["kalyan", None, 'mumbai']   # None = null
+}
+
+df = pb.DataFrame(data)
+print(df.info())
+```
+
+**Output:**
+```
+RangeIndex: 3 entries, 0 to 2
+Data columns (total 3 columns):
+ #   Column  Non-Null Count  Dtype
+---  ------  --------------  -----
+ 0   Name    3 non-null      object
+ 1   Age     3 non-null      int64
+ 2   City    2 non-null      object
+dtypes: int64(1), object(2)
+memory usage: 204.0+ bytes
+None
+```
+
+- **RangeIndex:** number of rows in the dataset
+- **Data columns:** info about each column, in bracket you can see the number of column
+    - **#:** column number (starts from 0)
+    - **Column:** name of the particular column
+    - **Non-Null Count:** number of not null entries (number of 
+    not null value for that single column)
+    - **Dtype:** what type of data is present in that column
+- **dtypes:** how many datatype we have use in our dataset, you can see each data type and how many columns have use that datatype
+- **memory usage:** amount of memory needed for that dataset
+
+
+
+[Go To Top](#content)
+
+---
+
+
