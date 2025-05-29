@@ -134,3 +134,49 @@ import pandas as pb
 [Go To Top](#content)
 
 ---
+# Read external files
+
+we have to create the DataFrame to read the specific file
+
+**Syntax:**
+```py
+df = pb_function("file path")
+```
+
+by simply using this syntax we might encounter a error related to encoding methods because Pandas is trying to read the file using the wrong character encoding, and some characters in the file can't be interpreted properly.
+
+to solve this error we mention encoding method in our syntax
+**Syntax:**
+```py
+df = pb_function("file path", encoding="your encoding method")
+```
+there are two different encoding methods i.e,
+1. utf-8
+2. latin1
+
+**Note: encoding method changes from device to device, that is one method work on one device but not on other, sometime you might not even need to use any encoding method**
+### Example code
+```py
+import pandas as pb
+
+# read data from csv file into dataframe
+df_csv = pb.read_csv('./Dataset/sales_data_sample.csv', encoding='latin1')  # in my device utf-8 doesn't work but latin1 work
+
+df_json = pb.read_json('./Dataset/sample_Data.json') # coe run without mentioning any method 
+
+print(df_csv)
+print(df_json)
+```
+
+you can read more files by using:
+| File Type | Pandas Function   | 
+| --------- | ----------------- | 
+| CSV       | `.read_csv()`   | 
+| Excel     | `.read_excel()` |
+| JSON      | `.read_json()`  |
+| SQL       | `.read_sql()`   | 
+
+
+[Go To Top](#content)
+
+---
