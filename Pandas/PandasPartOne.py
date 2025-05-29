@@ -25,15 +25,28 @@ import pandas as pb
 
 
 
+# # .info() method
+# data = {
+#     "Name":["ram", 'sham', 'yash'],
+#     "Age":[20, 21, 22],
+#     "City":["kalyan", None, 'mumbai']
+# }
 
+# df = pb.DataFrame(data)
+# print(df.info())
+
+
+
+# .describe() method
 data = {
-    "Name":["ram", 'sham', 'yash'],
-    "Age":[20, 21, 22],
-    "City":["kalyan", None, 'mumbai']
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
 }
 
 df = pb.DataFrame(data)
-print(df.info())
+print(df)
 
 
 

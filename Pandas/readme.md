@@ -292,6 +292,47 @@ None
 
 
 
+### .describe()
+The `.describe()` function in Pandas is used to quickly generate summary statistics for numeric column in our DataFrame 
+
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23], # numeric column
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000] # numeric column
+}
+
+df = pb.DataFrame(data)
+print(df.describe())
+```
+
+**Output:**
+in output we only see summary of numeric column (age ans salary)
+```
+             Age        salary
+count   6.000000      6.000000
+mean   22.833333  35000.000000
+std     2.316607  18708.286934
+min    20.000000  10000.000000
+25%    21.250000  22500.000000
+50%    22.500000  35000.000000
+75%    24.500000  47500.000000
+max    26.000000  60000.000000
+```
+
+| **Statistic** | **Meaning**                         |
+| ------------- | ----------------------------------- |
+| `count`       | Number of non-null (not NaN) values |
+| `mean`        | Average value                       |
+| `std`         | Standard deviation ( how spread out the values in a dataset are from the mean (average).It tells you how much the data varies.) high std means difference in data is high and low std means difference in data is low                |
+| `min`         | Minimum value                       |
+| `25%`         | 1st quartile (mean of first 25th percentile in our dataset)      |
+| `50%`         | Median (mean of data present from 25 to 50th percentile in our dataset)            |
+| `75%`         | 3rd quartile (mean of data present from 50 to 75th percentile in our dataset)      |
+| `max`         | Maximum value                       |
+
+
 [Go To Top](#content)
 
 ---
