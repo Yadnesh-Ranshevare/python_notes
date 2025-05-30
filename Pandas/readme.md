@@ -3,7 +3,8 @@
 2. [Installation](#installation)
 3. [Read files](#read-external-files)
 4. [save file](#save-file)
-
+5. [Info & Describe](#info--describe)
+6. [Shape & Column](#shape-and-column)
 
 # Introduction
 
@@ -251,6 +252,12 @@ this create the `new_data.csv` file in `Dataset` folder containing our data we m
 
 **Note: while writing the name of the file make sure that you also mention the valid extension for respective file format in that name**
 
+[Go To Top](#content)
+
+---
+
+
+# Info & Describe
 
 ### .info()
 it will give you the overall summary of your dataset
@@ -331,6 +338,51 @@ max    26.000000  60000.000000
 | `50%`         | Median (mean of data present from 25 to 50th percentile in our dataset)            |
 | `75%`         | 3rd quartile (mean of data present from 50 to 75th percentile in our dataset)      |
 | `max`         | Maximum value                       |
+
+
+[Go To Top](#content)
+
+---
+
+# Shape and Column
+
+### Shape
+- Return the tuple name `shape` that gives the dimensions (rows, columns) of a DataFrame.
+- syntax:
+```
+shape: (number_of_column, Number_of_rows)
+```
+
+### Column
+- return the tuple name `index` that contain the two thing
+    1. list of all column
+    2. dtype: what kind of data is present in the list
+- Syntax:
+```
+columns: Index(['col_1', 'col_2', ...], dtype='dtype_of_columns')
+```
+
+
+### Example code:
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(f'shape: {df.shape}')
+print(f'columns: {df.columns}')
+```
+### Output:
+```
+shape: (6, 4)
+columns: Index(['Name', 'Age', 'City', 'salary'], dtype='object')
+```
+
+
 
 
 [Go To Top](#content)

@@ -37,7 +37,21 @@ import pandas as pb
 
 
 
-# .describe() method
+# # .describe() method
+# data = {
+#     "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+#     "Age":[20, 21, 22, 25, 26, 23],
+#     "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+#     "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+# }
+
+# df = pb.DataFrame(data)
+# print(df)
+
+
+
+
+# shape and column
 data = {
     "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
     "Age":[20, 21, 22, 25, 26, 23],
@@ -46,8 +60,8 @@ data = {
 }
 
 df = pb.DataFrame(data)
-print(df)
-
+print(f'shape: {df.shape}')
+print(f'columns: {df.columns}')
 
 
 
