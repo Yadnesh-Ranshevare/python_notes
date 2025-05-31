@@ -4,7 +4,10 @@
 3. [Read files](#read-external-files)
 4. [save file](#save-file)
 5. [Info & Describe](#info--describe)
-6. [Shape & Column](#shape-and-column)
+6. [Access Row](#accessing-rows)
+7. [Row Slicing](#row-slicing)
+6. [Access Column](#accessing-columns)
+7. [Column Slicing](#column-slicing)
 
 # Introduction
 
@@ -388,5 +391,477 @@ columns: Index(['Name', 'Age', 'City', 'salary'], dtype='object')
 [Go To Top](#content)
 
 ---
+
+
+# Accessing Rows
+
+### `.iloc`
+
+1. **Accessing single rows**
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(df.iloc[1])
+```
+**Output:**
+```
+Name       sham
+Age          21
+City       None
+salary    20000
+Name: 1, dtype: object
+```
+2. **Accessing multiple rows**
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(df.iloc[[1,2,3]])     # provide the list of all the index in lists
+```
+**output:**
+```
+    Name  Age    City  salary
+1   sham   21    None   20000
+2   yash   22  mumbai   30000
+3  rohan   25    pune   40000
+```
+
+### `.loc`
+1. **Accessing single rows**
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(df.loc[1])
+```
+**Output:**
+```
+Name       sham
+Age          21
+City       None
+salary    20000
+Name: 1, dtype: object
+```
+2. **Accessing multiple rows**
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(df.loc[[1,2,3]])  # provide the list of all the index in lists
+```
+**output:**
+```
+    Name  Age    City  salary
+1   sham   21    None   20000
+2   yash   22  mumbai   30000
+3  rohan   25    pune   40000
+```
+
+
+### `Accessing all rows`
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+print("using loc \n")
+print(df.loc[:])
+
+print("\nusing iloc \n")
+print(df.iloc[:])
+```
+**Output:**
+```
+using loc 
+
+    Name  Age      City  salary
+0    ram   20    kalyan   10000
+1   sham   21      None   20000
+2   yash   22    mumbai   30000
+3  rohan   25      pune   40000
+4  aditi   26    nagpur   50000
+5  rohit   23  banglore   60000
+
+using iloc
+
+    Name  Age      City  salary
+0    ram   20    kalyan   10000
+1   sham   21      None   20000
+2   yash   22    mumbai   30000
+3  rohan   25      pune   40000
+4  aditi   26    nagpur   50000
+5  rohit   23  banglore   60000
+```
+- **Note: `.loc[]` and `.iloc[]` this two method wee also use while accessing the column, although this two method works similarly for accessing the row their implementation changes as you try to access the columns**
+
+[Go To Top](#content)
+
+---
+# Row slicing
+
+### Using iloc
+- **`.iloc[2:4]`**: rows from index 2 to 4, where 4 in excluded
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(df.iloc[2:4])
+```
+**Output:**
+```
+    Name  Age    City  salary
+2   yash   22  mumbai   30000
+3  rohan   25    pune   40000
+```
+
+- **`.iloc[0:5:2]`**: rows from 0 to 5 where 5 is excluded with step size of 2
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(df.iloc[0:5:2])
+```
+**Output:**
+```
+    Name  Age    City  salary
+0    ram   20  kalyan   10000
+2   yash   22  mumbai   30000
+4  aditi   26  nagpur   50000
+```
+### Using loc
+- **`.loc[2:4]`**: rows from index 2 to 4, where 4 in excluded
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(df.loc[2:4])
+```
+**Output:**
+```
+    Name  Age    City  salary
+2   yash   22  mumbai   30000
+3  rohan   25    pune   40000
+```
+
+- **`.loc[0:5:2]`**: rows from 0 to 5 where 5 is excluded with step size of 2
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(df.loc[0:5:2])
+```
+**Output:**
+```
+    Name  Age    City  salary
+0    ram   20  kalyan   10000
+2   yash   22  mumbai   30000
+4  aditi   26  nagpur   50000
+```
+
+
+
+[Go To Top](#content)
+
+---
+
+
+
+# Accessing Columns
+
+### For single column
+
+1. **using column name**
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(df['Name'])
+```
+**Output:**
+```
+0      ram
+1     sham
+2     yash
+3    rohan
+4    aditi
+5    rohit
+Name: Name, dtype: object
+```
+
+
+2. **using iloc (use index)**\
+ **`.iloc[:, 0]`:** All rows from column 0
+
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(df.iloc[:, 0])    # column at index 0
+```
+**Output:**
+```
+0      ram
+1     sham
+2     yash
+3    rohan
+4    aditi
+5    rohit
+Name: Name, dtype: object
+```
+
+
+3. **using loc (use name)**\
+**`.loc[:, ["Age"]]`**: All the rows from column Age
+
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(df.loc[:, ["Age"]])
+```
+**Output:**
+```
+   Age
+0   20
+1   21
+2   22
+3   25
+4   26
+5   23
+```
+
+
+
+
+
+
+### For multiple column
+1. **using column name** 
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(df[["Name", "City", "salary"]]) # use nested lists
+```
+**Output:**
+```
+    Name      City  salary
+0    ram    kalyan   10000
+1   sham      None   20000
+2   yash    mumbai   30000
+3  rohan      pune   40000
+4  aditi    nagpur   50000
+5  rohit  banglore   60000
+```
+
+2. **Using iloc (using index)**
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(df.iloc[:, [0, 2, 3]])    # provide the list of all the index in lists
+```
+**Output:**
+```
+    Name      City  salary
+0    ram    kalyan   10000
+1   sham      None   20000
+2   yash    mumbai   30000
+3  rohan      pune   40000
+4  aditi    nagpur   50000
+5  rohit  banglore   60000
+```
+3. **Using loc (using names)**
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(df.loc[:, ["Age","salary","Name"]])   # provide the list of all the names of column in lists
+```
+**Output:**
+```
+   Age  salary   Name
+0   20   10000    ram
+1   21   20000   sham
+2   22   30000   yash
+3   25   40000  rohan
+4   26   50000  aditi
+5   23   60000  rohit
+```
+
+
+[Go To Top](#content)
+
+---
+
+
+
+
+# Column slicing
+
+### Using iloc
+- **`.iloc[:, 0:3]`**: All the rows from cloumn 0 to 3, where 3 is excluded
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(df.iloc[:, 0:3])  # column from index 0 to 3 where 3 is excluded
+```
+**Output:**
+```
+    Name  Age      City
+0    ram   20    kalyan
+1   sham   21      None
+2   yash   22    mumbai
+3  rohan   25      pune
+4  aditi   26    nagpur
+5  rohit   23  banglore
+```
+- **`.iloc[:,0:4:2]`**: All the rows from cloumn 0 to 4, where 4 is excluded and step size is 2
+
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(df.iloc[:,0:4:2])
+```
+
+### Using loc
+- **`.loc[:,"Name":"City"]`**: all the rows from cloumns 'Name' to 'City'
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(df.loc[:,"Name":"City"])
+```
+**Output:**
+```
+    Name  Age      City
+0    ram   20    kalyan
+1   sham   21      None
+2   yash   22    mumbai
+3  rohan   25      pune
+4  aditi   26    nagpur
+5  rohit   23  banglore
+```
+- **`.loc[:,"Name":"salary":2]`**: All the rows from cloumn 'Name'  to 'salary' , with step size is 2
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(df.loc[:,"Name":"salary":2])
+```
+**Output:**
+```
+    Name      City
+0    ram    kalyan
+1   sham      None
+2   yash    mumbai
+3  rohan      pune
+4  aditi    nagpur
+5  rohit  banglore
+```
+
+
+[Go To Top](#content)
+
+---
+
 
 

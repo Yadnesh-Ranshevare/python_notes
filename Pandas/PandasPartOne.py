@@ -51,7 +51,21 @@ import pandas as pb
 
 
 
-# shape and column
+# # shape and column
+# data = {
+#     "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+#     "Age":[20, 21, 22, 25, 26, 23],
+#     "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+#     "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+# }
+
+# df = pb.DataFrame(data)
+# print(f'shape: {df.shape}')
+# print(f'columns: {df.columns}')
+
+
+
+
 data = {
     "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
     "Age":[20, 21, 22, 25, 26, 23],
@@ -60,9 +74,11 @@ data = {
 }
 
 df = pb.DataFrame(data)
-print(f'shape: {df.shape}')
-print(f'columns: {df.columns}')
-
-
+# print(df[["Name", "City", "salary"]])
+# print(df.loc[:, ["Name", "City", "salary"]])
+# print("using loc \n")
+# print(df.loc[:])
+# print("\nusing iloc \n")
+print(df.loc[:,"Name":"salary":2])
 
 
