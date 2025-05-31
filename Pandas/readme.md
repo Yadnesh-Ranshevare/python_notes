@@ -765,6 +765,48 @@ print(df.loc[:, ["Age","salary","Name"]])   # provide the list of all the names 
 5   23   60000  rohit
 ```
 
+### Note
+**you can access column and row at the same time by using both `iloc` and `loc`**
+1. using `iloc`
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(df.iloc[[0,2,4],[0,2]])
+```
+**Output:**
+```
+    Name    City
+0    ram  kalyan
+2   yash  mumbai
+4  aditi  nagpur
+```
+2. using `loc`
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+print(df.iloc[[0,2,4],["Name","City"]])
+```
+**Output:**
+```
+    Name    City
+0    ram  kalyan
+2   yash  mumbai
+4  aditi  nagpur
+```
+
+
 
 [Go To Top](#content)
 
@@ -811,7 +853,26 @@ data = {
 df = pb.DataFrame(data)
 print(df.iloc[:,0:4:2])
 ```
+- `Note:` you can also apply the row sllicing along with the column
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
 
+df = pb.DataFrame(data)
+print(df.iloc[0:4,0:3])
+```
+**Output:**
+```
+    Name  Age    City
+0    ram   20  kalyan
+1   sham   21    None
+2   yash   22  mumbai
+3  rohan   25    pune
+```
 ### Using loc
 - **`.loc[:,"Name":"City"]`**: all the rows from cloumns 'Name' to 'City'
 ```py
@@ -857,7 +918,27 @@ print(df.loc[:,"Name":"salary":2])
 4  aditi    nagpur
 5  rohit  banglore
 ```
+- `Note:` you can also apply the row sllicing along with the column
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
 
+df = pb.DataFrame(data)
+print(df.loc[0:4,"Name":"City"])
+```
+**Output:**
+```
+    Name  Age    City
+0    ram   20  kalyan
+1   sham   21    None
+2   yash   22  mumbai
+3  rohan   25    pune
+4  aditi   26  nagpur
+```
 
 [Go To Top](#content)
 

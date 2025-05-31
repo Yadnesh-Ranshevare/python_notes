@@ -74,11 +74,6 @@ data = {
 }
 
 df = pb.DataFrame(data)
-# print(df[["Name", "City", "salary"]])
-# print(df.loc[:, ["Name", "City", "salary"]])
-# print("using loc \n")
-# print(df.loc[:])
-# print("\nusing iloc \n")
-print(df.loc[:,"Name":"salary":2])
+print(df.iloc[0:4,0:3])
 
 
