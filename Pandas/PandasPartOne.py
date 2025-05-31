@@ -65,6 +65,18 @@ import pandas as pb
 
 
 
+# # Accessing the rows and column
+# data = {
+#     "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+#     "Age":[20, 21, 22, 25, 26, 23],
+#     "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+#     "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+# }
+
+# df = pb.DataFrame(data)
+# print(df.iloc[0:4,0:3])
+
+
 
 data = {
     "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
@@ -74,6 +86,11 @@ data = {
 }
 
 df = pb.DataFrame(data)
-print(df.iloc[0:4,0:3])
+
+# high_salary = df[df["salary"] > 30000]
+# print(high_salary)
+
+filtered = df[(df["salary"] >= 30000) & (df["salary"] <= 40000)]
+print(filtered)
 
 

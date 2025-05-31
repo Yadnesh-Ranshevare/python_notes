@@ -6,8 +6,9 @@
 5. [Info & Describe](#info--describe)
 6. [Access Row](#accessing-rows)
 7. [Row Slicing](#row-slicing)
-6. [Access Column](#accessing-columns)
-7. [Column Slicing](#column-slicing)
+8. [Access Column](#accessing-columns)
+9. [Column Slicing](#column-slicing)
+10. [Filtering the rows](#filtering-the-rows)
 
 # Introduction
 
@@ -944,5 +945,61 @@ print(df.loc[0:4,"Name":"City"])
 
 ---
 
+# Filtering the rows
 
 
+create the new data frame that contains the all the entries which produce result as true for given condition
+
+### for single condition
+condition: salary greater that 30000
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+high_salary = df[df["salary"] > 30000]
+print(high_salary)
+```
+**Output:**
+```
+    Name  Age      City  salary
+3  rohan   25      pune   40000
+4  aditi   26    nagpur   50000
+5  rohit   23  banglore   60000
+```
+
+### For multiple condition
+condition: salary between 30000 and 40000
+
+Note: use round bracket inside the list to use muliple condition\
+& -> and\
+| -> or
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+filtered = df[(df["salary"] >= 30000) & (df["salary"] <= 40000)]
+print(filtered)
+```
+**output:**
+```
+    Name  Age    City  salary
+2   yash   22  mumbai   30000
+3  rohan   25    pune   40000
+```
+
+
+[Go To Top](#content)
+
+---
