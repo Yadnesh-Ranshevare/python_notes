@@ -1065,13 +1065,13 @@ print(df)
 5  rohit   23  banglore   60000        66000.0
 ```
 
-**Using direct assigenment we can only add the column at the last position we dont have the control over the position of new column. Therefor to solve this issue we have insert method** 
+**Using direct assigenment we can only add the column at the last position that is we dont have any control over the position of new column. Therefor to solve this issue we have insert method** 
 
 ### Insert method
 syntax:
 
 ```py
-df.insert('position', 'col_name', 'col_data')
+df.insert('col_index', 'col_name', 'col_data')
 ```
 
 **Example 1:**\
@@ -1100,8 +1100,8 @@ print(df)
 5  rohit     60   23  banglore   60000
 ```
 
-**Example 1:**\
-lets assume you have a data of employee where each column represent the Name, Age, City, salary and now you have to find out the specific score of each employee based on their 'salary', lets say the sore is equal to the 50% of their original salary. Therefor add new column name sore to display the score of each empolyee
+**Example 2:**\
+lets assume you have a data of employee where each column represent the Name, Age, City, salary and now you have to find out the specific score of each employee based on their 'salary', lets say the sore is equal to the 50% of their original salary. Therefor add new column name sore just after the 'Name' and before the 'Age' to display the score of each empolyee
 ```py
 data = {
     "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
