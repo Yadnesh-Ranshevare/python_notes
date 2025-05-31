@@ -9,6 +9,7 @@
 8. [Access Column](#accessing-columns)
 9. [Column Slicing](#column-slicing)
 10. [Filtering the rows](#filtering-the-rows)
+11. [How to add a new column?](#how-to-add-new-column)
 
 # Introduction
 
@@ -999,6 +1000,131 @@ print(filtered)
 3  rohan   25    pune   40000
 ```
 
+
+[Go To Top](#content)
+
+---
+# How to add new column?
+
+
+### Direct Assigenment
+
+1. **Adding the new data into seprate column**
+
+lets assume you have a data of employee where each column represent the Name, Age, City, salary and now you want to add each employeis performace score
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+df["score"] = [20,45,78,87,67,8]    # ading the performance score into the original dala
+print(df)
+```
+**Output:**
+```
+    Name  Age      City  salary  score
+0    ram   20    kalyan   10000     20
+1   sham   21      None   20000     45
+2   yash   22    mumbai   30000     78
+3  rohan   25      pune   40000     87
+4  aditi   26    nagpur   50000     67
+5  rohit   23  banglore   60000      8
+```
+**Note: make sure that you provide the data for each entry**
+
+2. **Use one column to compute the new column**
+
+lets assume you have a data of employee where each column represent the Name, Age, City, salary and now you have to find out the future salary of each employee after 10% increment in there original salary. Therefor add new column name future_salary to display the future salary
+
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+df["future_salary"] = df['salary'] + df['salary'] * 0.1
+print(df)
+```
+**Output:**
+```
+    Name  Age      City  salary  future_salary
+0    ram   20    kalyan   10000        11000.0
+1   sham   21      None   20000        22000.0
+2   yash   22    mumbai   30000        33000.0
+3  rohan   25      pune   40000        44000.0
+4  aditi   26    nagpur   50000        55000.0
+5  rohit   23  banglore   60000        66000.0
+```
+
+**Using direct assigenment we can only add the column at the last position we dont have the control over the position of new column. Therefor to solve this issue we have insert method** 
+
+### Insert method
+syntax:
+
+```py
+df.insert('position', 'col_name', 'col_data')
+```
+
+**Example 1:**\
+lets assume you have a data of employee where each column represent the Name, Age, City, salary and now you want to add each employeis performace score just after the 'Name' and before the 'Age' column
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+df.insert(1, "score", [45, 67, 63, 37, 98, 60])       
+print(df)
+```
+**Output:**
+```
+    Name  score  Age      City  salary
+0    ram     45   20    kalyan   10000
+1   sham     67   21      None   20000
+2   yash     63   22    mumbai   30000
+3  rohan     37   25      pune   40000
+4  aditi     98   26    nagpur   50000
+5  rohit     60   23  banglore   60000
+```
+
+**Example 1:**\
+lets assume you have a data of employee where each column represent the Name, Age, City, salary and now you have to find out the specific score of each employee based on their 'salary', lets say the sore is equal to the 50% of their original salary. Therefor add new column name sore to display the score of each empolyee
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+df.insert(1, "score", df['salary'] * 0.5)       
+print(df)
+```
+**Output:**
+```
+    Name    score  Age      City  salary
+0    ram   5000.0   20    kalyan   10000
+1   sham  10000.0   21      None   20000
+2   yash  15000.0   22    mumbai   30000
+3  rohan  20000.0   25      pune   40000
+4  aditi  25000.0   26    nagpur   50000
+5  rohit  30000.0   23  banglore   60000
+```
 
 [Go To Top](#content)
 
