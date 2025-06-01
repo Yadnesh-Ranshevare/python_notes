@@ -10,6 +10,7 @@
 9. [Column Slicing](#column-slicing)
 10. [Filtering the rows](#filtering-the-rows)
 11. [How to add a new column?](#how-to-add-new-column)
+12. [Updating the data](#updating-data)
 
 # Introduction
 
@@ -528,7 +529,7 @@ using iloc
 # Row slicing
 
 ### Using iloc
-- **`.iloc[2:4]`**: rows from index 2 to 4, where 4 in excluded
+- **`.iloc[2:4]`**: rows from index 2 to 4, where 4 in `excluded`
 ```py
 data = {
     "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
@@ -547,7 +548,7 @@ print(df.iloc[2:4])
 3  rohan   25    pune   40000
 ```
 
-- **`.iloc[0:5:2]`**: rows from 0 to 5 where 5 is excluded with step size of 2
+- **`.iloc[0:5:2]`**: rows from 0 to 5 where 5 is `excluded` with step size of 2
 ```py
 data = {
     "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
@@ -567,7 +568,7 @@ print(df.iloc[0:5:2])
 4  aditi   26  nagpur   50000
 ```
 ### Using loc
-- **`.loc[2:4]`**: rows from index 2 to 4, where 4 in excluded
+- **`.loc[2:4]`**: rows from index 2 to 4, where 4 in `included`
 ```py
 data = {
     "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
@@ -584,9 +585,10 @@ print(df.loc[2:4])
     Name  Age    City  salary
 2   yash   22  mumbai   30000
 3  rohan   25    pune   40000
+4  aditi   26  nagpur   50000
 ```
 
-- **`.loc[0:5:2]`**: rows from 0 to 5 where 5 is excluded with step size of 2
+- **`.loc[0:5:2]`**: rows from 0 to 5 where 5 is `included` with step size of 2
 ```py
 data = {
     "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
@@ -820,7 +822,7 @@ print(df.iloc[[0,2,4],["Name","City"]])
 # Column slicing
 
 ### Using iloc
-- **`.iloc[:, 0:3]`**: All the rows from cloumn 0 to 3, where 3 is excluded
+- **`.iloc[:, 0:3]`**: All the rows from cloumn 0 to 3, where 3 is `excluded`
 ```py
 data = {
     "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
@@ -842,7 +844,7 @@ print(df.iloc[:, 0:3])  # column from index 0 to 3 where 3 is excluded
 4  aditi   26    nagpur
 5  rohit   23  banglore
 ```
-- **`.iloc[:,0:4:2]`**: All the rows from cloumn 0 to 4, where 4 is excluded and step size is 2
+- **`.iloc[:,0:4:2]`**: All the rows from cloumn 0 to 4, where 4 is `excluded` and step size is 2
 
 ```py
 data = {
@@ -1067,6 +1069,8 @@ print(df)
 
 **Using direct assigenment we can only add the column at the last position that is we dont have any control over the position of new column. Therefor to solve this issue we have insert method** 
 
+**Anothe problem with direct assigenment is that if you use allready existing column name then insted of creating new column it will overwrite the existing column**
+
 ### Insert method
 syntax:
 
@@ -1125,6 +1129,171 @@ print(df)
 4  aditi  25000.0   26    nagpur   50000
 5  rohit  30000.0   23  banglore   60000
 ```
+
+[Go To Top](#content)
+
+---
+
+# Updating Data
+
+**Befor you learn about any of the updating method you must know about the column accessing methods and column sclicing as to update any column you first need to access that column**\
+[Clikc here to learn about column Accessing](#accessing-columns)\
+[Clikc here to learn about column Sclicing](#column-slicing)
+
+
+### Data Overwriting
+
+**in this method you completely overwrite the original data of specific column with new data**
+
+**Example:**\
+lets assume you have a data of employee where each column represent the Name, Age, City, salary now update the salary of each employee with 10% increment in their original salary
+
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+df['salary'] = df['salary'] + df['salary'] * 0.1
+print(df)
+```
+
+
+**Output:**
+```
+    Name  Age      City   salary
+0    ram   20    kalyan  11000.0
+1   sham   21      None  22000.0
+2   yash   22    mumbai  33000.0
+3  rohan   25      pune  44000.0
+4  aditi   26    nagpur  55000.0
+5  rohit   23  banglore  66000.0
+```
+
+**Note: if provided column name is not there in the dataset then this will create the new column with the name you mention in left side**
+
+
+### Using `.loc`
+**in this method you change the required  data of specific column with new data**
+
+**Example 1:**\
+lets assume you have a data of employee where each column represent the Name, Age, City, salary. There is a employee with name yash who just had a promotion and has his salary increases by 10%, therefor update the dataset for yash with his new salary
+
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+df.loc[2, "salary" ] = df.loc[2, "salary"] + df.loc[2, "salary"] * 0.1
+print(df)
+```
+**Output:**
+```
+    Name  Age      City  salary
+0    ram   20    kalyan   10000
+1   sham   21      None   20000
+2   yash   22    mumbai   33000
+3  rohan   25      pune   40000
+4  aditi   26    nagpur   50000
+5  rohit   23  banglore   60000
+```
+
+**Example 2:**\
+lets assume you have a data of employee where each column represent the Name, Age, City, salary. There are few employeis with index `1 to 4` who just had a promotion and had their salary increases by 10%, therefor update the dataset for those employeis with their new salary
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+df.loc[1:4, "salary" ] = df.loc[1:4, "salary"] + df.loc[1:4, "salary"] * 0.1
+print(df)
+```
+**Output:**
+```
+    Name  Age      City  salary
+0    ram   20    kalyan   10000
+1   sham   21      None   22000
+2   yash   22    mumbai   33000
+3  rohan   25      pune   44000
+4  aditi   26    nagpur   55000
+5  rohit   23  banglore   60000
+```
+
+
+**Example 3:**\
+lets assume you have a data of employee where each column represent the Name, Age, City, salary. There are few employeis with index `1 to 4` who has just shifted form there original Cities to new city, and now they live in a same city as that of employee with index `3` lives in, therefor update the data set for thos employee with there new city
+
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+df.loc[1:4, "City" ] = df.loc[3, "City"] 
+print(df)
+```
+**Output:**
+```
+    Name  Age      City  salary
+0    ram   20    kalyan   10000
+1   sham   21      pune   20000
+2   yash   22      pune   30000
+3  rohan   25      pune   40000
+4  aditi   26      pune   50000
+5  rohit   23  banglore   60000
+```
+
+
+### Using `.iloc`
+**this is works similar to `.loc` but you just have to check for indexing**
+
+**Note: in case of slicing in `.loc` last index is `included` whereas in `.iloc` las index is `excluded`**
+
+**Example :**\
+lets assume you have a data of employee where each column represent the Name, Age, City, salary. There are few employeis with index `1 to 4` who just had a promotion and had their salary increases by 10%, therefor update the dataset for those employeis with their new salary
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+df.iloc[1:5, 3 ] = df.iloc[1:5, 3] + df.iloc[1:5, 3] * 0.1
+print(df)
+```
+**Output:**
+```
+    Name  Age      City  salary
+0    ram   20    kalyan   10000
+1   sham   21      None   22000
+2   yash   22    mumbai   33000
+3  rohan   25      pune   44000
+4  aditi   26    nagpur   55000
+5  rohit   23  banglore   60000
+```
+
+
 
 [Go To Top](#content)
 
