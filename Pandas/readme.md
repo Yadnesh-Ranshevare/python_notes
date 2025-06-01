@@ -171,7 +171,7 @@ import pandas as pb
 
 df_csv = pb.read_csv('./Dataset/sales_data_sample.csv', encoding='latin1')  # in my device utf-8 doesn't work but latin1 work
 
-df_json = pb.read_json('./Dataset/sample_Data.json') # coe run without mentioning any method 
+df_json = pb.read_json('./Dataset/sample_Data.json') # coed run without mentioning any method 
 
 print(df_csv)
 print(df_json)
@@ -296,7 +296,7 @@ None
 
 - **RangeIndex:** number of rows in the dataset
 - **Data columns:** info about each column, in bracket you can see the number of column
-    - **#:** column number (starts from 0)
+    - **#:** column index (starts from 0)
     - **Column:** name of the particular column
     - **Non-Null Count:** number of not null entries (number of 
     not null value for that single column)
@@ -307,7 +307,7 @@ None
 
 
 ### .describe()
-The `.describe()` function in Pandas is used to quickly generate summary statistics for numeric column in our DataFrame 
+The `.describe()` function in Pandas is used to quickly generate summary statistics for `numeric column` in our DataFrame 
 
 ```py
 data = {
@@ -530,7 +530,7 @@ using iloc
 # Row slicing
 
 ### Using iloc
-- **`.iloc[2:4]`**: rows from index 2 to 4, where 4 in `excluded`
+- **`.iloc[2:4]`**: rows from index 2 to 4, where 4 is `excluded`
 ```py
 data = {
     "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
@@ -609,6 +609,7 @@ print(df.loc[0:5:2])
 4  aditi   26  nagpur   50000
 ```
 
+#### Note: in `.iloc` last index is `excluded` wheres in `.loc` las index is `included`
 
 
 [Go To Top](#content)
@@ -944,6 +945,7 @@ print(df.loc[0:4,"Name":"City"])
 3  rohan   25    pune
 4  aditi   26  nagpur
 ```
+#### Note: in `.iloc` last index is `excluded` wheres in `.loc` las index is `included`
 
 [Go To Top](#content)
 
@@ -1280,7 +1282,7 @@ data = {
 
 df = pb.DataFrame(data)
 
-df.iloc[1:5, 3 ] = df.iloc[1:5, 3] + df.iloc[1:5, 3] * 0.1
+df.iloc[1:5, 3 ] = df.iloc[1:5, 3] + df.iloc[1:5, 3] * 0.1 # 5 is excluded and column 'salary' is at index 3
 print(df)
 ```
 **Output:**
@@ -1324,7 +1326,7 @@ data = {
 
 df = pb.DataFrame(data)
 
-new_Dataset = df.drop(columns=['City']) # by defult inplace isset to False     
+new_Dataset = df.drop(columns=['City']) # by defult inplace is set to False     
 
 print("new dataset\n",new_Dataset)
 print("\n original dataset\n",df)
