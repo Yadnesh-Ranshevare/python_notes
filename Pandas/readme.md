@@ -1298,3 +1298,155 @@ print(df)
 [Go To Top](#content)
 
 ---
+
+# Removing column
+
+- we use `.drope` method to remove the column which accepst the two parameter i.e, columns and inplace
+- **`columns:`** list of column you want to remove
+- **`inplace:`** a boolean flage to specify whether to change the original dataset or not
+    -  `inplace = True`: change the original dataset without returning anything
+    -  `inplace = False`: does not change the original dataset, insted return the new dataset
+    - by defult it is set to False
+- Syntax: `.drop(columns = ['col_1', 'col_2', ...], inplace = True/False)`
+
+
+### Example: remove city column
+
+1. **without inplace**
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+new_Dataset = df.drop(columns=['City']) # by defult inplace isset to False     
+
+print("new dataset\n",new_Dataset)
+print("\n original dataset\n",df)
+```
+**Output:**
+```
+new dataset
+     Name  Age  salary
+0    ram   20   10000
+1   sham   21   20000
+2   yash   22   30000
+3  rohan   25   40000
+4  aditi   26   50000
+5  rohit   23   60000
+
+ original dataset
+     Name  Age      City  salary
+0    ram   20    kalyan   10000
+1   sham   21      None   20000
+2   yash   22    mumbai   30000
+3  rohan   25      pune   40000
+4  aditi   26    nagpur   50000
+5  rohit   23  banglore   60000
+```
+
+2. **inplace = False**
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+new_Dataset = df.drop(columns=['City'], inplace = False)    # return modified dataset without changing the original
+
+print("new dataset\n",new_Dataset)
+print("\n original dataset\n",df)
+```
+**Output:**
+```
+new dataset
+     Name  Age  salary
+0    ram   20   10000
+1   sham   21   20000
+2   yash   22   30000
+3  rohan   25   40000
+4  aditi   26   50000
+5  rohit   23   60000
+
+ original dataset
+     Name  Age      City  salary
+0    ram   20    kalyan   10000
+1   sham   21      None   20000
+2   yash   22    mumbai   30000
+3  rohan   25      pune   40000
+4  aditi   26    nagpur   50000
+5  rohit   23  banglore   60000
+```
+3. **inplace = True**
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+new_Dataset = df.drop(columns=['City'], inplace = True) # doesn't return anything
+
+print("new dataset\n",new_Dataset)
+print("\n original dataset\n",df)
+```
+**Output:**
+```
+new dataset
+ None
+
+ original dataset
+     Name  Age  salary
+0    ram   20   10000
+1   sham   21   20000
+2   yash   22   30000
+3  rohan   25   40000
+4  aditi   26   50000
+5  rohit   23   60000
+```
+### Removing multiple columns
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+new_Dataset = df.drop(columns=['City', 'Age'], inplace = True)
+
+print("new dataset\n",new_Dataset)
+print("\n original dataset\n",df)
+```
+**Output:**
+```
+new dataset
+ None
+
+ original dataset
+     Name  salary
+0    ram   10000
+1   sham   20000
+2   yash   30000
+3  rohan   40000
+4  aditi   50000
+5  rohit   60000
+```
+
+
+[Go To Top](#content)
+
+---
