@@ -11,6 +11,7 @@
 10. [Filtering the rows](#filtering-the-rows)
 11. [How to add a new column?](#how-to-add-new-column)
 12. [Updating the data](#updating-data)
+13. [Removing the Columns](#removing-column)
 
 # Introduction
 
