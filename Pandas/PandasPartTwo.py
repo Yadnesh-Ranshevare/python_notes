@@ -68,18 +68,31 @@ import pandas as pb
 # print(df.isnull().sum())
 
 
-# handling missing data
+# # handling missing data
+# data = {
+#     "Name":["ram", None, 'yash', 'rohan', 'aditi', 'rohit'],
+#     "Age":[20, None, 22, 25, 26, 23],
+#     "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+#     "salary":[10000, None, 30000, 40000, 50000, 60000]
+# }
+
+# df = pb.DataFrame(data)
+
+# # df.dropna(inplace=True, axis=1)
+# # df.fillna(0, inplace=True)
+# df['Age'].fillna(df['Age'].mean() , inplace=True)
+# df['salary'].fillna(df['salary'].mean() , inplace=True)
+# print(df)
+
+
+
+# interpolate
 data = {
-    "Name":["ram", None, 'yash', 'rohan', 'aditi', 'rohit'],
-    "Age":[20, None, 22, 25, 26, 23],
-    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
-    "salary":[10000, None, 30000, 40000, 50000, 60000]
+    "Time":[1, 2, 3, 4, 5],
+    "Value":[10, None, 30, None, 50]
 }
 
 df = pb.DataFrame(data)
 
-# df.dropna(inplace=True, axis=1)
-# df.fillna(0, inplace=True)
-df['Age'].fillna(df['Age'].mean() , inplace=True)
-df['salary'].fillna(df['salary'].mean() , inplace=True)
+df['Value'] = df['Value'].interpolate(method='linear')
 print(df)

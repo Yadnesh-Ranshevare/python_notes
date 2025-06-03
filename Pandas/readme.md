@@ -12,6 +12,8 @@
 11. [How to add a new column?](#how-to-add-new-column)
 12. [Updating the data](#updating-data)
 13. [Removing the Columns](#removing-column)
+14. [How to detect the missing value using .isnull()](#how-to-detect-the-missing-value-using-isnull)
+15. [Handling the missing data](#handling-the-missing-data)
 
 # Introduction
 
@@ -1593,7 +1595,7 @@ print(df)
 4  aditi   26
 5  rohit   23
 ```
-### .fillna()
+## .fillna()
 - fill the default inpace of null
 - it taks two parameter i.e, value and inplace
 - value: default value you want to replace instead of null
@@ -1655,6 +1657,63 @@ print(df)
 4  aditi  26.0    nagpur  50000.0
 5  rohit  23.0  banglore  60000.0
 ```
+## .interpolate()
+The `.interpolate()` method in Pandas is used to fill missing values (`NaN`) in a DataFrame or Series by **estimating** them from existing data.
+
+Example: lets assume you have dataFrame like:
+```py
+data = {
+    "Time":[1, 2, 3, 4, 5],
+    "Value":[10, None, 30, None, 50]
+}
+
+df = pb.DataFrame(data)
+```
+- in above dataframe you can see that value column has some missing data, 
+- but you can see the trend(10, 20, 30, 40, 50) in the data pattern of 'Value' column, if you follow this trend then you can estimate the missing data of the 'Value' column, 
+- by filling thos estimaated column you will get the 'Value' column as follow: `[10, 20, 30, 40, 50]`
+- `.interpolate()` method can estimate those missing value
+- it take one parameter as input i.e, `method`
+- `method`: there are various method on the basis of which you can estimate the missing value
+
+**Code:**
+
+```py
+data = {
+    "Time":[1, 2, 3, 4, 5],
+    "Value":[10, None, 30, None, 50]
+}
+
+df = pb.DataFrame(data)
+
+df['Value'] = df['Value'].interpolate(method='linear')
+print(df)
+```
+**Output:**
+```
+   Time  Value
+0     1   10.0
+1     2   20.0
+2     3   30.0
+3     4   40.0
+4     5   50.0
+```
+
+**Some methods you can learn on your own**
+
+
+| Method                   | Meaning                                                                                               |
+| ------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `'linear'`               | Default. Fills missing values by drawing a straight line between known values.                        |
+| `'time'`                 | Works with time-indexed data. Interpolates based on time differences.                                 |
+| `'index'`                | Uses the numeric index values to interpolate. Similar to linear but based on index.                   |
+| `'pad'` / `'ffill'`      | Fill missing values with the **previous** known value (forward fill).                                 |
+| `'backfill'` / `'bfill'` | Fill missing values with the **next** known value (backward fill).                                    |
+| `'polynomial'`           | Fit a polynomial function to known values and estimate missing ones. You need to provide the `order`. |
+| `'spline'`               | Similar to polynomial but smoother; uses spline functions.                                            |
+| `'barycentric'`          | Uses barycentric interpolation. Works well for small datasets.                                        |
+| `'nearest'`              | Fills with the nearest known value (left or right).                                                   |
+
 
 
 [Go To Top](#content)
