@@ -13,7 +13,7 @@
 12. [Updating the data](#updating-data)
 13. [Removing the Columns](#removing-column)
 14. [How to detect the missing value using .isnull()](#how-to-detect-the-missing-value-using-isnull)
-15. [Handling the missing data](#handling-the-missing-data)
+15. [Handling the missing data using .dropna(), .fillna() and .interpolate()](#handling-the-missing-data)
 
 # Introduction
 
@@ -1713,6 +1713,130 @@ print(df)
 | `'spline'`               | Similar to polynomial but smoother; uses spline functions.                                            |
 | `'barycentric'`          | Uses barycentric interpolation. Works well for small datasets.                                        |
 | `'nearest'`              | Fills with the nearest known value (left or right).                                                   |
+
+
+
+[Go To Top](#content)
+
+---
+
+# How to sort the dataset
+- we use `.sort_values()` method to sort the columns, ehich takes three parameter i.e, by, ascending, inplace
+- `by`: on the basus of which column you want to sort the dataset
+- `ascending`: accept a boolean value and decide in which order to sort the dataset
+    - `ascending = True`: sort the dataset from low to high
+    - `ascending = False`:dort the dataset from high to low
+    - default value of ascending if True
+- inplace:-
+    -  `inplace = True`: change the original dataset without returning anything
+    -  `inplace = False`: does not change the original dataset, insted return the new dataset
+    - by defult it is set to False
+    - [to learn more about inplace click here](#removing-column)
+
+**Example:**
+sort the given dataset of employee on the basis of employeis age
+1. ascending = True : from low to high
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 32, 25, 19, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+df.sort_values(by='Age', inplace=True, ascending=True)
+print(df)
+```
+**Output:**
+```
+    Name  Age      City  salary
+4  aditi   19    nagpur   50000
+0    ram   20    kalyan   10000
+1   sham   21      None   20000
+5  rohit   23  banglore   60000
+3  rohan   25      pune   40000
+2   yash   32    mumbai   30000
+```
+2. without ascending: by default ascending is set to True(case 1)
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 32, 25, 19, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+df.sort_values(by='Age', inplace=True)
+print(df)
+```
+**Output:**
+```
+    Name  Age      City  salary
+4  aditi   19    nagpur   50000
+0    ram   20    kalyan   10000
+1   sham   21      None   20000
+5  rohit   23  banglore   60000
+3  rohan   25      pune   40000
+2   yash   32    mumbai   30000
+```
+3. ascending = False : from high to low
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 32, 25, 19, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+df.sort_values(by='Age', inplace=True, ascending=False)
+print(df)
+```
+**Output:**
+```
+    Name  Age      City  salary
+2   yash   32    mumbai   30000
+3  rohan   25      pune   40000
+5  rohit   23  banglore   60000
+1   sham   21      None   20000
+0    ram   20    kalyan   10000
+4  aditi   19    nagpur   50000
+```
+
+- you can also apply the sorting in multiple column at the same time
+- to do that you just nees to provide the list of column in by parameter
+- similarly for ascending parameter you will provide a list for that respective columns
+
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 32, 25, 19, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+df.sort_values(by=['Age','salary'], inplace=True, ascending=[False, True])  # first False for 'Age' column and second True is for 'salary' cloumn
+print(df)
+```
+**Output:**
+```
+    Name  Age      City  salary
+2   yash   32    mumbai   30000
+3  rohan   25      pune   40000
+5  rohit   23  banglore   60000
+1   sham   21      None   20000
+0    ram   20    kalyan   10000
+4  aditi   19    nagpur   50000
+```
+
+
 
 
 

@@ -86,13 +86,27 @@ import pandas as pb
 
 
 
-# interpolate
+# # interpolate
+# data = {
+#     "Time":[1, 2, 3, 4, 5],
+#     "Value":[10, None, 30, None, 50]
+# }
+
+# df = pb.DataFrame(data)
+
+# df['Value'] = df['Value'].interpolate(method='linear')
+# print(df)
+
+
+
 data = {
-    "Time":[1, 2, 3, 4, 5],
-    "Value":[10, None, 30, None, 50]
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 32, 25, 19, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
 }
 
 df = pb.DataFrame(data)
 
-df['Value'] = df['Value'].interpolate(method='linear')
+df.sort_values(by=['Age','salary'], inplace=True, ascending=[False, True])
 print(df)
