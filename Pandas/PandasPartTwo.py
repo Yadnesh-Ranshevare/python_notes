@@ -36,17 +36,50 @@ import pandas as pb
 
 
 
-# removing columns
+# # removing columns
+# data = {
+#     "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+#     "Age":[20, 21, 22, 25, 26, 23],
+#     "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+#     "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+# }
+
+# df = pb.DataFrame(data)
+
+# new_Dataset = df.drop(columns=['City', 'Age'], inplace = True)
+
+# print("new dataset\n",new_Dataset)
+# print("\n original dataset\n",df)
+
+
+
+
+# # detecting missing  data
+# data = {
+#     "Name":["ram", None, 'yash', 'rohan', 'aditi', 'rohit'],
+#     "Age":[20, None, 22, 25, 26, 23],
+#     "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+#     "salary":[10000, None, 30000, 40000, 50000, 60000]
+# }
+
+# df = pb.DataFrame(data)
+
+# print(df.isnull())
+# print(df.isnull().sum())
+
+
+# handling missing data
 data = {
-    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
-    "Age":[20, 21, 22, 25, 26, 23],
+    "Name":["ram", None, 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, None, 22, 25, 26, 23],
     "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
-    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+    "salary":[10000, None, 30000, 40000, 50000, 60000]
 }
 
 df = pb.DataFrame(data)
 
-new_Dataset = df.drop(columns=['City', 'Age'], inplace = True)
-
-print("new dataset\n",new_Dataset)
-print("\n original dataset\n",df)
+# df.dropna(inplace=True, axis=1)
+# df.fillna(0, inplace=True)
+df['Age'].fillna(df['Age'].mean() , inplace=True)
+df['salary'].fillna(df['salary'].mean() , inplace=True)
+print(df)

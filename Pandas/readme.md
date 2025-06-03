@@ -1453,3 +1453,210 @@ new dataset
 [Go To Top](#content)
 
 ---
+
+# How to detect the missing value using .isnull()
+
+- **`.isnull()`**: return true if value is missing and uf value is present then return false
+
+```py
+data = {
+    "Name":["ram", None, 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, None, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, None, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+print(df.isnull())
+```
+**Output:**
+```
+    Name    Age   City  salary
+0  False  False  False   False
+1   True   True   True    True
+2  False  False  False   False
+3  False  False  False   False
+4  False  False  False   False
+5  False  False  False   False
+```
+
+- **`.isnull().sum()`**: return the total number of missing values in each column
+
+```py
+data = {
+    "Name":["ram", None, 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, None, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, None, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+print(df.isnull().sum())
+```
+**Output:**
+```
+Name      1
+Age       1
+City      1
+salary    1
+dtype: int64
+```
+
+
+[Go To Top](#content)
+
+---
+# Handling the missing data
+
+## .dropna()
+- it remove the missing data
+- accept two parameter i.e, axis & inplace
+- axis:- 
+    - `axis = 1`: will remove the column who has missing data
+    - `axis = 0`: will remove the row who has missing data
+    - by default axis is set to 0
+- inplace:-
+    -  `inplace = True`: change the original dataset without returning anything
+    -  `inplace = False`: does not change the original dataset, insted return the new dataset
+    - by defult it is set to False
+    - [to learn more about inplace click here](#removing-column)
+
+1. without axis
+```py
+data = {
+    "Name":["ram", None, 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, None, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, None, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+df.dropna(inplace=True) # by default axis is set to 0
+print(df)
+```
+**Output:**
+```
+    Name   Age      City   salary
+0    ram  20.0    kalyan  10000.0
+2   yash  22.0    mumbai  30000.0
+3  rohan  25.0      pune  40000.0
+4  aditi  26.0    nagpur  50000.0
+5  rohit  23.0  banglore  60000.0
+```
+2. axis = 0 (remove row)
+```py
+data = {
+    "Name":["ram", None, 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, None, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, None, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+df.dropna(inplace=True, axis=0)
+print(df)
+```
+**Output:**
+```
+    Name   Age      City   salary
+0    ram  20.0    kalyan  10000.0
+2   yash  22.0    mumbai  30000.0
+3  rohan  25.0      pune  40000.0
+4  aditi  26.0    nagpur  50000.0
+5  rohit  23.0  banglore  60000.0
+```
+3. axis = 1 (remove column)
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, None, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+df.dropna(inplace=True, axis=1)
+print(df)
+```
+**Output:**
+```
+    Name  Age
+0    ram   20
+1   sham   21
+2   yash   22
+3  rohan   25
+4  aditi   26
+5  rohit   23
+```
+### .fillna()
+- fill the default inpace of null
+- it taks two parameter i.e, value and inplace
+- value: default value you want to replace instead of null
+- inplace:-
+    -  `inplace = True`: change the original dataset without returning anything
+    -  `inplace = False`: does not change the original dataset, insted return the new dataset
+    - by defult it is set to False
+    - [to learn more about inplace click here](#removing-column)
+- syntax: `df.fillna(value, inplace = true/false)`
+
+**Example 1: direcct replacement**
+```py
+data = {
+    "Name":["ram", None, 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, None, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, None, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+df.fillna(0, inplace=True)
+print(df)
+```
+**Output:**
+```
+    Name   Age      City   salary
+0    ram  20.0    kalyan  10000.0
+1      0   0.0         0      0.0
+2   yash  22.0    mumbai  30000.0
+3  rohan  25.0      pune  40000.0
+4  aditi  26.0    nagpur  50000.0
+5  rohit  23.0  banglore  60000.0
+```
+
+**Example 2: perticulat value for perticular column**\
+fill the missing Age and salary with avarage Age and avarage salary
+```py
+data = {
+    "Name":["ram", None, 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, None, 22, 25, 26, 23],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, None, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+df['Age'].fillna(df['Age'].mean() , inplace=True)
+df['salary'].fillna(df['salary'].mean() , inplace=True)
+print(df)
+```
+**Output:**
+```
+    Name   Age      City   salary
+0    ram  20.0    kalyan  10000.0
+1   None  23.2      None  38000.0
+2   yash  22.0    mumbai  30000.0
+3  rohan  25.0      pune  40000.0
+4  aditi  26.0    nagpur  50000.0
+5  rohit  23.0  banglore  60000.0
+```
+
+
+[Go To Top](#content)
+
+---
