@@ -14,6 +14,7 @@
 13. [Removing the Columns](#removing-column)
 14. [How to detect the missing value using .isnull()](#how-to-detect-the-missing-value-using-isnull)
 15. [Handling the missing data using .dropna(), .fillna() and .interpolate()](#handling-the-missing-data)
+16. [How to sort the data](#how-to-sort-the-dataset)
 
 # Introduction
 
