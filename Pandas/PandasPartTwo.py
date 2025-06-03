@@ -98,15 +98,35 @@ import pandas as pb
 # print(df)
 
 
+# # sorting
+# data = {
+#     "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+#     "Age":[20, 21, 32, 25, 19, 23],
+#     "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+#     "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+# }
 
+# df = pb.DataFrame(data)
+
+# df.sort_values(by=['Age','salary'], inplace=True, ascending=[False, True])
+# print(df)
+
+
+
+# Aggregation function
 data = {
-    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
-    "Age":[20, 21, 32, 25, 19, 23],
-    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
-    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+    "Value":[1, 2, 3, 4, 5, 5]
 }
 
 df = pb.DataFrame(data)
 
-df.sort_values(by=['Age','salary'], inplace=True, ascending=[False, True])
-print(df)
+print(df['Value'].sum())
+print(df['Value'].mean())
+print(df['Value'].median())
+print(df['Value'].min())
+print(df['Value'].max())
+print(df['Value'].count())
+print(df['Value'].std())
+print(df['Value'].var())
+print(df['Value'].prod())
+print(df['Value'].unique())

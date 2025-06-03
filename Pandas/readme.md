@@ -15,6 +15,7 @@
 14. [How to detect the missing value using .isnull()](#how-to-detect-the-missing-value-using-isnull)
 15. [Handling the missing data using .dropna(), .fillna() and .interpolate()](#handling-the-missing-data)
 16. [How to sort the data](#how-to-sort-the-dataset)
+17. [Aggregation Functions](#aggregation-functions)
 
 # Introduction
 
@@ -1839,6 +1840,62 @@ print(df)
 
 
 
+
+
+[Go To Top](#content)
+
+---
+# Aggregation Functions
+In Pandas, aggregation functions are used to summarize or combine multiple values into a single value — usually when working with groups of data or when applying operations on DataFrames/Series
+
+
+### Common Aggregation Functions in Pandas
+
+| Function    | Description                     | Example Result on `[1, 2, 3, 4, 5]` |
+| ----------- | ------------------------------- | ----------------------------------- |
+| `sum()`     | Sum of all values               | `15`                                |
+| `mean()`    | Average (arithmetic mean)       | `3.0`                               |
+| `median()`  | Middle value                    | `3`                                 |
+| `min()`     | Smallest value                  | `1`                                 |
+| `max()`     | Largest value                   | `5`                                 |
+| `count()`   | Number of non-null values       | `5`                                 |
+| `std()`     | Standard deviation              | `1.58` (approx)                     |
+| `var()`     | Variance                        | `2.5`                               |
+| `prod()`    | Product of all values           | `120`                               |
+| `nunique()` | lisy of unique values         | `[1 2 3 4 5]`                                 |
+
+**Code:**
+```py
+data = {
+    "Value":[1, 2, 3, 4, 5, 5]
+}
+
+df = pb.DataFrame(data)
+
+print(df['Value'].sum())
+print(df['Value'].mean())
+print(df['Value'].median())
+print(df['Value'].min())
+print(df['Value'].max())
+print(df['Value'].count())
+print(df['Value'].std())
+print(df['Value'].var())
+print(df['Value'].prod())
+print(df['Value'].unique())
+```
+**Output:**
+```
+20
+3.3333333333333335
+3.5
+1
+5
+6
+1.632993161855452
+2.666666666666667
+600
+[1 2 3 4 5]
+```
 
 
 [Go To Top](#content)
