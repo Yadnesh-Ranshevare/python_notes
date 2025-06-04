@@ -17,6 +17,8 @@
 16. [How to sort the data](#how-to-sort-the-dataset)
 17. [Aggregation Functions](#aggregation-functions)
 18. [Grouping in Pandas](#grouping-in-pandas)
+19. [Merging two dataFrame](#merging-of-two-dataframe)
+20. [Concatenating Two Data Frame](#how-to-concatenate-two-dataframe)
 
 # Introduction
 
@@ -2186,6 +2188,173 @@ AttributeError: 'DataFrameGroupBy' object has no attribute 'items'
      - as you know groupby function return the list we apply for loop to print the output 
      - just make sure on which list you are applying the loop
      - for loop will automatically type cast the result into the list on the basis of which syntax you have use i.e, `grouped_dataset` or `grouped_dataset.items()` 
+
+
+
+[Go To Top](#content)
+
+---
+
+# Merging of two dataframe
+
+- To merge two DataFrames in pandas, you can use the `merge()` function. It's similar to SQL joins like INNER JOIN, LEFT JOIN, etc.
+- Basic Syntax: `pd.merge(df1, df2, on='common_column', how='type_of_join')
+- Types of how:
+    - `'inner'` – only matching rows (default)
+    - `'left'` – all rows from left DataFrame, match if possible
+    - `'right'` – all rows from right DataFrame, match if possible
+    - `'outer'` – all rows from both, fill unmatched with NaN`
+
+
+```py
+customers = {
+    "id":[1, 2, 3, 4, 5, 6],
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit']
+}
+
+orders = {
+    "id":[1, 2, 3, 4, 5, 7],
+    "order_amount":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df_customers = pb.DataFrame(customers)
+df_orders = pb.DataFrame(orders)
+
+df_inner_merged = pb.merge(df_customers, df_orders, how='inner', on='id')
+df_outer_merged = pb.merge(df_customers, df_orders, how='outer', on='id')
+df_left_merged = pb.merge(df_customers, df_orders, how='left', on='id')
+df_right_merged = pb.merge(df_customers, df_orders, how='right', on='id')
+
+print("inner join\n",df_inner_merged,"\n")
+print("outer join\n",df_outer_merged,"\n")
+print("left join\n",df_left_merged,"\n")
+print("right join\n",df_right_merged,"\n")
+```
+**Output:**
+```
+inner join
+    id   Name  order_amount
+0   1    ram         10000
+1   2   sham         20000
+2   3   yash         30000
+3   4  rohan         40000
+4   5  aditi         50000
+
+outer join
+    id   Name  order_amount
+0   1    ram       10000.0
+1   2   sham       20000.0
+2   3   yash       30000.0
+3   4  rohan       40000.0
+4   5  aditi       50000.0
+5   6  rohit           NaN
+6   7    NaN       60000.0
+
+left join
+    id   Name  order_amount
+0   1    ram       10000.0
+1   2   sham       20000.0
+2   3   yash       30000.0
+3   4  rohan       40000.0
+4   5  aditi       50000.0
+5   6  rohit           NaN
+
+right join
+    id   Name  order_amount
+0   1    ram         10000
+1   2   sham         20000
+2   3   yash         30000
+3   4  rohan         40000
+4   5  aditi         50000
+5   7    NaN         60000
+```
+[Go To Top](#content)
+
+---
+# How to concatenate two dataframe?
+To concatenate two DataFrames in pandas, you use `pd.concat()`
+```py
+list_customers_1 = {
+    "id":[1, 2, 3],
+    "Name":["ram", 'sham', 'yash']
+}
+
+list_customers_2 = {
+    "id":[4, 5, 6],
+    "Name":["rohan", 'aditi', 'rohit']
+}
+
+df_customers_1 = pb.DataFrame(list_customers_1)
+df_customers_2 = pb.DataFrame(list_customers_2)
+
+df_concat = pb.concat([df_customers_1, df_customers_2])
+print(df_concat)
+```
+**Output:**
+```
+   id   Name
+0   1    ram
+1   2   sham
+2   3   yash
+0   4  rohan
+1   5  aditi
+2   6  rohit
+```
+Here you can see the inconsistancy in indexing like after 2 there is again 0 to solve this we use `ignore_index=True` (by default it is set to False)
+```py
+list_customers_1 = {
+    "id":[1, 2, 3],
+    "Name":["ram", 'sham', 'yash']
+}
+
+list_customers_2 = {
+    "id":[4, 5, 6],
+    "Name":["rohan", 'aditi', 'rohit']
+}
+
+df_customers_1 = pb.DataFrame(list_customers_1)
+df_customers_2 = pb.DataFrame(list_customers_2)
+
+df_concat = pb.concat([df_customers_1, df_customers_2],ignore_index=True)
+print(df_concat)
+```
+**Output:**
+```
+   id   Name
+0   1    ram
+1   2   sham
+2   3   yash
+3   4  rohan
+4   5  aditi
+5   6  rohit
+```
+
+Here we have concatenate our dataframe vertically i.e, row wise we can also concatenate them horizontally i.e, column wise, to do that we just have to add `axis=1` (by default it is set to 0)
+```py
+list_customers_1 = {
+    "id":[1, 2, 3],
+    "Name":["ram", 'sham', 'yash']
+}
+
+list_customers_2 = {
+    "id":[4, 5, 6],
+    "Name":["rohan", 'aditi', 'rohit']
+}
+
+df_customers_1 = pb.DataFrame(list_customers_1)
+df_customers_2 = pb.DataFrame(list_customers_2)
+
+df_concat = pb.concat([df_customers_1, df_customers_2],ignore_index=True, axis=1)
+print(df_concat)
+```
+**Output:**
+```
+   0     1  2      3
+0  1   ram  4  rohan
+1  2  sham  5  aditi
+2  3  yash  6  rohit
+```
+
 
 
 

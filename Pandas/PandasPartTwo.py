@@ -132,16 +132,65 @@ import pandas as pb
 # print(df['Value'].unique())
 
 
-# Grouping in Pandas
-data = {
-    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
-    "Age":[20, 21, 22, 21, 23, 22],
-    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
-    "salary":[30000, 20000, 10000, 20000, 50000, 10000]
+# # Grouping in Pandas
+# data = {
+#     "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+#     "Age":[20, 21, 22, 21, 23, 22],
+#     "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+#     "salary":[30000, 20000, 10000, 20000, 50000, 10000]
+# }
+
+# df = pb.DataFrame(data)
+
+# grouped = df.groupby(['Age','salary'])
+# for group in grouped:
+#     print(group)
+
+
+
+# # merging of data
+# customers = {
+#     "id":[1, 2, 3, 4, 5, 6],
+#     "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit']
+# }
+
+# orders = {
+#     "id":[1, 2, 3, 4, 5, 7],
+#     "order_amount":[10000, 20000, 30000, 40000, 50000, 60000]
+# }
+
+# df_customers = pb.DataFrame(customers)
+# df_orders = pb.DataFrame(orders)
+
+# df_inner_merged = pb.merge(df_customers, df_orders, how='inner', on='id')
+# df_outer_merged = pb.merge(df_customers, df_orders, how='outer', on='id')
+# df_left_merged = pb.merge(df_customers, df_orders, how='left', on='id')
+# df_right_merged = pb.merge(df_customers, df_orders, how='right', on='id')
+
+# print("inner join\n",df_inner_merged,"\n")
+# print("outer join\n",df_outer_merged,"\n")
+# print("left join\n",df_left_merged,"\n")
+# print("right join\n",df_right_merged,"\n")
+
+
+
+# concatenation
+list_customers_1 = {
+    "id":[1, 2, 3],
+    "Name":["ram", 'sham', 'yash']
 }
 
-df = pb.DataFrame(data)
+list_customers_2 = {
+    "id":[4, 5, 6],
+    "Name":["rohan", 'aditi', 'rohit']
+}
 
-grouped = df.groupby(['Age','salary'])
-for group in grouped:
-    print(group)
+df_customers_1 = pb.DataFrame(list_customers_1)
+df_customers_2 = pb.DataFrame(list_customers_2)
+
+df_concat = pb.concat([df_customers_1, df_customers_2],ignore_index=True, axis=1)
+print(df_concat)
+
+# 
+
+
