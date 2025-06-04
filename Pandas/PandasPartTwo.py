@@ -137,17 +137,11 @@ data = {
     "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
     "Age":[20, 21, 22, 21, 23, 22],
     "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
-    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+    "salary":[30000, 20000, 10000, 20000, 50000, 10000]
 }
 
 df = pb.DataFrame(data)
 
-grouped_by_aggregation = df.groupby('Age')["salary"].sum()
-grouped_by_aggregation_Group_of_column = df.groupby('Age')[["salary"]].sum()
-grouped_by = df.groupby('Age')[[ "salary"]]
-
-print(list(grouped_by_aggregation.items()))
-print("\n\n")
-print(list(grouped_by_aggregation_Group_of_column.items()))
-print("\n\n")
-print(list(grouped_by.items()))
+grouped = df.groupby(['Age','salary'])
+for group in grouped:
+    print(group)

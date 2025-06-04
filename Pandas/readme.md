@@ -2058,6 +2058,35 @@ print(list(grouped.items()))
 Name: salary, dtype: int64)]
 ```
 
+## Grouping multiple columns
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 21, 23, 22],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[30000, 20000, 10000, 20000, 50000, 10000]
+}
+
+df = pb.DataFrame(data)
+
+grouped = df.groupby(['Age','salary'])
+for group in grouped:
+    print(group)
+```
+**Outpput:**
+```
+((np.int64(20), np.int64(30000)),   Name  Age    City  salary
+                                  0  ram   20  kalyan   30000)
+((np.int64(21), np.int64(20000)),     Name  Age  City  salary
+                                  1   sham   21  None   20000
+                                  3  rohan   21  pune   20000)
+((np.int64(22), np.int64(10000)),     Name  Age      City  salary
+                                  2   yash   22    mumbai   10000
+                                  5  rohit   22  banglore   10000)
+((np.int64(23), np.int64(50000)),     Name  Age    City  salary
+                                  4  aditi   23  nagpur   50000)
+```
+
 ## How to print the result
 to print this we have two differnt ways as follow:
 
@@ -2157,6 +2186,8 @@ AttributeError: 'DataFrameGroupBy' object has no attribute 'items'
      - as you know groupby function return the list we apply for loop to print the output 
      - just make sure on which list you are applying the loop
      - for loop will automatically type cast the result into the list on the basis of which syntax you have use i.e, `grouped_dataset` or `grouped_dataset.items()` 
+
+
 
 [Go To Top](#content)
 
