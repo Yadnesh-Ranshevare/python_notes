@@ -113,20 +113,41 @@ import pandas as pb
 
 
 
-# Aggregation function
+# # Aggregation function
+# data = {
+#     "Value":[1, 2, 3, 4, 5, 5]
+# }
+
+# df = pb.DataFrame(data)
+
+# print(df['Value'].sum())
+# print(df['Value'].mean())
+# print(df['Value'].median())
+# print(df['Value'].min())
+# print(df['Value'].max())
+# print(df['Value'].count())
+# print(df['Value'].std())
+# print(df['Value'].var())
+# print(df['Value'].prod())
+# print(df['Value'].unique())
+
+
+# Grouping in Pandas
 data = {
-    "Value":[1, 2, 3, 4, 5, 5]
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 21, 23, 22],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
 }
 
 df = pb.DataFrame(data)
 
-print(df['Value'].sum())
-print(df['Value'].mean())
-print(df['Value'].median())
-print(df['Value'].min())
-print(df['Value'].max())
-print(df['Value'].count())
-print(df['Value'].std())
-print(df['Value'].var())
-print(df['Value'].prod())
-print(df['Value'].unique())
+grouped_by_aggregation = df.groupby('Age')["salary"].sum()
+grouped_by_aggregation_Group_of_column = df.groupby('Age')[["salary"]].sum()
+grouped_by = df.groupby('Age')[[ "salary"]]
+
+print(list(grouped_by_aggregation.items()))
+print("\n\n")
+print(list(grouped_by_aggregation_Group_of_column.items()))
+print("\n\n")
+print(list(grouped_by.items()))

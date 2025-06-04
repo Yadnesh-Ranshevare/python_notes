@@ -1901,3 +1901,262 @@ print(df['Value'].unique())
 [Go To Top](#content)
 
 ---
+# Grouping in Pandas
+Grouping in pandas means splitting data into groups based on some criteria, then applying a function (like sum, mean, count, etc.) to each group.
+
+- consider a dataset as follow
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 21, 23, 22],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+```
+- if you focus on age column then you can see that there are multiple people with same age, in pamdas you can group those people with similar age by using `goroupby` method
+- it return a list like structure (`<class 'pandas.core.groupby.generic.SeriesGroupBy'>`) that containg list of tuples and each tuple consist of two things i.e, 
+    1. **value:** on the basis of whih we are making the group, in our example its 'Age'
+    2. **data:** grouped data of that value
+- Output syntax: `[(value, data), (value, data), ....]`
+
+
+## Grouping all the column
+
+lets assume you have a data of employee where each column represent the Name, Age, City, salary. Group the given data according to the Age of the employee
+
+
+**Code:**
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 21, 23, 22],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+grouped = df.groupby('Age')
+
+for group in grouped:
+    print(group)
+```
+**Output:**
+```
+(20,   Name  Age    City  salary
+    0  ram   20  kalyan   10000)
+(21,     Name  Age  City  salary
+    1   sham   21  None   20000
+    3  rohan   21  pune   40000)
+(22,     Name  Age      City  salary
+    2   yash   22    mumbai   30000
+    5  rohit   22  banglore   60000)
+(23,     Name  Age    City  salary
+    4  aditi   23  nagpur   50000)
+```
+- in above example we can see that there is only one person (ram) with age 20, two persons (sham & rohan) with age 21, two persons (yash & rohit) with age 22 and one person (aditi) with age 23
+
+
+
+## Grouping single column
+- if we want to group the specific column then we can also do that my mentioning the name of that column
+
+- **Example:**\
+find name of all employee with their respective age group
+
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 21, 23, 22],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+grouped = df.groupby('Age')["Name"]     # mention the name of the column
+
+for group in grouped:
+    print(group)
+```
+
+**Output:**
+```
+(20, 0    ram
+Name: Name, dtype: object)
+(21, 1     sham
+     3    rohan
+Name: Name, dtype: object)
+(22, 2     yash
+     5    rohit
+Name: Name, dtype: object)
+(23, 4    aditi
+Name: Name, dtype: object)
+```
+Here `Name` represent the name of that column on which we have performed group
+
+## Groupin the multiple columns
+- Use nested list to provide the multiple column name
+- **Example:**\
+lets assume you have a data of employee where each column represent the Name, Age, City, salary. Group the given data according to the Age of the employee and find the salary of each employee for each group
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 21, 23, 22],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+grouped = df.groupby('Age')[["Name", "salary"]] # provie the name of multiple column inside the nested list
+
+for group in grouped:
+    print(group)
+```
+**Output:**
+```
+(20,   Name  salary
+    0  ram   10000)
+(21,     Name  salary
+    1   sham   20000
+    3  rohan   40000)
+(22,     Name  salary
+    2   yash   30000
+    5  rohit   60000)
+(23,     Name  salary
+    4  aditi   50000)
+```
+
+## How to add Aggregation Functions along with groupby
+- you can only apply the Aggregation function on a numeric column\
+[to learn about Aggregation Functions](#aggregation-functions)
+- **Example:**\
+lets assume you have a data of employee where each column represent the Name, Age, City, salary. Group the given data according to the Age of the employee and find the total salary of each group
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 21, 23, 22],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+grouped = df.groupby('Age')[[ "salary"]].sum()
+
+print(list(grouped.items()))
+``` 
+**Output:**
+```
+[('salary', Age
+20    10000
+21    60000
+22    90000
+23    50000
+Name: salary, dtype: int64)]
+```
+
+## How to print the result
+to print this we have two differnt ways as follow:
+
+1. `list(grouped_dataset):` 
+    - for genral grouped dataset **without Aggregation**
+    - aggregation function return the single tuple
+    - Therefor with aggregation it only print the list contaning the result of that aggregation function and not in key  value format
+    - This does not work if you apply aggregation on multiple coulmn at same time and insted of returning the value it return the column name
+    - even if you have one column in the nested list it will still provide the column name as a output
+    - therefor we can say that this method **does not work when we have nested lists** that is styntax for multiple column
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 21, 23, 22],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+grouped_by_aggregation = df.groupby('Age')["salary"].sum()
+grouped_by_aggregation_Group_of_column = df.groupby('Age')[["salary"]].sum()
+grouped_by = df.groupby('Age')[[ "salary"]]
+
+print(list(grouped_by_aggregation)) # onlly provide the vallues
+print("\n\n")
+print(list(grouped_by))
+print("\n\n")
+print(list(grouped_by_aggregation_Group_of_column))     # only provide the list contaning the column name
+```
+**Output**
+```
+[10000, 60000, 90000, 50000]
+
+
+
+[(20,    salary
+     0   10000), 
+ (21,    salary
+     1   20000
+     3   40000), 
+ (22,    salary
+     2   30000
+     5   60000), 
+ (23,    salary
+     4   50000)]
+
+
+['salary']
+```
+2. `list(grouped_dataset.items()):` 
+    - when you have performed Aggregation function on grouped dataset and want to perform the print operation to print the result in key value format
+    - this method does not work on normal groupedby function (without aggregation)
+```py
+data = {
+    "Name":["ram", 'sham', 'yash', 'rohan', 'aditi', 'rohit'],
+    "Age":[20, 21, 22, 21, 23, 22],
+    "City":["kalyan", None, 'mumbai', 'pune', 'nagpur', 'banglore'],
+    "salary":[10000, 20000, 30000, 40000, 50000, 60000]
+}
+
+df = pb.DataFrame(data)
+
+grouped_by_aggregation = df.groupby('Age')["salary"].sum()
+grouped_by_aggregation_Group_of_column = df.groupby('Age')[["salary"]].sum()
+grouped_by = df.groupby('Age')[[ "salary"]]
+
+print(list(grouped_by_aggregation.items()))
+print("\n\n")
+print(list(grouped_by_aggregation_Group_of_column.items()))
+print("\n\n")
+print(list(grouped_by.items())) # will through error
+```
+**Output:**
+```
+[(20, 10000), (21, 60000), (22, 90000), (23, 50000)]
+
+
+
+[('salary', Age
+            20    10000
+            21    60000
+            22    90000
+            23    50000
+Name: salary, dtype: int64)]
+
+
+Traceback (most recent call last):
+  File "E:\yadnesh2024\code\PYTHON\Pandas\PandasPartTwo.py", line 153, in <module>
+    print(list(grouped_by.items()))
+               ^^^^^^^^^^^^^^^^
+  File "E:\yadnesh2024\code\PYTHON\Pandas\.venv\Lib\site-packages\pandas\core\groupby\groupby.py", line 1363, in __getattr__
+    raise AttributeError(
+AttributeError: 'DataFrameGroupBy' object has no attribute 'items'
+```
+3. **using for loop**
+     - as you know groupby function return the list we apply for loop to print the output 
+     - just make sure on which list you are applying the loop
+     - for loop will automatically type cast the result into the list on the basis of which syntax you have use i.e, `grouped_dataset` or `grouped_dataset.items()` 
+
+[Go To Top](#content)
+
+---
