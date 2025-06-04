@@ -16,6 +16,7 @@
 15. [Handling the missing data using .dropna(), .fillna() and .interpolate()](#handling-the-missing-data)
 16. [How to sort the data](#how-to-sort-the-dataset)
 17. [Aggregation Functions](#aggregation-functions)
+18. [Grouping in Pandas](#grouping-in-pandas)
 
 # Introduction
 
