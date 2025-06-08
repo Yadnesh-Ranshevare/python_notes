@@ -5,6 +5,12 @@
 4. [Variable](#variable)
 5. [Variable Measurement Scale](#variable-measurement-scale)
 6. [Study of Data Using Graph](#study-of-data-using-graph)
+7. [Central Measure of Tendency](#central-measure-of-tendency)
+    - [Mean](#mean)
+    - [Outlier](#outlier)
+    - [Median](#median)
+    - [Mode](#mode)
+    - [Comparison Between Mean, Median, and Mode](#comparison-between-mean-median-and-mode)
 
 
 # Introduction
@@ -326,7 +332,7 @@ Now let’s add cumulative frequency:
 **Studying data using graphs in data science helps you visually understand patterns, trends, and outliers.**
 
 
-#### 1. Bar Graph (Column-based comparison)
+## 1. Bar Graph (Column-based comparison)
 - **Use it when:** You want to compare categories like favorite sport of students
 - it is generally use for Discrete variables
 
@@ -344,7 +350,7 @@ Now let’s add cumulative frequency:
 **from this graph we can easily say that `Golf` is the `least` favorite sport whereas `Basketball` is `most` favorite**
 
 
-#### 2. histogram
+## 2. histogram
 - **Use it when:** You want to see how values are spread like age
 - it is generally use for Continues variables
 - **Bin**: In data science, a bin is a range or interval used to group continuous values in a histogram.
@@ -371,16 +377,17 @@ Bin(age) | number of people
 
 ![Histogram image](./Images/histogram.png)
 
-#### Line Graph
+## 3. Line Graph
 - **Use it when:** You want to see how something changes over time (like daily temperature).
 - it is generally use for Continues variables
 
 **Example:**
+
 ![Line char Image](./Images/Line-Graph-05-min.png)
 
 
 
-#### Pie Chart (Percentage of total)
+## 4. Pie Chart (Percentage of total)
 **Use it when:** You want to show parts small data with respect to bigdata (e.g., vote share, budget spending).
 
 **Example:**
@@ -391,6 +398,194 @@ Bin(age) | number of people
 from the above pie chart we can say that toys has total sales of `14%`
 
 
+
+
+[Go To Top](#content)
+
+---
+# Central Measure of Tendency
+
+Central Measure of Tendency (or just Measures of Central Tendency) are statistical values that represent the **center of distribution of data**
+
+**They help answer:**\
+📌 "What is the average or middle value of this data?"
+
+
+### There are 3 main types:
+| Measure    | Symbol             | Meaning                          | Use Case Example              |
+| ---------- | ------------------ | -------------------------------- | ----------------------------- |
+| [**Mean**](#mean)   | $\bar{x}$ or $\mu$ | Average of all values            | Average marks of students     |
+| [**Median**](#median) | —                  | Middle value when data is sorted | Middle income of a population |
+| [**Mode**](#mode)   | —                  | Most frequently occurring value  | Most sold product             |
+
+
+
+## Mean
+The arithmetic mean is the sum of all values divided by the number of values.
+
+#### Formula:
+
+$$
+Mean = \frac{Sum of all values
+​} {Number of values}
+$$
+
+
+###  1. Population Mean (μ)
+Used when you're dealing with the entire group (like all students in a school).
+
+#### Formula:
+
+$$
+\mu = \frac{\sum_{}^{} X_i}{\text{N}}
+$$
+
+Where:
+
+- **𝜇**: Population mean  
+- **∑𝑋ᵢ**: Sum of all data points in the population  
+- **N**: Total number of data points in the population
+
+
+#### Example:
+Heights of all 5 students: 150, 160, 170, 180, 190
+$$
+μ = \frac{150 + 160 + 170 + 180 + 190}{5} = \frac{850}{5} = 170
+$$
+
+###  2. Sample Mean (x̄)
+Used when you take a subset (sample) from the population.
+
+#### Formula:
+
+$$
+\bar{x} = \frac{\sum_{}^{} X_i}{\text{n}}
+$$
+
+
+Where:
+
+- **x̄**: sample mean  
+- **∑𝑋ᵢ**: Sum of all data points in the sample  
+- **n**: Total number of data points in the sample
+
+#### Example:
+Heights of a sample of 3 students: 150, 170, 190
+
+$$
+\bar{x} = \frac{150 + 170 + 190}{3} = \frac{510}{3} = 170
+$$
+
+#### Key Difference
+
+| Aspect      | Population Mean (μ) | Sample Mean (x̄) |
+| ----------- | ------------------- | ---------------- |
+| Use case    | Whole group         | Subset of group  |
+| Notation    | $\mu$               | $\bar{x}$        |
+| Size symbol | $N$                 | $n$              |
+
+
+## outlier
+- An outlier is a data point that is significantly different from the other values in a dataset — it either lies much higher or much lower than the rest.
+
+**Example:**\
+Data:\
+`10, 12, 11, 13, 500`\
+🔍 Here, `500` is an outlier because it’s far away from the other values.
+ 
+
+ - An outlier can pull the mean toward itself, especially if the dataset is small.
+
+**Example:**\
+Data without outlier:\
+`10, 12, 14, 16, 18`
+
+**Mean = (10 + 12 + 14 + 16 + 18) / 5 = 70 / 5 = `14`**
+
+Now add an outlier → 100:\
+`10, 12, 14, 16, 18, 100`
+
+**Mean = (10 + 12 + 14 + 16 + 18 + 100) / 6 = 170 / 6 ≈ `28.3`**
+
+👉 The mean jumped from **14 to 28.3** — just because of one outlier!
+
+
+## Median
+Median is the middle value of a sorted dataset.
+
+#### Steps to Find the Median:
+1. Sort the data
+2. Use these rules:
+    - If odd number of values:\
+👉 Median = middle value
+
+    - If even number of values:\
+👉 Median = average of two middle values
+
+
+**Example 1: Odd number of elements**
+
+Data:\
+`[5, 1, 3]` → sort it → `[1, 3, 5]`\
+👉 Median = `3`
+
+
+ **Example 2: Even number of elements**
+
+Data:\
+`[6, 2, 4, 8]` → sort → `[2, 4, 6, 8]`\
+👉 Median = (4 + 6) / 2 = `5`
+
+#### Median is not affected by outlier
+
+**Example:**\
+data\
+`10, 12, 14, 16, 18, 100`\
+outlier → 100:
+
+**Mean = (10 + 12 + 14 + 16 + 18 + 100) / 6 = 170 / 6 ≈ `28.3`**\
+**Median = (14 + 16) = `15`**
+
+out of `28.3` and `15` median `15` is more realistic 
+
+
+## Mode
+Mode is the value that appears the most number of times in a dataset.
+It tells you the most frequent or popular value.
+
+
+#### Example:
+**Data:**\
+`[2, 4, 4, 6, 7, 4, 8]`\
+👉 Mode = 4 (because it appears 3 times)
+
+####  Other Possibilities:
+| Type of Mode   | Example              | Explanation                   |
+| -------------- | -------------------- | ----------------------------- |
+| **No Mode**    | `[1, 2, 3, 4]`       | All values occur only once    |
+| **Unimodal**   | `[3, 3, 5, 6]`       | One mode (3)                  |
+| **Bimodal**    | `[2, 2, 5, 5, 7]`    | Two modes (2 and 5)           |
+| **Multimodal** | `[1, 1, 2, 2, 3, 3]` | More than two values repeated |
+
+#### Where is Mode Useful?
+| Situation                      | Why Mode Helps                          |
+| ------------------------------ | --------------------------------------- |
+| Most bought product            | Shows customer preference               |
+| Most common exam score         | Shows what most students scored         |
+| Categorical data (e.g. colors) | Mean/median doesn’t make sense for text |
+
+
+## Comparison Between Mean, Median, and Mode
+| Feature                      | **Mean**                                 | **Median**                                   | **Mode**                            |
+| ---------------------------- | ---------------------------------------- | -------------------------------------------- | ----------------------------------- |
+| **Definition**               | Average of all values                    | Middle value in sorted data                  | Most frequently occurring value     |
+| **Formula**                  | $\text{Sum of values} \div \text{Count}$ | Middle of sorted list (or avg of two middle) | Value that appears most often       |
+| **Affected by Outliers**     | ✅ Yes                                    | ❌ No                                         | ❌ No                                |
+| **Data Type**                | Numerical only                           | Numerical only                               | Numerical & Categorical             |
+| **Use Case**                 | Balanced data                            | Skewed data or with outliers                 | Categorical or repeated values      |
+| **Example (2, 3, 3, 6, 10)** | Mean = 4.8                               | Median = 3                                   | Mode = 3                            |
+| **Uniqueness**               | One unique value                         | One unique value                             | Can be none, one, or multiple modes |
+| **Common In**                | Grades, salary average                   | Real estate prices, age data                 | Survey results, product popularity  |
 
 
 [Go To Top](#content)
