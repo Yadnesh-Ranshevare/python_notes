@@ -551,7 +551,7 @@ out of `28.3` and `15` median `15` is more realistic
 
 ## Mode
 Mode is the value that appears the most number of times in a dataset.
-It tells you the most frequent or popular value.
+It tells you the most frequent or popular value. especially used for categorical or non-numeric data.
 
 
 #### Example:
@@ -573,6 +573,24 @@ It tells you the most frequent or popular value.
 | Most bought product            | Shows customer preference               |
 | Most common exam score         | Shows what most students scored         |
 | Categorical data (e.g. colors) | Mean/median doesn’t make sense for text |
+
+#### Does an outlier affect the mode?
+It depends on whether the outlier is frequent or not.
+
+1. **Usually, outliers do NOT affect mode**\
+Because mode depends on frequency, not size.\
+**Example:**\
+Data: `[2, 2, 3, 4, 100]`
+    - Mode = 2
+    - 100 is an outlier (appears once) → ❌ No effect on mode
+
+2. **BUT — if the outlier repeats more than others, it can become the mode.**\
+**Example:**\
+Data: `[1, 2, 3, 4, 5, 100, 100]`
+
+    - 100 appears twice, more than any other\
+✅ Mode = 100\
+🎯 Outlier became the mode
 
 
 ## Comparison Between Mean, Median, and Mode
