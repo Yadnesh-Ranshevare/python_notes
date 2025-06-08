@@ -496,6 +496,8 @@ Data:\
 
  - An outlier can pull the mean toward itself, especially if the dataset is small.
 
+
+#### How outlier affect mean
 **Example:**\
 Data without outlier:\
 `10, 12, 14, 16, 18`
