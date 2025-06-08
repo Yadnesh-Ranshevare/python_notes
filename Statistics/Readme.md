@@ -4,6 +4,7 @@
 3. [Sampling Techniques](#sampling-techniques)
 4. [Variable](#variable)
 5. [Variable Measurement Scale](#variable-measurement-scale)
+6. [Study of Data Using Graph](#study-of-data-using-graph)
 
 
 # Introduction
@@ -297,6 +298,100 @@ Range (Marks) | Frequency
 11 - 20       |     5
 21 - 30       |     3
 ```
+### Cumulative Frequency
+Cumulative frequency is the running total of frequencies up to a certain value or class in a frequency distribution.
+
+Suppose this is your frequency table:
+| Marks Range | Frequency |
+| ----------- | --------- |
+| 0 - 10      | 3         |
+| 11 - 20     | 5         |
+| 21 - 30     | 7         |
+| 31 - 40     | 4         |
+
+Now let’s add cumulative frequency:
+| Marks Range | Frequency | Cumulative Frequency |
+| ----------- | --------- | -------------------- |
+| 0 - 10      | 3         | 3                    |
+| 11 - 20     | 5         | 3 + 5 = 8            |
+| 21 - 30     | 7         | 8 + 7 = 15           |
+| 31 - 40     | 4         | 15 + 4 = 19          |
+
+
+[Go To Top](#content)
+
+---
+
+# Study of Data Using Graph
+**Studying data using graphs in data science helps you visually understand patterns, trends, and outliers.**
+
+
+#### 1. Bar Graph (Column-based comparison)
+- **Use it when:** You want to compare categories like favorite sport of students
+- it is generally use for Discrete variables
+
+**Example:**
+| type of sport  | number of student  |
+| ------ | ----- |
+| Golf  | 6    |
+| Tennis | 8     |
+| Football  | 12     |
+| Rugby  | 10     |
+| Basketball  | 16     |
+
+![Bar chart](./Images/Bar-Graph-Chart.jpg)
+
+**from this graph we can easily say that `Golf` is the `least` favorite sport whereas `Basketball` is `most` favorite**
+
+
+#### 2. histogram
+- **Use it when:** You want to see how values are spread like age
+- it is generally use for Continues variables
+- **Bin**: In data science, a bin is a range or interval used to group continuous values in a histogram.
+
+**Example:**\
+consider a following dataset of age of peoples 
+
+```
+age = {22, 26, 31, 35, 37, 39, 40, 43, 46, 48, 51, 53, 54, 55, 57, 66, 68, 69, 75, 92}
+```
+**From above table we get the frequency table**
+Bin(age) | number of people
+--- | --- 
+0 - 10 | 0
+10 - 20 | 0
+20 - 30 | 2
+30 - 40 | 4
+40 - 50 | 4
+50 - 60 | 5
+60 - 70 | 3
+70 - 80 | 1
+80 - 90 | 0
+90 - 100 | 1
+
+![Histogram image](./Images/histogram.png)
+
+#### Line Graph
+- **Use it when:** You want to see how something changes over time (like daily temperature).
+- it is generally use for Continues variables
+
+**Example:**
+![Line char Image](./Images/Line-Graph-05-min.png)
+
+
+
+#### Pie Chart (Percentage of total)
+**Use it when:** You want to show parts small data with respect to bigdata (e.g., vote share, budget spending).
+
+**Example:**
+
+![Pie chart image](./Images/pie1.png)
+
+
+from the above pie chart we can say that toys has total sales of `14%`
+
+
+
 
 [Go To Top](#content)
 
