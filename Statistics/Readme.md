@@ -17,6 +17,7 @@
     - [Standard Deviation](#standard-deviation)
     - [Standard Deviation Graph](#standard-deviation-graph)
     - [Interquartile Range (IQR)](#interquartile-range-iqr)
+9. [Percentile](#percentile)
 
 
 # Introduction
@@ -872,6 +873,63 @@ Take the upper half of data, after the median:` [14, 18, 20, 22]`
 | Q1       | 7.5                 |
 | Q3       | 19                  |
 | IQR      | 19 − 7.5 = **11.5** |
+
+
+
+[Go To Top](#content)
+
+---
+
+# Percentile
+
+A percentile is a value below which a given percentage of data falls.
+
+It helps you understand the relative standing of a value in a dataset
+
+**Simple Meaning:**
+- The 25th percentile means 25% of the data is below that value.
+- The 90th percentile means you're higher than 90% of the data.
+- The 50th percentile is the median (middle value).
+
+
+#### Example:
+dataset: `2, 2, 3, 4, 5, 5, 5, 6, 7, 8, 8, 8, 8, 9, 9, 10, 11, 11, 12`\
+find the percentile of `10`
+
+**Formula**
+
+$$
+\text{percentile of X} = \left({\frac{\text{number of value below X}}{\text{total number of value}}}\right) \times 100
+$$
+
+Therefor:\
+percentile of 10 = $\left(\frac{16}{20}\right) \times 100$ = 80%ile
+
+- we can say that 80% of the entire distribution is less than `10`
+
+#### what is the value present at 25 percentile
+
+**Formula:**
+
+
+$$
+Value = \left(\frac{percentile}{100}\right) \times (n + 1)
+$$
+
+ThereFor:\
+value = $\frac{25}{100} \times 21$ = 5.25
+
+- 5.25 is the index of value in our dataset
+- there is no any index 5.25 in our dataset
+- in our dataset we have nearest index as(5.25 will lie in between 5 & 6):\
+ index 5 = 5\
+ index 6 = 5
+- to find the value present at index 5.25 we take the mean of this two values  
+
+Therefor, value = `5`
+
+
+
 
 
 
