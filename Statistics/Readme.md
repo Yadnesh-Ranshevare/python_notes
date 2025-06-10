@@ -16,8 +16,12 @@
     - [Variance](#variance)
     - [Standard Deviation](#standard-deviation)
     - [Standard Deviation Graph](#standard-deviation-graph)
+    - [Quartile](#quartile)
     - [Interquartile Range (IQR)](#interquartile-range-iqr)
 9. [Percentile](#percentile)
+10. [Five Number Summary](#five-number-summary)
+    - [Box Plot](#box-plot)
+    - [Detecting and Removing outlier](#detecting-and-removing-outlier)
 
 
 # Introduction
@@ -797,19 +801,24 @@ lets assume a dataset whose mean is `50` and standard deviation is `10`
 here:
 - 50 : Standard deviation 
     - μ = 50
-- 60 : 1st SD to the left
+- 60 : 1st SD to the left of mean
     - μ + 1σ = 60
-- 70 : 2nd SD to the left
+- 70 : 2nd SD to the left of mean
     - μ + 2σ = 70
-- 80 : 3rd SD to the left
+- 80 : 3rd SD to the left of mean
     - μ + 3σ = 80
-- 40 : 1st SD to the right
+- 40 : 1st SD to the right of mean
     - μ − 1σ = 40
-- 30 : 2nd SD to the right
+- 30 : 2nd SD to the right of mean
     - μ − 2σ = 30
 
-- 20 : 3rd SD to the right
+- 20 : 3rd SD to the right of mean
     - μ − 3σ = 20
+
+**Also:**
+- first SD : 40 to 60
+- second SD : 30 to 70
+- third SD : 20 to 80
 
 with this graph we can say that how far the value is from the mean
 
@@ -825,6 +834,56 @@ data value 65 is 1.5 SD to the left -> $\mu$ + $1.5\sigma$ = 65
 - Higher the SD higher the value spread from mean, whereas lower the SD lower the value spread form mean
 
 ---
+
+## Quartile
+A quartile is a three statistical value that divides a dataset into four equal parts. These help describe the spread and distribution of data.
+
+####  The 3 Quartiles are:
+1. **Q1 (First Quartile)**
+    - 25% of the data is less than or equal to Q1
+    - It’s the median of the lower half of the data
+
+2. **Q2 (Second Quartile)**
+    - This is just the median of the entire dataset (50% mark)
+3. **Q3 (Third Quartile)**
+    - 75% of the data is less than or equal to Q3
+    - It’s the median of the upper half of the data
+
+
+#### Example:
+Data: ` 2, 4, 6, 8, 10, 12, 14, 16, 18`
+
+- Q2 (Median) = 10
+- Lower half = 2, 4, 6, 8 → Q1 = (4 + 6)/2 = 5
+- Upper half = 12, 14, 16, 18 → Q3 = (14 + 16)/2 = 15
+
+✅ **So:**
+- Q1 = 5
+- Q2 = 10
+- Q3 = 15
+
+#### how to divide the dataset into the four equal parts
+- part 1 : 0 to Q1
+- part 2 : Q1 to Q2
+- part 3 : Q2 to Q3
+- part 4 : Q3 to last value
+
+**Example:**\
+Data: ` 2, 4, 6, 8, 10, 12, 14, 16, 18`
+
+where:
+- Q1 = 5
+- Q2 = 10
+- Q3 = 15
+
+**ThereFor**\
+- part 1 : `2, 4` (only 2, 4 lies in the range of 0 to Q1)
+- part 2 : `6, 8, 10` (only 6, 8, 10 lies in range Q1 to Q2)
+- part 3 : `12, 14` (only 12, 14 lies in the range of Q2 to Q3)
+- part 4 : `16, 18` (only 16, 18 is beyond the Q3)
+
+**Note: Values equal to Q1, Q2, or Q3 can belong to any side depending on convention**
+
 ## Interquartile Range (IQR)
 IQR is a measure of dispersion that tells you how spread out the middle 50% of your data is.
 It’s useful for removing the influence of outliers.
@@ -921,7 +980,7 @@ value = $\frac{25}{100} \times 21$ = 5.25
 
 - 5.25 is the index of value in our dataset
 - there is no any index 5.25 in our dataset
-- in our dataset we have nearest index as(5.25 will lie in between 5 & 6):\
+- in our dataset we have nearest (5.25 will lie in between 5 & 6) index as:\
  index 5 = 5\
  index 6 = 5
 - to find the value present at index 5.25 we take the mean of this two values  
@@ -936,3 +995,105 @@ Therefor, value = `5`
 [Go To Top](#content)
 
 ---
+
+# Five Number Summary
+The Five Number Summary is a simple way to describe a set of data using five specific values that show the spread and center of the data.
+
+before you learn about 5 number summary you must also know about the [quartile](#quartile)
+
+#### The 5 numbers are:
+1. **Minimum** – the smallest value
+2. **Q1 (First Quartile)** – the median of the lower half (25% of data below it or you can say value at 25%ile)
+3. **Median (Q2)** – the middle value of the dataset
+4. **Q3 (Third Quartile)** – the median of the upper half (75% of data below it or you can say value at 75%ile)
+5. **Maximum** – the largest value
+
+#### Example
+Consider this sorted dataset:\
+`5, 7, 8, 10, 12, 14, 18, 20, 22`
+
+- **Minimum** = 5
+- **Q1** = 8 (middle of 5, 7, 8, 10)
+- **Median (Q2)** = 12
+- **Q3** = 20 (middle of 14, 18, 20, 22)
+- **Maximum** = 22
+
+**So the 5-number summary is:**\
+`[5, 8, 12, 20, 22]`
+
+## Box Plot
+A box plot (also called a box-and-whisker plot) is a graphical representation of the Five Number Summary
+
+![Box plot image](./Images/boxplotsimple.png)
+
+Box plot diagram is use to tell how data is spread in dataset:
+- higher the box length -> higher the data spread
+- shorter the box length -> lesser the data spread
+- max -> how far is maximum value 
+- min -> how far is minimum value 
+
+
+
+## Detecting and Removing outlier
+[Click here to learn about outlier](#outlier)
+
+- to remove outlier we calculate the lower fence and higher fence with the help of [Interquartile Range (IQR)](#interquartile-range-iqr)
+- Interquartile Range (IQR) = Q3 - Q1
+- formula for lower fence
+
+$$
+\text{Lower Fence} = Q1 - 1.5(IQR) 
+$$
+
+- formula for higher fence
+
+$$
+\text{Lower Fence} = Q3 + 1.5(IQR) 
+$$
+
+- Now any value which doesn't lie between the range of lower fence to higher fence will consider as outlier
+
+
+#### Example:
+data : `1, 2, 2, 2, 3, 3, 4, 5, 5, 5, 6, 6, 6, 6, 7, 8, 8, 9, 27`
+
+- Q1 = value at 25%ile = $(\frac{25}{100}) \times (19 + 1)$ = $(\frac{25}{100}) \times (20)$ = 5 -> index = `3` 
+- Q3 = value at 75%ile = $(\frac{75}{100}) \times (19 + 1)$ = $(\frac{75}{100}) \times (20)$ = 15 -> index = `7`
+- **Interquartile Range (IQR)** = Q3 - Q1 = 7 - 3 = `4`
+- lower fence = Q1 - 1.5(IQR) = 3 - 1.5(4) = 3 - 6 = `-3`
+- higher fence = Q3 + 1.5(IQR) = 7 + 1.5(4) = 7 + 6 = `13`
+- Therefor our range is:\
+`-3 to 13`
+- in our dataset only one value which doesn't lie int this range i.e, `27`, therefor `27` is an outlier
+- therefor after removing that outlier our final data becomes:\
+`1, 2, 2, 2, 3, 3, 4, 5, 5, 5, 6, 6, 6, 6, 7, 8, 8, 9`
+
+
+[Go To Top](#content)
+
+---
+# Distribution
+In statistics, a distribution tells us how data values are spread out — or how frequently each value (or range of values) occurs in a dataset.
+
+
+## 1. Gaussian / Normal Distribution
+
+ Make sure that you know about the [Standard deviation graph](#standard-deviation-graph)
+
+![Normal distribution graph](./Images/ND.png)
+
+- Empirical formula: its just a formula of 68.2 - 95.4 - 99.7 rate 
+- this formula says
+    1. 68.2% of data lie under the curve -$1\sigma$  to $1\sigma$ i.e, first SD
+    1. 95.4% of data lie under the curve -$2\sigma$  to $2\sigma$ i.e second SD
+    1. 99.7% of data lie under the curve -$3\sigma$  to $3\sigma$ i.e third SD
+
+
+
+[Go To Top](#content)
+
+---
+
+
+
+
