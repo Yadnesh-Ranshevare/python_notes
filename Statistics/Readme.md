@@ -759,14 +759,17 @@ Mean = (2 + 4 + 6 + 8) / 4 = `5`
 - Number of values (n) = 4
 
 **For Population:**
+
 $$
 Variance(\sigma^2) = \frac{20}{4} = 5
 $$
+
 $$
 \text{Standard Deviation}(\sigma) = \sqrt{5} ≈ 2.24
 $$
 
 **For Sample:**
+
 $$
 Variance(s^2) = \frac{20}{4 - 1} = \frac{20}{3} ≈ 6.67
 $$
