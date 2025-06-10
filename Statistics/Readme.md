@@ -11,6 +11,12 @@
     - [Median](#median)
     - [Mode](#mode)
     - [Comparison Between Mean, Median, and Mode](#comparison-between-mean-median-and-mode)
+8. [Measure of Dispersion](#measure-of-dispersion)
+    - [Range](#range)
+    - [Variance](#variance)
+    - [Standard Deviation](#standard-deviation)
+    - [Standard Deviation Graph](#standard-deviation-graph)
+    - [Interquartile Range (IQR)](#interquartile-range-iqr)
 
 
 # Introduction
@@ -606,6 +612,259 @@ Data: `[1, 2, 3, 4, 5, 100, 100]`
 | **Example (2, 3, 3, 6, 10)** | Mean = 4.8                               | Median = 3                                   | Mode = 3                            |
 | **Uniqueness**               | One unique value                         | One unique value                             | Can be none, one, or multiple modes |
 | **Common In**                | Grades, salary average                   | Real estate prices, age data                 | Survey results, product popularity  |
+
+
+[Go To Top](#content)
+
+---
+# Measure of Dispersion
+A Measure of **Dispersion** tells you how **spread** out or **scattered** the values in a dataset are.
+
+It shows how much the data spread from the center (mean/median) — basically, how consistent or variable the data is.
+
+### Common Measures of Dispersion:
+| Measure                       | What it tells you                       |
+| ----------------------------- | --------------------------------------- |
+| [**Range**](#range)                     | Difference between max and min values   |
+| [**Variance**](#variance)                  | Average squared deviation from the mean |
+| [**Standard Deviation**](#standard-deviation)        | Square root of variance (most used)     |
+| [**Interquartile Range (IQR)**](#interquartile-range-iqr) | Spread of the middle 50% of data        |
+
+---
+## Range
+Range is the simplest measure of dispersion — it tells you how spread out the data is by calculating the difference between the highest and lowest values.
+
+#### Formula:
+$$
+\text{Range} = \text{Maximum Value} - \text{Minimum Value}
+$$
+
+#### Example:
+Data: `[4, 7, 9, 15, 20]`
+
+- Max = 20
+- Min = 4\
+👉 Range = 20 - 4 = 16
+
+#### Key Points
+- Easy to calculate	
+- Affected by outliers	
+- Useful for quick overview	as it give basic spread
+- only looks at two values (max and min), so it ignores the rest of the dataset.
+
+---
+## Variance
+Variance measures how far each value in a dataset is from the mean (on average).
+It shows the spread or variability of data.
+
+#### Formula:
+
+- For Population Variance ($\sigma^2$)
+
+$$
+\sigma^2 = \frac{1}{N} \sum_{i=1}^{N} (x_i - \mu)^2
+$$
+
+- For Sample Variance ($s^2$)
+$$
+s^2 = \frac{1}{n - 1} \sum_{i=1}^{n} (x_i - \bar{x})^2
+$$
+
+**Where:**
+- $x_i$ :  each data point
+- $\mu$ : population mean
+- $\bar{x}$ : sample mean
+- $N$ : population size
+- $n$ : sample size
+
+
+#### The reason why population variance uses N, but sample variance uses n − 1, comes down to accuracy and unbiased estimation.
+
+ **Population Variance:**
+- You have all data points from the population.
+- So, you know the true mean 𝜇
+- μ, and can calculate exact spread.
+- Use divisor **N** (the total number of values).
+
+**Sample Variance:**
+- You only have a subset of the population.
+- You don’t know the true mean 𝜇, so you estimate it using sample mean $\bar{x}$
+- That estimation introduces a small error, which tends to underestimate the real variance.
+- To correct that underestimation, we divide by n − 1 instead of n.\
+→ This correction is called Bessel's correction.
+
+
+
+#### Example:
+Data: `[2, 4, 6, 8]`\
+Mean = (2 + 4 + 6 + 8) / 4 = `5`
+
+| Data $x_i$ | Mean $\bar{x} = 5$ | $x_i - \bar{x}$ | $(x_i - \bar{x})^2$ |
+| ---------- | ------------------ | --------------- | ------------------- |
+| 2          | 5                  | 2 − 5 = **−3**  | (−3)² = **9**       |
+| 4          | 5                  | 4 − 5 = **−1**  | (−1)² = **1**       |
+| 6          | 5                  | 6 − 5 = **+1**  | (+1)² = **1**       |
+| 8          | 5                  | 8 − 5 = **+3**  | (+3)² = **9**       |
+
+- $\sum{}{}(x_i - \bar{x})$ = 9 + 1 + 1 + 9 = `20`
+- Number of values (n) = 4
+
+**For Population Variance:**
+$$
+\sigma^2 = \frac{20}{4} = 5
+$$
+
+**For Sample Variance:**
+$$
+s^2 = \frac{20}{4 - 1} = \frac{20}{3} ≈ 6.67
+$$
+
+---
+## Standard Deviation
+Standard Deviation (SD) measures how spread out the values in a dataset are from the mean.
+It tells you how much the data varies on average.
+
+It’s the square root of the variance — this brings the unit back to the original scale of your data (unlike variance, which is squared).
+
+#### Formula:
+
+ **For Population:**
+
+ $$
+ \sigma = \sqrt{\frac{1}{N}\sum{}{}(x_i - \mu)^2} = \sqrt{Population Variance (\sigma^2)}
+ $$
+
+**For Sample:**
+ $$
+ \sigma = \sqrt{\frac{1}{n-1}\sum{}{}(x_i - \bar{x})^2} = \sqrt{Sample Variance (s^2)}
+ $$
+
+
+ Data: `[2, 4, 6, 8]`\
+Mean = (2 + 4 + 6 + 8) / 4 = `5`
+
+| Data $x_i$ | Mean $\bar{x} = 5$ | $x_i - \bar{x}$ | $(x_i - \bar{x})^2$ |
+| ---------- | ------------------ | --------------- | ------------------- |
+| 2          | 5                  | 2 − 5 = **−3**  | (−3)² = **9**       |
+| 4          | 5                  | 4 − 5 = **−1**  | (−1)² = **1**       |
+| 6          | 5                  | 6 − 5 = **+1**  | (+1)² = **1**       |
+| 8          | 5                  | 8 − 5 = **+3**  | (+3)² = **9**       |
+
+- $\sum{}{}(x_i - \bar{x})$ = 9 + 1 + 1 + 9 = `20`
+- Number of values (n) = 4
+
+**For Population:**
+$$
+Variance(\sigma^2) = \frac{20}{4} = 5
+$$
+$$
+\text{Standard Deviation}(\sigma) = \sqrt{5} ≈ 2.24
+$$
+
+**For Sample:**
+$$
+Variance(s^2) = \frac{20}{4 - 1} = \frac{20}{3} ≈ 6.67
+$$
+
+$$
+\text{Standard Deviation}(s) = \sqrt{6.67} ≈ 2.58
+$$
+
+---
+## Standard Deviation Graph
+lets assume a dataset whose mean is `50` and standard deviation is `10`
+- Draw X-axis (horizontal) → represents the data values, how to create the x-axis
+    - Mean = 50 and SD = 10
+    - Mean $\pm$ SD = 40, 60
+    - 40 - SD = 30 and 60 + SD = 70 
+    - 30 - SD = 20 and 70 + SD = 80 
+    - therefor mark points: 20, 30, 40, 50, 60, 70, 80  
+- Draw Y-axis (vertical) → represents frequency or probability
+- if you connect the all point then you'll find the smooth curve like:
+
+
+![SD graph image](./Images/SD.webp)
+
+here:
+- 50 : Standard deviation 
+    - μ = 50
+- 60 : 1st SD to the left
+    - μ + 1σ = 60
+- 70 : 2nd SD to the left
+    - μ + 2σ = 70
+- 80 : 3rd SD to the left
+    - μ + 3σ = 80
+- 40 : 1st SD to the right
+    - μ − 1σ = 40
+- 30 : 2nd SD to the right
+    - μ − 2σ = 30
+
+- 20 : 3rd SD to the right
+    - μ − 3σ = 20
+
+with this graph we can say that how far the value is from the mean
+
+**Example:**\
+data value 65 is 1.5 SD to the left -> $\mu$ + $1.5\sigma$ = 65 
+
+
+### Also larger the curve of the graph higher the SD and smaller the curve of the graph lower the SD
+
+![SD_high_low_image](./Images/SD_high_lowjpg.jpg)
+
+
+- Higher the SD higher the value spread from mean, whereas lower the SD lower the value spread form mean
+
+---
+## Interquartile Range (IQR)
+IQR is a measure of dispersion that tells you how spread out the middle 50% of your data is.
+It’s useful for removing the influence of outliers.
+
+#### Formula:
+$$
+IRQ = Q_3 - Q_1
+$$
+
+**Where:**
+- $Q_3$ = 1st quartile (25% of data below it)
+- $Q_1$ = 3rd quartile (75% of data below it)
+
+So IQR = the range between the 25th and 75th percentile.
+
+#### Example:
+Let’s take the data:\
+`[5, 7, 8, 10, 12, 14, 18, 20, 22]`
+
+1. **Sort the data**\
+`[5, 7, 8, 10, 12, 14, 18, 20, 22]`
+
+2. Find the Median (Q2)
+- Total values = 9 (odd number)
+- Middle value = 5th value → 12\
+So,
+$$Q_2 = Median = 12
+$$
+3. **Find Q1 (Lower Quartile)**\
+Take the lower half of data, before the median: `[5, 7, 8, 10]`
+    - This has 4 values → Median of this group = average of 2nd and 3rd value:
+    $$
+    Q_1 = \frac{7 + 8}{2} = 7.5
+    $$
+4. **Find Q3 (Upper Quartile)**\
+Take the upper half of data, after the median:` [14, 18, 20, 22]`
+    - Again, 4 values → Median = average of 2nd and 3rd:
+    $$
+    Q_3 = \frac{18 + 20}{2} = 19
+    $$
+
+5. **Final Answer:**
+
+| Quartile | Value               |
+| -------- | ------------------- |
+| Q1       | 7.5                 |
+| Q3       | 19                  |
+| IQR      | 19 − 7.5 = **11.5** |
+
 
 
 [Go To Top](#content)
