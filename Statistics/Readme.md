@@ -635,6 +635,7 @@ It shows how much the data spread from the center (mean/median) — basically, h
 Range is the simplest measure of dispersion — it tells you how spread out the data is by calculating the difference between the highest and lowest values.
 
 #### Formula:
+
 $$
 \text{Range} = \text{Maximum Value} - \text{Minimum Value}
 $$
@@ -666,6 +667,7 @@ $$
 $$
 
 - For Sample Variance ($s^2$)
+
 $$
 s^2 = \frac{1}{n - 1} \sum_{i=1}^{n} (x_i - \bar{x})^2
 $$
@@ -710,11 +712,13 @@ Mean = (2 + 4 + 6 + 8) / 4 = `5`
 - Number of values (n) = 4
 
 **For Population Variance:**
+
 $$
 \sigma^2 = \frac{20}{4} = 5
 $$
 
 **For Sample Variance:**
+
 $$
 s^2 = \frac{20}{4 - 1} = \frac{20}{3} ≈ 6.67
 $$
@@ -735,6 +739,7 @@ It’s the square root of the variance — this brings the unit back to the orig
  $$
 
 **For Sample:**
+
  $$
  \sigma = \sqrt{\frac{1}{n-1}\sum{}{}(x_i - \bar{x})^2} = \sqrt{Sample Variance (s^2)}
  $$
