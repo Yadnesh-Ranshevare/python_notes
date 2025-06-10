@@ -1084,9 +1084,9 @@ In statistics, a distribution tells us how data values are spread out — or how
 
 - Empirical formula: its just a formula of 68.2 - 95.4 - 99.7 rate 
 - this formula says
-    1. 68.2% of data lie under the curve -$1\sigma$  to $1\sigma$ i.e, first SD
-    1. 95.4% of data lie under the curve -$2\sigma$  to $2\sigma$ i.e second SD
-    1. 99.7% of data lie under the curve -$3\sigma$  to $3\sigma$ i.e third SD
+    1. 68.2% of data lie under the curve  $-1\sigma$  to $1\sigma$ i.e, first SD
+    1. 95.4% of data lie under the curve $-2\sigma$  to $2\sigma$ i.e second SD
+    1. 99.7% of data lie under the curve $-3\sigma$  to $3\sigma$ i.e third SD
 
 
 
