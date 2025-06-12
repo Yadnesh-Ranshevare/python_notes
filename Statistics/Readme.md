@@ -796,23 +796,23 @@ lets assume a dataset whose mean is `50` and standard deviation is `10`
 - if you connect the all point then you'll find the smooth curve like:
 
 
-![SD graph image](./Images/SD.webp)
+![SD graph image](./Images/SD.jpg)
 
 here:
 - 50 : Standard deviation 
     - μ = 50
-- 60 : 1st SD to the left of mean
+- 60 : 1st SD to the right of mean
     - μ + 1σ = 60
-- 70 : 2nd SD to the left of mean
+- 70 : 2nd SD to the right of mean
     - μ + 2σ = 70
-- 80 : 3rd SD to the left of mean
+- 80 : 3rd SD to the right of mean
     - μ + 3σ = 80
-- 40 : 1st SD to the right of mean
+- 40 : 1st SD to the left of mean
     - μ − 1σ = 40
-- 30 : 2nd SD to the right of mean
+- 30 : 2nd SD to the left of mean
     - μ − 2σ = 30
 
-- 20 : 3rd SD to the right of mean
+- 20 : 3rd SD to the left of mean
     - μ − 3σ = 20
 
 **Also:**
@@ -1088,6 +1088,80 @@ In statistics, a distribution tells us how data values are spread out — or how
     1. 95.4% of data lie under the curve $-2\sigma$  to $2\sigma$ i.e second SD
     1. 99.7% of data lie under the curve $-3\sigma$  to $3\sigma$ i.e third SD
 
+#### Z score
+
+A Z-score (also called a standard score) tells you how far a data point is from the mean, in terms of standard deviations.
+
+**Example:**
+
+consider a SD graph with mean = 50
+
+![SD graph](./Images/SD.jpg)
+
+from this graph we can say that point `60` will lie on to the `1 SD` to the right of mean ( $\mu + 1\sigma$ = 60 )
+
+but what if you want to find the point `57` and where it fall. we cannot directly find that point on the graph, therefor to find this point we use Z score
+
+**Formula:**
+
+$$
+Z = \frac{X - \mu}{\sigma}
+$$
+
+where:
+- $X$ : your data point
+- $\mu$ : mean of the dataset
+- $\sigma$ : standard deviation
+
+Therefor from this formula we can find the position of `57`
+
+$$
+z = \frac{57 - 50}{10} = 0.7
+$$
+
+This means you point lie at `0.7 SD` to the right pf the mean ( $\mu + 0.7\sigma$ = 57 )
+
+
+**Note: if value of `Z` is `negative` that means point ile in `left` side of the graph, whereas if value of `Z` is `positive` then point lie in `right` side of the graph**
+
+### Standardization
+
+- currently our normal distribution are: `[20, 30, 40, 50, 60, 70, 80]` with `50 = mean` and `SD = 10`
+- apply Z score over this list
+    1. Z = (20 - 40) / 10 = -3
+    1. Z = (30 - 40) / 10 = -2
+    1. Z = (40 - 40) / 10 = -1
+    1. Z = (50 - 40) / 10 = -0
+    1. Z = (60 - 40) / 10 = 1
+    1. Z = (70 - 40) / 10 = 2
+    1. Z = (80 - 40) / 10 = 3
+- therefor our new list becomes: `[-3, -2, -1, 0, 1, 2, 3]`
+- from above example we can see that for any normal distribution like `[20, 30, 40, 50, 60, 70, 80]` if we apply the Z score then we get another distribution `[-3, -2, -1, 0, 1, 2, 3]` where `mean = 0` and `SD = 1`
+- This new distribution (`[-3, -2, -1, 0, 1, 2, 3]`) is known as **standard normal distribution** and the process of converting normal distribution to standard normal distribution is called **standardization**
+
+### How to use Z score to find the value?
+
+you have given a graph of SAT score with `mean = 1150` and `SD = 150` find the probability of score being more than `1380`
+
+**Solution:**\
+for `1380`:
+
+$
+Z = \frac{X - \mu}{\sigma} = \frac{1380 - 1150}{150} = 1.53
+$
+
+![Graph](./Images/standard-normal-shaded-area-example.webp)
+
+- now to find the probability of score being more than `1380` we have to find the area of graph where `z > 1.53`
+
+- considering the area of whole graph is `1`, therefor we can say that area of graph where `z > 1.53` is: `P(z > 1.53) = 1 - (area of graph from -3 to 1.53)`
+
+- to find the area of graph between -3 to 1.53 we use Z-score table
+
+- from the table we get `area = 0.9370`
+
+- Therefor the area of graph for `Z > 1.53` = `1 - 0.9370` = `0.063`
+- hence we can say that probability of marks being more than `1380` is `6.3%`
 
 
 [Go To Top](#content)
