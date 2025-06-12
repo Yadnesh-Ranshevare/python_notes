@@ -22,7 +22,7 @@
 10. [Five Number Summary](#five-number-summary)
     - [Box Plot](#box-plot)
     - [Detecting and Removing outlier](#detecting-and-removing-outlier)
-11. [Normal distribution](#1-gaussian--normal-distribution)
+11. [Normal / Gaussian Distribution](#gaussian--normal-distribution)
 
 
 # Introduction
@@ -1073,23 +1073,30 @@ data : `1, 2, 2, 2, 3, 3, 4, 5, 5, 5, 6, 6, 6, 6, 7, 8, 8, 9, 27`
 [Go To Top](#content)
 
 ---
-# Distribution
-In statistics, a distribution tells us how data values are spread out — or how frequently each value (or range of values) occurs in a dataset.
 
 
-## 1. Gaussian / Normal Distribution
+
+# Gaussian / Normal Distribution
+A normal distribution is a special type of probability distribution that is bell-shaped and symmetric around the mean. It is one of the most common and important distributions in statistics
+
 
  Make sure that you know about the [Standard deviation graph](#standard-deviation-graph)
 
 ![Normal distribution graph](./Images/ND.png)
 
+
+- Data is symmetrically distributed around the mean. i.e, left and right curve from the mean is exactly same
+- Standard Deviation (σ) controls the spread
+
+    - More σ = wider curve
+    - Less σ = steeper curve
 - Empirical formula: its just a formula of 68.2 - 95.4 - 99.7 rate 
 - this formula says
     1. 68.2% of data lie under the curve  $-1\sigma$  to $1\sigma$ i.e, first SD
     1. 95.4% of data lie under the curve $-2\sigma$  to $2\sigma$ i.e second SD
     1. 99.7% of data lie under the curve $-3\sigma$  to $3\sigma$ i.e third SD
 
-#### Z score
+### Z score
 
 A Z-score (also called a standard score) tells you how far a data point is from the mean, in terms of standard deviations.
 
@@ -1148,7 +1155,7 @@ you have given a graph of SAT score with `mean = 1150` and `SD = 150` find the p
 for `1380`:
 
 $$
-\text{Z} = \frac{X - \mu}{\sigma} = \frac{1380 - 1150}{150} = 1.53
+\text{Z} = \frac{X - \mu}{\sigma} = \frac{1380 - 1150}{150} ≈ 1.53
 $$
 
 ![Graph](./Images/standard-normal-shaded-area-example.webp)
