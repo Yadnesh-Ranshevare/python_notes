@@ -1148,7 +1148,7 @@ you have given a graph of SAT score with `mean = 1150` and `SD = 150` find the p
 for `1380`:
 
 $$
-Z = \frac{X - \mu}{\sigma} = \frac{1380 - 1150}{150} = 1.53
+\text{Z} = \frac{X - \mu}{\sigma} = \frac{1380 - 1150}{150} = 1.53
 $$
 
 ![Graph](./Images/standard-normal-shaded-area-example.webp)
