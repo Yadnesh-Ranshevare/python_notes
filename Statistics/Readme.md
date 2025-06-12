@@ -22,6 +22,7 @@
 10. [Five Number Summary](#five-number-summary)
     - [Box Plot](#box-plot)
     - [Detecting and Removing outlier](#detecting-and-removing-outlier)
+11. [Normal distribution](#1-gaussian--normal-distribution)
 
 
 # Introduction
@@ -1158,7 +1159,8 @@ $
 
 - to find the area of graph between -3 to 1.53 we use Z-score table
 
-- from the table we get `area = 0.9370`
+- from the table we get `area = 0.9370`\
+[click here to view the Z-score table](./z-table%20example.pdf)
 
 - Therefor the area of graph for `Z > 1.53` = `1 - 0.9370` = `0.063`
 - hence we can say that probability of marks being more than `1380` is `6.3%`
