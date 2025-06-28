@@ -26,6 +26,7 @@
 12. [Probability](#probability)
     - [Addition Rule](#addition-rule)
     - [Multiplication Rule](#multiplication-rule)
+13. [Permutation and combination](#permutation-and-combination)
 
 
 # Introduction
@@ -1061,8 +1062,8 @@ $$
 #### Example:
 data : `1, 2, 2, 2, 3, 3, 4, 5, 5, 5, 6, 6, 6, 6, 7, 8, 8, 9, 27`
 
-- Q1 = value at 25%ile = $(\frac{25}{100}) \times (19 + 1)$ = $(\frac{25}{100}) \times (20)$ = 5 -> index = `3` 
-- Q3 = value at 75%ile = $(\frac{75}{100}) \times (19 + 1)$ = $(\frac{75}{100}) \times (20)$ = 15 -> index = `7`
+- Q1 = value at 25%ile = $(\frac{25}{100}) \times (19 + 1)$ = $(\frac{25}{100}) \times (20)$ = 5 (index) -> `3` 
+- Q3 = value at 75%ile = $(\frac{75}{100}) \times (19 + 1)$ = $(\frac{75}{100}) \times (20)$ = 15 (index) -> `7`
 - **Interquartile Range (IQR)** = Q3 - Q1 = 7 - 3 = `4`
 - lower fence = Q1 - 1.5(IQR) = 3 - 1.5(4) = 3 - 6 = `-3`
 - higher fence = Q3 + 1.5(IQR) = 7 + 1.5(4) = 7 + 6 = `13`
@@ -1368,9 +1369,9 @@ $$
 
 where:
 
-$$
+$
  \text{P(B/A) means probability of B given A already happened. Also known as conditional probability}
-$$
+$
 
 - Therefor, the probability of drawing two red card for a deck of card without replacement is
 
@@ -1384,6 +1385,56 @@ $$
 
 ---
 
+# Permutation and combination
+Both permutation and combination are methods for counting arrangements or selections, but:
+- Permutation = Order matters
+- Combination = Order doesn’t matter
+
+### Permutation (P)
+How many ways to arrange things where the order is important
+ 
+**Formula:**
+
+$$
+^nP_r = \frac{n!}{(n-r!)}
+$$
+
+Where:
+- $n$ = total number of items
+- $r$ = number of items you’re arranging
+
+**Example:**\
+You have 3 letters: A, B, C.\
+How many 2-letter arrangements?
 
 
+$$
+^3P_2 = \frac{3!}{(3-2!)} = \frac{6}{1} = 6
+$$
 
+**Arrangements: AB, AC, BA, BC, CA, CB**
+
+
+### Combination (C)
+
+How many ways to choose things where the order doesn’t matter
+
+**Formula:**
+
+$$
+^nC_r = \frac{n!}{r!(n-r!)}
+$$
+
+**Example:**\
+From the same letters A, B, C — choose any 2 (order doesn’t matter):
+
+$$
+^3C_2 = \frac{3!}{2!(3-2!)} = \frac{6}{2 \times 1} = 3
+$$
+
+ **Selections: AB, AC, BC (BA = AB, so not counted again)**
+
+
+[Go To Top](#content)
+
+---
