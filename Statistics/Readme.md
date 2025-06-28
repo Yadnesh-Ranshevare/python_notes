@@ -23,6 +23,8 @@
     - [Box Plot](#box-plot)
     - [Detecting and Removing outlier](#detecting-and-removing-outlier)
 11. [Normal / Gaussian Distribution](#gaussian--normal-distribution)
+12. [Probability](#probability)
+    - [Addition Rule](#addition-rule)
 
 
 # Introduction
@@ -1207,6 +1209,105 @@ $$
 
 - Therefor the area of graph for `Z > 1.53` = `1 - 0.9370` = `0.063`
 - hence we can say that probability of marks being more than `1380` is `6.3%`
+
+
+[Go To Top](#content)
+
+---
+# Probability
+Probability is the chance or likelihood that a certain event will happen.
+
+In Simple Words probability tells you how likely something is to happen, based on math and logic.
+
+### Basic Definition:
+
+$$
+Probability = \frac{\text{Number of Ways That Event Can Occur}}{\text{Total Possible Outcome}}
+$$
+
+### Example 1: Tossing a Coin
+- Total outcomes = 2 (Heads, Tails)
+- Probability of getting Heads:
+
+$$
+P(head) = \frac{1}{2} = 0.5
+$$
+
+### Example 2: Rolling a Die
+- Total outcomes = 6 (1 to 6)
+- Probability of getting a 4:
+
+$$
+P(4) = \frac{1}{6} ≈ 0.167
+$$
+
+- Values are between 0 and 1
+    - 0 = Impossible event
+    - 1 = Certain event
+    - 0.5 = 50-50 chance
+
+# Addition Rule
+**The addition rule helps us find the probability that at least one of two events occurs (Event A or Event B).**
+
+### Mutually Exclusive Events
+Two events are mutually exclusive if they cannot happen at the same time.
+
+-  **Example:**
+    - **Tossing a coin:** You can get either Heads or Tails, not both.
+    - **Drawing a card:** Drawing a King and a Queen at the same time from a single draw is not possible.
+- Formula (Mutually Exclusive):
+
+$$
+\text{P(A or B)} =  P(A) + P(B)
+$$
+- Example:\
+what is the probability of getting head or tails on a single coin toss
+
+$$
+P(head) = 0.5
+$$
+
+$$
+P(tail) = 0.5
+$$
+
+$$
+\text{P(head or tail)} = P(head) + P(tail) = 0.5 + 0.5 = 1
+$$
+
+
+### Non-Mutually Exclusive Events
+Two events are non-mutually exclusive if they can happen at the same time.
+
+- **Example**:
+    - Drawing a card: Event A = drawing a red card, Event B = drawing a King.\
+👉 A King of Hearts is both red and a king → So they can overlap.
+-  Formula (Non-Mutually Exclusive):
+$$
+\text{P(A or B)} =  P(A) + P(B) - \text{P(A and B)}
+$$
+- Example:\
+what are the probability of getting a card which is queen or a heart
+
+$$
+P(Queen) = \frac{4}{52}
+$$ 
+
+$$
+P(Heart) = \frac{13}{52}
+$$ 
+
+$$
+\text{P(Queen and Heart)} = \frac{1}{52}
+$$
+
+Therefor,
+
+$$
+\text{P(Queen or Heart)} = P(Queen) + P(Heart) - \text{P(Queen and Heart)} = \frac{4}{52} + \frac{13}{52} - \frac{1}{52} = \frac{16}{52} ≈ 0.307
+$$
+
+
 
 
 [Go To Top](#content)
