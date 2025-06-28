@@ -25,6 +25,7 @@
 11. [Normal / Gaussian Distribution](#gaussian--normal-distribution)
 12. [Probability](#probability)
     - [Addition Rule](#addition-rule)
+    - [Multiplication Rule](#multiplication-rule)
 
 
 # Introduction
@@ -1307,6 +1308,75 @@ $$
 \text{P(Queen or Heart)} = P(Queen) + P(Heart) - \text{P(Queen and Heart)} = \frac{4}{52} + \frac{13}{52} - \frac{1}{52} = \frac{16}{52} ≈ 0.307
 $$
 
+# Multiplication Rule
+**The multiplication rule helps you find the probability that two events happen together (Event A and Event B).**
+
+###  Independent Events
+Events that do **not** affect each other.
+
+
+
+- Example:
+rolling 5 and then 4 in a dice\
+getting 5 will not affect the probability of getting 4 on a dice
+
+- Formula (Independent Events):
+
+$$
+\text{P(A and B)} = P(A) \times P(B)
+$$
+
+
+- Example:\
+what is the probability of rolling 5 and then 4 in a dice
+
+$$
+P(5) = \frac{1}{6}  
+$$
+
+$$
+P(4) = \frac{1}{6}
+$$
+
+$$
+\text{P(5 and 4)} = \frac{1}{6} \times \frac{1}{6} = \frac{1}{36}
+$$
+
+### Dependent Events
+Events that do affect each other (the outcome of A changes B).
+
+- Example: from a deck of card draw two red card without replacement        
+
+$$
+\text{P(first red card)} = \frac{26}{52}
+$$
+
+since we have draw one card from the deck of `52` cards remaining number of card in a deck is equal to `51`
+
+Also out of `26` red cards we have drawn one red card  therefor remaining number of red card is `25`
+
+$$
+\text{P(second red card)} = \frac{25}{51}
+$$
+
+- from the above example we can see that happening of first event affect the second event
+- Formula (Dependent Events):
+
+$$
+\text{P(A and B)} = P(A) \times P(B/A)
+$$
+
+where:
+
+$$
+ \text{P(B/A) means probability of B given A already happened. Also known as conditional probability}
+$$
+
+- Therefor, the probability of drawing two red card for a deck of card without replacement is
+
+$$
+\text{P('first red card' and 'second red card')} = \text{P(first red card)} \times \text{P(second red card / first red card)} = \frac{26}{52} \times \frac{25}{51} ≈ 0.245
+$$
 
 
 
