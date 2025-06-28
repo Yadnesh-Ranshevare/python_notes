@@ -27,6 +27,7 @@
     - [Addition Rule](#addition-rule)
     - [Multiplication Rule](#multiplication-rule)
 13. [Permutation and combination](#permutation-and-combination)
+14. [Hypothesis testing, Significant value and Confidential Interval](#hypothesis-testing-significant-value-and-confidential-interval)
 
 
 # Introduction
@@ -1408,9 +1409,9 @@ You have 3 letters: A, B, C.\
 How many 2-letter arrangements?
 
 
-$$
+$
 ^3P_2 = \frac{3!}{(3-2!)} = \frac{6}{1} = 6
-$$
+$
 
 **Arrangements: AB, AC, BA, BC, CA, CB**
 
@@ -1428,12 +1429,75 @@ $$
 **Example:**\
 From the same letters A, B, C — choose any 2 (order doesn’t matter):
 
-$$
+$
 ^3C_2 = \frac{3!}{2!(3-2!)} = \frac{6}{2 \times 1} = 3
-$$
+$
 
  **Selections: AB, AC, BC (BA = AB, so not counted again)**
 
+
+[Go To Top](#content)
+
+---
+# Hypothesis testing, Significant value and Confidential Interval   
+
+### What is Hypothesis Testing?
+Hypothesis testing is a statistical method used to decide whether there's enough evidence in a sample of data to support or reject a claim about a population.
+
+**Example:**\
+given a coin check whether the coin is fair or not by performing 100 tosses\
+You want to check: “Is the company's claim really true?” → This is where hypothesis testing helps.
+
+after performing 100 tosses if we get the 50 head (remaining 50 tails) then we can say that our coin is fair
+
+as for fair coin probability of head is 0.5
+
+**Steps for hypothesis testing**
+1. Null Hypothesis (H₀)
+    - The default assumption
+    - Example: H₀: "Coin is fair"
+
+2. Alternative Hypothesis (H₁ or Hₐ)
+    - What you're trying to prove / opposite of null hypothesis
+    - Example: H₁: "coin is not fair"
+
+3. Experiment:
+    - we perform the experiment to find the probability 
+    - example: perform the 100 tosses and find the probability of head
+
+4. based of probability we reject or accept the null hypothesis
+
+Now by performing the series of experiment we can plot the graph as follow
+
+![graph](./Images/hypo)
+
+### Significance Value (α)
+- let say we perform the 100 tosses and we get 30(probability = 0.3) times head. Although probability of head is not equal to 0.5 we cannot say that coin if unfair
+
+- As while performing that experiment we might have get some error
+
+- Therefor we use significance value as a threshold on how much error is allow
+
+- By definition:\
+It's the maximum probability you're willing to accept for making a wrong decision — specifically, the chance of rejecting a true null hypothesis.
+
+
+
+
+### Confidence Interval (CI)
+A confidence interval gives a range of values that is likely to contain the true population parameter (like mean or proportion), based on your sample data.
+
+- let say for our fair coin test we have α = 0.05\
+that means we can accept 5% of the error, Therefor remaining 95% of the time we must get a successful result
+
+![Graph](./Images/CI)
+
+- Now any value which lie between this 95% of the region is a valid value and for that value the null hypothesis get accepted
+
+- for our fair coin test:\
+number of head found in experiment = 30
+- as 30 lie in the 95% of the region we will accept the null hypothesis
+- if we get number of head as 20 then we will reject the null hypothesis and accept the alternate hypothesis
 
 [Go To Top](#content)
 
