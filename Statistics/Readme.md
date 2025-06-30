@@ -27,7 +27,10 @@
     - [Addition Rule](#addition-rule)
     - [Multiplication Rule](#multiplication-rule)
 13. [Permutation and combination](#permutation-and-combination)
-14. [Hypothesis testing, Significant value and Confidential Interval](#hypothesis-testing-significant-value-and-confidential-interval)
+14. [Hypothesis testing](#hypothesis-testing)
+    - [significance value](#significance-value-α)
+    - [Confidential interval](#Confidential-interval-ci)
+    - [Type I and Type II Error](#type-i-and-type-ii-error)
 
 
 # Introduction
@@ -1439,7 +1442,7 @@ $
 [Go To Top](#content)
 
 ---
-# Hypothesis testing, Significant value and Confidential Interval   
+# Hypothesis testing  
 
 ### What is Hypothesis Testing?
 Hypothesis testing is a statistical method used to decide whether there's enough evidence in a sample of data to support or reject a claim about a population.
@@ -1450,7 +1453,7 @@ You want to check: “Is the company's claim really true?” → This is where h
 
 after performing 100 tosses if we get the 50 head (remaining 50 tails) then we can say that our coin is fair
 
-as for fair coin probability of head is 0.5
+as for fair coin, probability of head is 0.5
 
 **Steps for hypothesis testing**
 1. Null Hypothesis (H₀)
@@ -1484,7 +1487,7 @@ It's the maximum probability you're willing to accept for making a wrong decisio
 
 
 
-### Confidence Interval (CI)
+### Confidential Interval (CI)
 A confidence interval gives a range of values that is likely to contain the true population parameter (like mean or proportion), based on your sample data.
 
 - let say for our fair coin test we have α = 0.05\
@@ -1496,8 +1499,38 @@ that means we can accept 5% of the error, Therefor remaining 95% of the time we 
 
 - for our fair coin test:\
 number of head found in experiment = 30
-- as 30 lie in the 95% of the region we will accept the null hypothesis
+- as 30 lie in the 95% of the region, we will accept the null hypothesis
 - if we get number of head as 20 then we will reject the null hypothesis and accept the alternate hypothesis
+
+#### Formula for upper bound
+
+$$
+\text{upper bound} = \bar{x} + Z_\frac{\alpha}{2} \times \frac{\sigma}{\sqrt{n}}
+$$
+
+#### Formula for lower bound 
+
+$$
+\text{upper bound} = \bar{x} - Z_\frac{\alpha}{2} \times \frac{\sigma}{\sqrt{n}}
+$$
+
+Where:
+- $\bar{x}$ :  sample mean
+- $Z $: z-score 
+- $\sigma$ : population standard deviation
+- $n$ : sample size
+
+
+###  Type I and Type II Error
+
+These errors happen when you make a wrong decision about the null hypothesis $ H_0$
+
+| Error Type        | What it Means                        | Real-life Analogy                                                  |
+| ----------------- | ------------------------------------ | ------------------------------------------------------------------ |
+| **Type I Error**  | **Rejecting H₀ when it's true**      | False alarm — like thinking someone's guilty when they’re innocent |
+| **Type II Error** | **Not rejecting H₀ when it’s false** | Missed detection — like letting a guilty person go free            |
+
+
 
 [Go To Top](#content)
 
