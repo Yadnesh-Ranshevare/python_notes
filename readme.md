@@ -11,3 +11,5 @@
 4. Statistics
     - [Direct Notes](./Statistics/Readme.md)
     - [YouTube Video](https://youtu.be/LZzq1zSL1bs?si=cEgnCOOzyB2fMyyw)
+5. Exploratory Data Analysis (EDA)
+    - [Direct Notes](./EDA/readdme.md)
