@@ -31,6 +31,7 @@
     - [significance value](#significance-value-α)
     - [Confidential interval](#Confidential-interval-ci)
     - [Type I and Type II Error](#type-i-and-type-ii-error)
+    - [One-Tail and Two-Tail Test](#one-tail-and-two-tail-test)
 
 
 # Introduction
@@ -1529,6 +1530,58 @@ These errors happen when you make a wrong decision about the null hypothesis $ H
 | ----------------- | ------------------------------------ | ------------------------------------------------------------------ |
 | **Type I Error**  | **Rejecting H₀ when it's true**      | False alarm — like thinking someone's guilty when they’re innocent |
 | **Type II Error** | **Not rejecting H₀ when it’s false** | Missed detection — like letting a guilty person go free            |
+
+
+### One-Tail and Two-Tail Test
+In hypothesis testing, the choice between a one-tailed or two-tailed test depends on what kind of difference you’re trying to detect.
+
+#### Two-Tail Test
+value is different (either higher or lower) than the claimed value.
+
+You don’t know which direction the change might happen.
+
+**Hypotheses:**
+- H₀: The coin is fair → 
+𝑃(head)
+=
+0.5
+
+- H₁: The coin is not fair → 
+𝑃(head)
+≠
+0.5
+
+from above example we can say that value of P(head) becomes less or more than 0.5 then the coin in not fair
+
+#### graph
+![graph](./Images/two-tails-test.jpg)
+
+in above example of graph critical region is the region where the value of P(head) if not equal to 0.5
+
+in first region it is less than 0.5 and in second region it is higher than 0.5
+
+therefor in two tail test the change happen in both direction may affect the hypothesis
+
+
+#### One-Tail Test
+value is only higher or only lower than the claimed value.
+
+use when you only care about increase or decrease, not both.
+
+**Hypotheses:**
+- H₀: The coin is fair → 
+𝑃
+=
+0.5
+
+- H₁: The coin gives less heads than usual → 𝑃 < 0.5
+
+#### Graph
+![graph](./Images/one-tail-test.jpg)
+
+in above example of graph critical region is the region where the value of P(head) if less to 0.5
+
+therefor in one tail test the change happen in only one direction can affect the hypothesis
 
 
 
