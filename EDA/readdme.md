@@ -1,6 +1,8 @@
 # content
 1. [Introduction](#introduction)
 2. [Data Analytic/Science process flow](#data-analyticscience-process-flow)
+3. [Visualization](#visualization)
+4. [Step Involve In EDA](#step-involve-in-eda)
 
 ---
 
@@ -87,6 +89,96 @@ It shows the step-by-step journey of data from the real world to decision-making
 - Example: adjusting marketing strategy based on customer prediction.
 #### 10. Back to Real World
 - Once deployed, the system continues to interact with the real world, collecting new data → process repeats.
+
+
+[Got To Top](#content)
+
+---
+# Visualization
+
+**Visualization is the presentation of the data in a graphical or visual form to understand the data more clearly.**
+
+
+### Advantages of Visualization
+- Helps understand data easily
+- Shows patterns and trends clearly
+- Detects outliers and unusual values
+- Reveals relationships between variables
+- Helps find missing or wrong data
+- Aids in feature selection (choosing useful columns)
+- Makes results easy to explain and present
+- Guides next analysis steps based on insights
+
+
+### Common Visualization Types in EDA
+
+
+| Visualization Type | Use Case                                         | Example (Python code with `matplotlib` / `seaborn`)  |
+| ------------------ | ------------------------------------------------ | ---------------------------------------------------- |
+| **Histogram**      | See how a single numeric variable is distributed | `sns.histplot(data['age'], bins=10)`                 |
+| **Box Plot**       | Identify outliers and data spread                | `sns.boxplot(x=data['salary'])`                      |
+| **Scatter Plot**   | Check relationship between two numeric variables | `sns.scatterplot(x='height', y='weight', data=data)` |
+| **Bar Plot**       | Compare categories                               | `sns.barplot(x='gender', y='income', data=data)`     |
+| **Heatmap**        | Visualize correlation between multiple variables | `sns.heatmap(data.corr(), annot=True)`               |
+| **Pair Plot**      | View all pairwise relationships                  | `sns.pairplot(data)`                                 |
+
+
+
+
+[Got To Top](#content)
+
+---
+# Step Involve In EDA
+
+## Step 1: Data Sourcing / Collection
+- data sourcing is the process of gathering the data from multiple sources as external or internal data collection
+- There are two major kind of data which can be classified according to source
+    1. **Public data:** the data which is easily access without taking any permission. 
+    2. **private data:** The data which is not available on public platform and to access the data we have to take the permission
+## Step 2: Data Cleaning
+- data cleaning means that you get rid of only information that doesn't need to be there
+- it generally perform to improve the quality of the data for future data analysis operation and building a machine learning model  
+- the benefit of data cleaning is that all the incorrect and irrelevant data is gone, and we get the good quality of data which will help in improving the accuracy of our machine learning model
+
+#### major steps of data cleaning
+- **Remove Duplicates:** Delete repeated or identical rows from the dataset.
+- **Handle Missing Values:** Fill missing data with mean, median, or mode, or remove rows/columns with too many missing values.
+- **Fix Data Types:** Convert columns to correct data types (e.g., integer, float, date).
+- **Detect and Handle Outliers:** Identify and remove or adjust extreme or unusual values.
+- **Standardize Data Formats:** Make sure formats are consistent (e.g., “Yes/No” instead of “Y/N”).
+- **Correct Inconsistent or Invalid Data:** Fix spelling mistakes, invalid entries, or incorrect labels.
+- **Remove Irrelevant Data:** Drop unnecessary or unhelpful columns and rows.
+- **Normalize or Scale Data:** Adjust numeric values to a common scale to improve model performance.
+
+#### Handling Missing Values
+
+1. **Delete row / column:**
+    - **Remove rows with missing values**\
+Delete rows that contain missing values if they are few and random, so you don’t lose much information.\
+Example: `data.dropna()`
+    - **Remove columns with too many missing values**\
+Drop a column if most of its data is missing, since it may not be useful.
+
+2. **Fill another Value:**
+    - **Fill numeric values with mean, median, or mode**\
+Replace missing numeric data with the average, median, or most frequent value to maintain dataset size.\
+Example: `data['age'].fillna(data['age'].mean())`
+    - **Fill categorical values with mode or a constant**\
+Replace missing categorical values with the most frequent category or a placeholder like `"Unknown"`.\
+Example: `data['gender'].fillna("Unknown")`
+    - **Forward fill / Backward fill**\
+Fill missing values using previous or next row values, useful in time series data.\
+Example: `data.fillna(method='ffill')`
+
+3. **Interpreted:**
+    - **Interpolation**\
+Estimate missing values based on surrounding data points, useful for continuous variables.\
+Example: `data['sales'].interpolate(method='linear')`
+    - **Advanced imputation methods**\
+Use machine learning or statistical models (like KNN Imputer or regression) to predict missing values based on other columns.
+
+
+
 
 
 [Got To Top](#content)
