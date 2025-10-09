@@ -10,6 +10,8 @@
     - [handling invalid Values](#handling-invalid-values)
 5. Type of Analysis
     - [Univariate Analysis](#univariate-analysis)
+    - [Bivariate Analysis](#bivariate-analysis)
+    - [Multivariate Analysis](#multivariate-analysis)
 
 ---
 
@@ -473,6 +475,159 @@ There are 3 Males and 2 Females.
 Males are slightly more common in this dataset.
 
 **Conclusion**: The dataset has a higher number of males compared to females.
+
+[Got To Top](#content)
+
+---
+# Bivariate Analysis 
+Bivariate analysis means analyzing two variables together to understand the relationship between them.
+- **“Bi”** → two
+- **“Variate”** → variables
+
+So basically, we’re exploring how one variable changes with respect to another.
+
+It’s a key step in Exploratory Data Analysis (EDA) because it helps us go beyond individual variable descriptions (univariate analysis) and start exploring connections between variables.
+
+It helps answer questions like:
+- Does age affect income?
+- Do males and females spend differently?
+- Is there a link between education level and employment status?
+
+### 3 Main Types
+
+#### 1. Numerical vs Numerical
+Both variables are numbers.\
+We study whether they increase or decrease together — i.e., correlation.
+
+**Example:**\
+Let’s say we have this data:
+
+| Person | Age | Salary (in ₹) |
+| ------ | --- | ------------- |
+| A      | 22  | 25,000        |
+| B      | 25  | 30,000        |
+| C      | 28  | 35,000        |
+| D      | 35  | 60,000        |
+| E      | 40  | 80,000        |
+
+**Observation:**\
+As age increases, salary also increases.\
+→ This means there’s a positive correlation.
+
+**Interpretation:**\
+Older people tend to have more experience → higher salaries.\
+Hence, Age and Salary are positively correlated.
+
+In EDA, you’d visualize this with a scatter plot, where points form an upward trend.
+
+#### 2. Categorical vs Numerical
+One variable is category-based, the other is numeric.\
+We study if the numeric values differ across categories.
+
+**Example:**
+| Gender | Monthly Spending (₹) |
+| ------ | -------------------- |
+| Male   | 3,000                |
+| Male   | 3,500                |
+| Female | 5,000                |
+| Female | 4,800                |
+| Female | 5,200                |
+
+**Observation:**\
+Average spending for females ≈ ₹5,000\
+Average spending for males ≈ ₹3,250
+
+**Interpretation:**\
+Spending differs by gender → the categorical variable (Gender) influences the numerical variable (Spending).
+
+In EDA, you’d show this with a box plot to compare the spending distribution between groups.
+
+
+#### 3. Categorical vs Categorical
+Both variables are categories.\
+We check if they are dependent or independent.
+
+**Example:**
+| Gender | Purchased (Yes/No) |
+| ------ | ------------------ |
+| Male   | No                 |
+| Female | Yes                |
+| Female | Yes                |
+| Male   | No                 |
+| Female | Yes                |
+
+**Observation (Counts):**
+| Gender | Yes | No |
+| ------ | --- | -- |
+| Male   | 0   | 2  |
+| Female | 3   | 0  |
+
+**Interpretation:**\
+Females purchased more than males → there’s a relationship between Gender and Purchase.
+
+In EDA, you’d use a crosstab or stacked bar chart to show this.
+
+
+### Objectives of Bivariate Analysis
+1. **Identify Relationships:**\
+To check if two variables are related (e.g., does height increase with weight?).
+2. **Measure Strength and Direction:**\
+If they are related, how strong is the relationship?\
+And is it positive (both increase together) or negative (one increases, the other decreases)?
+3. **Find Patterns or Trends:**\
+Helps in spotting data patterns that can influence predictions or decisions.
+4. **Detect Outliers or Anomalies:**\
+Sometimes, the relationship reveals data points that don’t fit the general pattern.
+
+[Got To Top](#content)
+
+---
+# Multivariate Analysis
+Multivariate analysis means studying more than two variables at the same time to understand the relationships, interactions, and patterns among them.
+- **“Multi”** → many
+- **“Variate”** → variables
+
+So while:
+- Univariate analysis = 1 variable
+- Bivariate analysis = 2 variables
+- Multivariate analysis = 3 or more variables
+
+### Why It’s Used in EDA
+In real-world datasets, things are rarely controlled by just two factors.
+For example:
+
+- A person’s salary may depend on age, education level, and experience — not just one thing.
+- A customer’s buying decision might depend on income, age, and gender.
+
+Multivariate analysis helps us uncover these complex relationships that can’t be seen in simple pairwise comparisons.
+
+### Goals of Multivariate Analysis
+1. Understand interactions between multiple features.
+2. Detect hidden patterns that appear only when multiple variables are considered together.
+3. Reduce data dimensionality (i.e., summarize many variables into fewer key components).
+4. Build predictive insights (which variable influences the outcome most).
+
+### Example
+Let’s say you have the following dataset:
+| Person | Age | Education | Experience (Years) | Salary (₹) |
+| ------ | --- | --------- | ------------------ | ---------- |
+| A      | 22  | Graduate  | 1                  | 25,000     |
+| B      | 25  | Graduate  | 3                  | 30,000     |
+| C      | 28  | Postgrad  | 5                  | 35,000     |
+| D      | 35  | Postgrad  | 8                  | 60,000     |
+| E      | 40  | Doctorate | 12                 | 80,000     |
+
+**What you can do:**
+- **Univariate:** Look at salary distribution.
+- **Bivariate:** Compare age vs salary.
+- **Multivariate:** Study how age, education, and experience together affect salary.
+
+**You might find:**
+- Salary increases with both age and experience,
+- But people with higher education earn more even with less experience.
+
+That’s something you can only discover through multivariate analysis.
+
 
 [Got To Top](#content)
 
