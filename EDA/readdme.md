@@ -4,14 +4,20 @@
 3. [Visualization](#visualization)
 4. [Data Cleaning](#data-cleaning-1)
     - [How to handle missing values?](#handling-missing-values)
-    - [Feature Scaling](#feature-scaling)
-    - [feature scaling techniques](#feature-scaling-techniques)
     - [Outlier Treatment](#outlier-treatment)
     - [handling invalid Values](#handling-invalid-values)
 5. Type of Analysis
     - [Univariate Analysis](#univariate-analysis)
     - [Bivariate Analysis](#bivariate-analysis)
     - [Multivariate Analysis](#multivariate-analysis)
+6. [Feature Engineering](#feature-engineering)
+    - [Derived Matrix](#derived-matrix)
+    - [Feature Binning](#feature-binning)
+    - [Feature Scaling](#feature-scaling)
+7. [Feature Selection]()
+8. [Model Building]()
+9. [Model Evaluation]()
+10. [Reporting / Dashboard]()
 
 ---
 
@@ -186,145 +192,6 @@ Estimate missing values based on surrounding data points, useful for continuous 
 Example: `data['sales'].interpolate(method='linear')`
     - **Advanced imputation methods**\
 Use machine learning or statistical models (like KNN Imputer or regression) to predict missing values based on other columns.
-
-### Feature Scaling 
-Feature Scaling is a process where we adjust the values of features (columns) so they are on a similar scale.
-
-This is important because:
-- Many machine learning algorithms work better or converge faster when features are on the same scale (e.g., algorithms using distances like KNN, SVM, or gradient descent methods).
-- Without scaling, features with large values can dominate those with small values.
-
-**Example**\
-Imagine you have a dataset with two features:
-| Height (cm) | Weight (kg) |
-| ----------- | ----------- |
-| 170         | 65          |
-| 180         | 75          |
-| 160         | 55          |
-
-Here:
-- Height values: 160–180 cm → numbers in the range of about hundreds
-- Weight values: 55–75 kg → numbers in the range of tens
-
-That means the scale of the two features is very different.
-
-Some algorithms treat larger numbers as more important. So we scale them to a similar range.
-
-Therefor we transform the features so they are on similar scales.
-
-Using Min-Max Scaling
-
-Formula:
-
-$$
-X' = \frac{X - X_{min}}{X_{max} - X_{min}}
-$$
-
-For Height:
-- Min = 160, Max = 180
-- Row 1:
-
-$$
-X' = \frac{170 - 160}{180 - 160} = \frac{10}{20} = 0.5
-$$
-
-- Row 2:
-
-$$
-X' = \frac{180 - 160}{180 - 160} = \frac{20}{20} = 1
-$$
-
-- Row 3:
-
-$$
-X' = \frac{160 - 160}{180 - 10} = 0
-$$
-
-For Weight:
-- Min = 55, Max = 75
-- Row 1:
-
-$$
-X' = \frac{65 - 55}{75 - 55} = \frac{10}{20} = 0.5
-$$
-
-- Row 2:
-
-$$
-X' = \frac{75 - 55}{75 - 55} = \frac{10}{20} = 1
-$$
-
-- Row 3:
-
-$$
-X' = \frac{55 - 55}{75 - 55} = \frac{10}{20} = 1
-$$
-
-Scaled Dataset
-| Height_scaled | Weight_scaled |
-| ------------- | ------------- |
-| 0.5           | 0.5           |
-| 1.0           | 1.0           |
-| 0.0           | 0.0           |
-
-Now both features are on the same scale 0–1. This ensures no single feature dominates the model’s decisions.
-
-
-### feature scaling techniques
-1. **Min-Max Scaling (Normalization)**
-    - Formula:
-
-    $$
-    X' = \frac{X - X_{min}}{X_{max} - X_{min}}
-    $$
-
-    - Scales data to a fixed range (usually 0 to 1).
-    - Use case: Useful when you want bounded data and your model needs normalized values (e.g., neural networks).
-    - Downside: Sensitive to outliers.
-
-2. **Standardization (Z-score Normalization)**
-
-    - Formula:
-    $$
-    X' = \frac{X - \mu}{\sigma}
-    $$
-
-    where μ = mean, σ = standard deviation.
-    - Scales data so it has a mean of 0 and standard deviation of 1.
-    - Use case: Works well for most machine learning algorithms.
-    - Downside: Doesn’t bound values to a specific range.
-
-3. **Robust Scaling**
-    - Formula:
-    $$
-    X' = \frac{X - median}{IQR}
-    $$
-
-    where IQR = Interquartile Range (Q3 − Q1).
-    - Uses medians and IQR instead of mean and standard deviation.
-    - Use case: Good for datasets with many outliers.
-    - Downside: Doesn’t bound values.
-
-4. **Max Abs Scaling**
-    - Formula:
-
-    $$
-    X' = \frac{X}{|X_{max}|}
-    $$
-    - Scales data to [-1, 1] without shifting/centering.
-    - Use case: Useful when your data is already centered at zero.
-    - Downside: Sensitive to outliers.
-5. **Unit Vector Scaling (Normalization by norm)**
-    - Formula:
-
-    $$
-    X' = \frac{X}{||X||}
-    $$
-
-    where ∥X∥ is the vector norm (often L2 norm).
-    - Scales data so that the length of the vector is 1.
-    - Use case: Useful in text classification and clustering.
-    - Downside: Doesn’t preserve original distribution.
 
 
 ### Outlier Treatment
@@ -627,6 +494,446 @@ Let’s say you have the following dataset:
 - But people with higher education earn more even with less experience.
 
 That’s something you can only discover through multivariate analysis.
+
+
+[Got To Top](#content)
+
+---
+
+# Feature Engineering
+Feature Engineering means creating, transforming, or selecting features (columns) from raw data to make it more useful for analysis or machine learning models.
+
+You can think of it as turning raw data into meaningful information that helps your model understand patterns better.
+
+#### Why it’s needed
+Raw data is often messy or not directly usable by ML models.
+Feature Engineering helps by:
+- Making the data more informative
+- Reducing noise or irrelevant details
+- Improving model accuracy and performance
+#### Main Tasks in Feature Engineering
+| Step                                            | Description                         | Example                                       |
+| ----------------------------------------------- | ----------------------------------- | --------------------------------------------- |
+| **1. Creating new features (Feature Creation)** | Combine or extract new columns      | `Total_Price = Quantity × Price`              |
+| **2. Transforming features**                    | Apply math or logic transformations | `log(Salary)` to reduce skewness              |
+| **3. Encoding categorical data**                | Convert text → numbers              | `City = {“Mumbai”, “Delhi”}` → One-Hot Encode |
+| **4. Feature Scaling**                          | Normalize values to same range      | Use Min-Max or Standard scaling               |
+| **5. Handling Outliers / Missing Data**         | Fix extreme or missing values       | Replace missing age with mean                 |
+| **6. Feature Selection**                        | Keep only useful features           | Remove columns with low correlation           |
+
+#### Simple Example
+
+Suppose you have raw data:
+| Name | Birth_Year | Height(cm) | Weight(kg) |
+| ---- | ---------- | ---------- | ---------- |
+| A    | 2000       | 170        | 60         |
+| B    | 1995       | 180        | 85         |
+
+After Feature Engineering, you could add:
+| Age | BMI   |
+| --- | ----- |
+| 25  | 20.76 |
+| 30  | 26.23 |
+
+- Age = 2025 - Birth_Year
+- BMI = Weight / (Height/100)^2
+
+These new features (Age, BMI) help your model understand health patterns better.
+
+
+**there are many other ways of doing Feature Engineering depending on your dataset type (numeric, categorical, text, or date).**
+
+| **Category**        | **Example**                         | **What it Means (Simple)**                                           |
+| ------------------- | ----------------------------------- | -------------------------------------------------------------------- |
+| [Derived Matrix ](#derived-matrix)    | `BMI = Weight ÷ (Height × Height)`  | Make a new number from existing data that tells you something useful |
+| [Feature Binning](#feature-binning)     | Ages → “Child”, “Adult”, “Senior”   | Group numbers into categories to make them easier to understand      |
+| [Encoding](#feature-encoding)            | “Male” → 0, “Female” → 1            | Change words into numbers so a computer can use them                 |
+| [Scaling](#feature-scaling)             | Test scores 0–100 → 0–1             | Make numbers similar in size so one doesn’t overpower the others     |
+| Transformation      | Use `log` or `sqrt`                 | Fix numbers that are too big or uneven to balance them               |
+| Datetime Extraction | “2025-10-11” → Month = 10, Day = 11 | Pull useful info like month or day from a date                       |
+| Aggregation         | Average purchase per person         | Summarize many numbers into one to see overall patterns              |
+| Interaction         | `Total = Price × Quantity`          | Combine two numbers to show a relationship between them              |
+| Decomposition       | PCA (reduce many columns to fewer)  | Make data smaller while keeping important info                       |
+| Domain Features     | `Profit = Revenue − Cost`           | Use real-world rules to create numbers that make sense               |
+
+
+[Got To Top](#content)
+
+---
+
+# Derived Matrix
+
+A new matrix (or table of data) that is created by transforming or deriving new features/variables from an existing dataset.
+
+A derived matrix is formed when you take your original dataset and add new columns or transform existing ones to create derived (calculated) variables.
+
+So, it’s the “transformed” version of your data used for analysis or model building.
+
+### Example
+Let’s say you have this dataset (matrix):
+
+| Age | Height (m) | Weight (kg) |
+| --- | ---------- | ----------- |
+| 20  | 1.75       | 70          |
+| 25  | 1.68       | 60          |
+| 30  | 1.80       | 90          |
+
+Now, if you derive new features such as:
+- BMI = Weight / Height²
+- Age Group = "Young" if Age < 25 else "Adult"
+
+You get this derived matrix:
+
+| Age | Height | Weight | BMI  | Age Group |
+| --- | ------ | ------ | ---- | --------- |
+| 20  | 1.75   | 70     | 22.9 | Young     |
+| 25  | 1.68   | 60     | 21.3 | Adult     |
+| 30  | 1.80   | 90     | 27.8 | Adult     |
+
+[Got To Top](#content)
+
+---
+
+# Feature Binning
+Feature binning means dividing continuous numerical values into discrete intervals (bins) — basically grouping similar values together.
+
+It helps simplify the data and reduce noise or outlier effects.
+
+### Example
+Say you have an Age column:
+```
+[15, 18, 22, 30, 35, 42, 50, 60, 70]
+```
+After binning, you could group it like this:
+| Age | Age_Group           |
+| --- | ------------------- |
+| 15  | Teen (0–19)         |
+| 18  | Teen (0–19)         |
+| 22  | Young Adult (20–35) |
+| 30  | Young Adult (20–35) |
+| 42  | Adult (36–55)       |
+| 60  | Senior (56–75)      |
+| 70  | Senior (56–75)      |
+
+Now instead of many distinct numeric values, you have fewer, meaningful categories.
+
+### Why Do We Use Binning?
+| Reason                       | Explanation                                                     |
+| ---------------------------- | --------------------------------------------------------------- |
+| **Simplify Data**            | Makes continuous values easier to interpret                     |
+| **Handle Noise**             | Small random fluctuations are absorbed into bins                |
+| **Reduce Outlier Effect**    | Outliers don’t distort bins as much                             |
+| **Improve Interpretability** | Easier for humans to understand (e.g., “Low”, “Medium”, “High”) |
+| **Help Certain Models**      | Decision trees or Naive Bayes can benefit from categorical bins |
+
+### Types of Binning
+1. **Equal Width Binning**
+    - Divide data into bins of equal size (range).
+    - Example: If Age ranges from 0–100 and you want 5 bins → each bin = 20 years wide.
+    ```
+    [0–20), [20–40), [40–60), [60–80), [80–100)
+    ```
+
+2. **Equal Frequency Binning**
+    - Each bin contains roughly the same number of observations.
+    - Example: 1000 data points → 5 bins → each bin has 200 values.
+    - This helps when data is skewed (unevenly distributed).
+3. **Custom / Domain-based Binning**
+    - Created using domain knowledge or business logic.
+    - Example:
+        - Income < 30K → “Low”
+        - 30K–70K → “Medium”
+        - 70K → “High”
+    - This is the most meaningful type in real-world projects.
+
+
+[Got To Top](#content)
+
+---
+# Feature Encoding
+
+Feature Encoding is the process of converting categorical (non-numeric) data into numeric format so that machine learning models can understand it.
+> Most ML models can’t work with text directly — they need numbers.\
+> Feature Encoding is how we “translate” categories into numbers.
+
+### Types of Feature Encoding
+#### 1. Label Encoding
+- Assigns a unique integer to each category.
+- Useful for ordinal categories (where order matters).
+
+**Example**:\
+Imagine a dataset of fruits
+| Fruit  | Color  |
+| ------ | ------ |
+| Apple  | Red    |
+| Banana | Yellow |
+| Orange | Orange |
+| Apple  | Red    |
+
+
+We just assign numbers:
+- **Color**: Red = 0, Yellow = 1, Orange = 2
+- **Fruit**: Apple = 0, Banana = 1, Orange = 2    
+
+Now the table becomes:
+| Fruit | Color |
+| ----- | ----- |
+| 0     | 0     |
+| 1     | 1     |
+| 2     | 2     |
+| 0     | 0     |
+
+#### 2. One-Hot Encoding
+- Creates binary columns for each category.
+- Used for nominal categories (no order).
+
+**Example**:\
+Imagine a dataset of fruits
+| Fruit  | Color  |
+| ------ | ------ |
+| Apple  | Red    |
+| Banana | Yellow |
+| Orange | Orange |
+| Apple  | Red    |
+
+We create a column for each category and put 1 if it’s that category, 0 otherwise:
+| Fruit_Apple | Fruit_Banana | Fruit_Orange | Color_Red | Color_Yellow | Color_Orange |
+| ----------- | ------------ | ------------ | --------- | ------------ | ------------ |
+| 1           | 0            | 0            | 1         | 0            | 0            |
+| 0           | 1            | 0            | 0         | 1            | 0            |
+| 0           | 0            | 1            | 0         | 0            | 1            |
+| 1           | 0            | 0            | 1         | 0            | 0            |
+
+#### 3. Ordinal Encoding
+- Similar to Label Encoding, but you specifically define the order.
+
+**Example**:\
+Imagine a dataset of customer satisfaction survey:
+| Customer | Satisfaction |
+| -------- | ------------ |
+| A        | Poor         |
+| B        | Average      |
+| C        | Excellent    |
+| D        | Good         |
+| E        | Poor         |
+
+Satisfaction has a natural order:
+`Poor < Average < Good < Excellent`
+
+Therefor we assign numbers to reflect the order:
+| Customer | Satisfaction | Ordinal Encoded |
+| -------- | ------------ | --------------- |
+| A        | Poor         | 0               |
+| B        | Average      | 1               |
+| D        | Good         | 2               |
+| C        | Excellent    | 3               |
+| E        | Poor         | 0               |
+
+
+#### 4. Binary / Base-N Encoding (Optional Advanced)
+- Converts categories to binary digits (like 0s and 1s).
+- Useful when you have high-cardinality categorical data (many unique values).
+
+**Example**:\
+Imagine a fruit Category list
+| Fruit  |
+| ------ |
+| Apple  |
+| Banana |
+| Orange |
+| Mango  |
+
+First, assign a number to each category:
+| Fruit  | Number |
+| ------ | ------ |
+| Apple  | 0      |
+| Banana | 1      |
+| Orange | 2      |
+| Mango  | 3      |
+
+Then convert numbers to binary:
+| Fruit  | Number | Binary (2-bit) |
+| ------ | ------ | -------------- |
+| Apple  | 0      | 00             |
+| Banana | 1      | 01             |
+| Orange | 2      | 10             |
+| Mango  | 3      | 11             |
+
+#### 5. Target / Mean Encoding (Advanced)
+- Replace categories with average of target variable for that category.
+- Useful for predictive models, especially categorical variables with many levels.
+
+**Example**:\
+ Predicting Loan Approval
+ | Customer | Bank  | Loan Approved (Target) |
+| -------- | ----- | ---------------------- |
+| A        | SBI   | 1                      |
+| B        | HDFC  | 0                      |
+| C        | SBI   | 1                      |
+| D        | ICICI | 0                      |
+| E        | HDFC  | 1                      |
+
+Target = Loan Approved (1 = Yes, 0 = No)
+
+**Step 1: Compute mean target per category**
+| Bank  | Avg Loan Approved |
+| ----- | ----------------- |
+| SBI   | (1+1)/2 = 1.0     |
+| HDFC  | (0+1)/2 = 0.5     |
+| ICICI | 0/1 = 0.0         |
+
+**Step 2: Replace Bank column with mean target**
+
+| Customer | Bank_Encoded | Loan Approved |
+| -------- | ------------ | ------------- |
+| A        | 1.0          | 1             |
+| B        | 0.5          | 0             |
+| C        | 1.0          | 1             |
+| D        | 0.0          | 0             |
+| E        | 0.5          | 1             |
+
+Now the categorical column is numeric and contains information about the target, which can help the model predict better.
+
+[Got To Top](#content)
+
+---
+# Feature Scaling 
+Feature Scaling is a process where we adjust the values of features (columns) so they are on a similar scale.
+
+This is important because:
+- Many machine learning algorithms work better or converge faster when features are on the same scale (e.g., algorithms using distances like KNN, SVM, or gradient descent methods).
+- Without scaling, features with large values can dominate those with small values.
+
+### Example
+Imagine you have a dataset with two features:
+| Height (cm) | Weight (kg) |
+| ----------- | ----------- |
+| 170         | 65          |
+| 180         | 75          |
+| 160         | 55          |
+
+Here:
+- Height values: 160–180 cm → numbers in the range of about hundreds
+- Weight values: 55–75 kg → numbers in the range of tens
+
+That means the scale of the two features is very different.
+
+Some algorithms treat larger numbers as more important. So we scale them to a similar range.
+
+Therefor we transform the features so they are on similar scales using Min-Max Scaling
+
+### Formula:
+
+$$
+X' = \frac{X - X_{min}}{X_{max} - X_{min}}
+$$
+
+### For Height:
+- Min = 160, Max = 180
+- Row 1:
+
+$$
+X' = \frac{170 - 160}{180 - 160} = \frac{10}{20} = 0.5
+$$
+
+- Row 2:
+
+$$
+X' = \frac{180 - 160}{180 - 160} = \frac{20}{20} = 1
+$$
+
+- Row 3:
+
+$$
+X' = \frac{160 - 160}{180 - 10} = 0
+$$
+
+### For Weight:
+- Min = 55, Max = 75
+- Row 1:
+
+$$
+X' = \frac{65 - 55}{75 - 55} = \frac{10}{20} = 0.5
+$$
+
+- Row 2:
+
+$$
+X' = \frac{75 - 55}{75 - 55} = \frac{10}{20} = 1
+$$
+
+- Row 3:
+
+$$
+X' = \frac{55 - 55}{75 - 55} = \frac{10}{20} = 1
+$$
+
+### Scaled Dataset
+| Height_scaled | Weight_scaled |
+| ------------- | ------------- |
+| 0.5           | 0.5           |
+| 1.0           | 1.0           |
+| 0.0           | 0.0           |
+
+Now both features are on the same scale 0–1. This ensures no single feature dominates the model’s decisions.
+
+
+### feature scaling techniques
+1. **Min-Max Scaling (Normalization)**
+    - Formula:
+
+    $$
+    X' = \frac{X - X_{min}}{X_{max} - X_{min}}
+    $$
+
+    - Scales data to a fixed range (usually 0 to 1).
+    - Use case: Useful when you want bounded data and your model needs normalized values (e.g., neural networks).
+    - Downside: Sensitive to outliers.
+
+2. **Standardization (Z-score Normalization)**
+
+    - Formula:
+    $$
+    X' = \frac{X - \mu}{\sigma}
+    $$
+
+    where μ = mean, σ = standard deviation.
+    - Scales data so it has a mean of 0 and standard deviation of 1.
+    - Use case: Works well for most machine learning algorithms.
+    - Downside: Doesn’t bound values to a specific range.
+
+3. **Robust Scaling**
+    - Formula:
+    $$
+    X' = \frac{X - median}{IQR}
+    $$
+
+    where IQR = Interquartile Range (Q3 − Q1).
+    - Uses medians and IQR instead of mean and standard deviation.
+    - Use case: Good for datasets with many outliers.
+    - Downside: Doesn’t bound values.
+
+4. **Max Abs Scaling**
+    - Formula:
+
+    $$
+    X' = \frac{X}{|X_{max}|}
+    $$
+    - Scales data to [-1, 1] without shifting/centering.
+    - Use case: Useful when your data is already centered at zero.
+    - Downside: Sensitive to outliers.
+5. **Unit Vector Scaling (Normalization by norm)**
+    - Formula:
+
+    $$
+    X' = \frac{X}{||X||}
+    $$
+
+    where $||X||$ is the vector norm (often L2 norm).
+    - Scales data so that the length of the vector is 1.
+    - Use case: Useful in text classification and clustering.
+    - Downside: Doesn’t preserve original distribution.
+
 
 
 [Got To Top](#content)

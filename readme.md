@@ -13,3 +13,5 @@
     - [YouTube Video](https://youtu.be/LZzq1zSL1bs?si=cEgnCOOzyB2fMyyw)
 5. Exploratory Data Analysis (EDA)
     - [Direct Notes](./EDA/readdme.md)
+    - youtube Video
+        - [Theoretical Part](https://youtu.be/FNLLxYcUnow?si=TCtZwC4B_2ZVDBWN)
