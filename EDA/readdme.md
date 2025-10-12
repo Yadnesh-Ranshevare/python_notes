@@ -19,10 +19,7 @@
     - [Aggregation](#aggregation)
     - [Feature Interaction](#feature-interaction)
     - [Decomposition](#decomposition)
-7. [Feature Selection]()
-8. [Model Building]()
-9. [Model Evaluation]()
-10. [Reporting / Dashboard]()
+
 
 ---
 
