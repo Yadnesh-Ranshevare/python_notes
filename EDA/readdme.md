@@ -14,6 +14,11 @@
     - [Derived Matrix](#derived-matrix)
     - [Feature Binning](#feature-binning)
     - [Feature Scaling](#feature-scaling)
+    - [Feature Transformation](#feature-transformation)
+    - [Datetime Extraction](#datetime-extraction)
+    - [Aggregation](#aggregation)
+    - [Feature Interaction](#feature-interaction)
+    - [Decomposition](#decomposition)
 7. [Feature Selection]()
 8. [Model Building]()
 9. [Model Evaluation]()
@@ -547,13 +552,13 @@ These new features (Age, BMI) help your model understand health patterns better.
 | ------------------- | ----------------------------------- | -------------------------------------------------------------------- |
 | [Derived Matrix ](#derived-matrix)    | `BMI = Weight ÷ (Height × Height)`  | Make a new number from existing data that tells you something useful |
 | [Feature Binning](#feature-binning)     | Ages → “Child”, “Adult”, “Senior”   | Group numbers into categories to make them easier to understand      |
-| [Encoding](#feature-encoding)            | “Male” → 0, “Female” → 1            | Change words into numbers so a computer can use them                 |
-| [Scaling](#feature-scaling)             | Test scores 0–100 → 0–1             | Make numbers similar in size so one doesn’t overpower the others     |
-| Transformation      | Use `log` or `sqrt`                 | Fix numbers that are too big or uneven to balance them               |
-| Datetime Extraction | “2025-10-11” → Month = 10, Day = 11 | Pull useful info like month or day from a date                       |
-| Aggregation         | Average purchase per person         | Summarize many numbers into one to see overall patterns              |
-| Interaction         | `Total = Price × Quantity`          | Combine two numbers to show a relationship between them              |
-| Decomposition       | PCA (reduce many columns to fewer)  | Make data smaller while keeping important info                       |
+| [Feature Encoding](#feature-encoding)            | “Male” → 0, “Female” → 1            | Change words into numbers so a computer can use them                 |
+| [ Feature Scaling](#feature-scaling)             | Test scores 0–100 → 0–1             | Make numbers similar in size so one doesn’t overpower the others     |
+| [Feature Transformation ](#feature-transformation)     | Use `log` or `sqrt`                 | Fix numbers that are too big or uneven to balance them               |
+| [Datetime Extraction](#datetime-extraction) | “2025-10-11” → Month = 10, Day = 11 | Pull useful info like month or day from a date                       |
+| [Aggregation](#aggregation)         | Average purchase per person         | Summarize many numbers into one to see overall patterns              |
+| [Feature Interaction](#feature-interaction)         | `Total = Price × Quantity`          | Combine two numbers to show a relationship between them              |
+| [Decomposition](#decomposition)       | PCA (reduce many columns to fewer)  | Make data smaller while keeping important info                       |
 | Domain Features     | `Profit = Revenue − Cost`           | Use real-world rules to create numbers that make sense               |
 
 
@@ -935,6 +940,356 @@ Now both features are on the same scale 0–1. This ensures no single feature do
     - Downside: Doesn’t preserve original distribution.
 
 
+
+[Got To Top](#content)
+
+---
+
+# Feature Transformation
+Feature Transformation means changing the scale, shape, or distribution of your data features to make them more useful for a machine learning model.
+
+It’s like “reshaping” the data so that algorithms can understand it better.
+
+### Why do we use it?
+- Some models (like Linear Regression, KNN, SVM) perform better when features are on the same scale
+- Some features have skewed data, and transformation helps to make it normal-like
+- It helps models learn patterns faster and more accurately
+
+### Main Types of Feature Transformation
+| Type                                     | Description                                                                                                                                            | Easy Example                                                                                               |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| **1. Log Transformation**                | Used when numbers vary a lot (like income, sales). Makes large numbers smaller and easier to compare.                                                  | Suppose you have incomes: `[10,000, 100,000, 1,000,000]` → After `log(x)` → `[4, 5, 6]`                    |
+| **2. Square Root / Cube Root**           | Works well for small positive numbers or count data. Reduces the gap between small and large numbers.                                                  | Visitors per day: `[1, 4, 9, 16]` → After `sqrt(x)` → `[1, 2, 3, 4]`                                       |
+| **3. Box-Cox / Yeo-Johnson**             | Used when data is not normal (too skewed). These methods automatically find the best power (log, sqrt, etc.) to make it look more like a normal curve. | Suppose exam scores `[5, 10, 50, 90]` are uneven → After Box-Cox → `[1.2, 2.0, 4.5, 6.0]` (balanced range) |
+| **4. Normalization (Min-Max Scaling)**   | Compresses all values into a 0–1 range. Keeps shape but changes scale.                                                                                 | Heights `[150, 160, 170, 180]` → After normalization → `[0.0, 0.33, 0.67, 1.0]`                            |
+| **5. Standardization (Z-score Scaling)** | Centers data around mean 0 and standard deviation 1, useful when units differ.                                                                         | Test scores `[40, 50, 60]` → Mean = 50, Std = 10 → After scaling → `[-1, 0, 1]`                            |
+| **6. Power Transformation**              | Raises numbers to a power (e.g. square or square root) to stabilize variance or highlight patterns.                                                    | Prices `[2, 3, 4]` → `x²` → `[4, 9, 16]` or `x⁰·⁵` → `[1.41, 1.73, 2.0]`                                   |
+
+
+### Example
+Suppose you have an “Income” column:
+| Person | Income  |
+| ------ | ------- |
+| A      | 20,000  |
+| B      | 60,000  |
+| C      | 500,000 |
+
+After Log Transformation:
+| Person | log(Income) |
+| ------ | ----------- |
+| A      | 4.3         |
+| B      | 4.8         |
+| C      | 5.7         |
+
+Now the differences between large and small values are reduced, making patterns easier for the model to learn.
+
+### Feature Scaling vs Feature Transformation
+These two terms are closely related, but not exactly the same.\
+You can think of feature scaling as a part of feature transformation.
+
+#### Feature Scaling
+It’s about changing the scale or range of numeric data — nothing else.
+
+**Goal:**\
+Make sure all features are on a similar numeric range, so one doesn’t dominate the others.
+
+**Common scaling methods:**
+- Normalization (Min–Max scaling) → range [0,1]
+- Standardization (Z-score scaling) → mean = 0, std = 1
+
+**Example:**
+| Feature     | Original      | After Scaling |
+| ----------- | ------------- | ------------- |
+| Height (cm) | 160, 170, 180 | 0.0, 0.5, 1.0 |
+
+#### Feature Transformation
+It’s a broader concept — includes scaling, but also covers methods that change data distribution or make patterns more visible to models.
+
+**Goal:**\
+Make data more useful for analysis or modeling.
+
+**Includes:**
+- Feature Scaling (Normalization, Standardization)
+- Log / Sqrt / Cube root transformation
+- Box-Cox, Yeo-Johnson transformation
+- Polynomial transformation
+- Encoding categorical features (sometimes also called transformation)
+
+
+[Got To Top](#content)
+
+---
+
+# Datetime Extraction
+Datetime extraction means taking useful parts (features) out of a date or time column — like year, month, day, hour, weekday, etc.
+
+It helps the model understand time-related patterns that raw timestamps can’t show.
+
+### Example Dataset
+
+| Order_ID | Order_Date          |
+| -------- | ------------------- |
+| 101      | 2024-07-15 14:35:00 |
+| 102      | 2024-07-16 09:12:00 |
+| 103      | 2024-08-01 20:45:00 |
+
+#### Step 1: Extract date parts
+| Order_ID | Year | Month | Day | Hour | Weekday  |
+| -------- | ---- | ----- | --- | ---- | -------- |
+| 101      | 2024 | 7     | 15  | 14   | Monday   |
+| 102      | 2024 | 7     | 16  | 9    | Tuesday  |
+| 103      | 2024 | 8     | 1   | 20   | Thursday |
+
+Now, you’ve turned one column into multiple features that the model can use!
+
+### How it help in analysis?
+| Extracted Feature        | How It Helps                                          |
+| ------------------------ | ----------------------------------------------------- |
+| **Year**                 | Detect trends over time (e.g., yearly sales growth)   |
+| **Month**                | Find seasonal patterns (e.g., more sales in December) |
+| **Day**                  | See daily activity patterns                           |
+| **Hour**                 | Analyze busy hours (e.g., 9 AM peak orders)           |
+| **Weekday / Weekend**    | Understand customer behavior (weekend vs weekday)     |
+| **Is_Holiday / Quarter** | Capture special events or fiscal periods              |
+
+
+### Python Example
+```py
+import pandas as pd
+
+# Example data
+df = pd.DataFrame({
+    'Order_Date': ['2024-07-15 14:35:00', '2024-07-16 09:12:00', '2024-08-01 20:45:00']
+})
+
+# Convert to datetime
+df['Order_Date'] = pd.to_datetime(df['Order_Date'])
+
+# Extract datetime features
+df['Year'] = df['Order_Date'].dt.year
+df['Month'] = df['Order_Date'].dt.month
+df['Day'] = df['Order_Date'].dt.day
+df['Hour'] = df['Order_Date'].dt.hour
+df['Weekday'] = df['Order_Date'].dt.day_name()
+
+print(df)
+```
+**Output:**
+| Order_Date          | Year | Month | Day | Hour | Weekday  |
+| ------------------- | ---- | ----- | --- | ---- | -------- |
+| 2024-07-15 14:35:00 | 2024 | 7     | 15  | 14   | Monday   |
+| 2024-07-16 09:12:00 | 2024 | 7     | 16  | 9    | Tuesday  |
+| 2024-08-01 20:45:00 | 2024 | 8     | 1   | 20   | Thursday |
+
+
+[Got To Top](#content)
+
+---
+# Aggregation
+Aggregation means combining multiple rows of data into a single value to create a new feature — usually by applying operations like:
+- `sum()`
+- `mean()`
+- `count()`
+- `max()`
+- `min()`
+- `std()` (standard deviation)
+
+In simple terms:\
+You summarize detailed data to get useful insights or features.
+
+### Real-Life Example: E-commerce Orders
+Suppose you have a dataset of customer orders:
+| Customer_ID | Order_ID | Amount |
+| ----------- | -------- | ------ |
+| 101         | O1       | 200    |
+| 101         | O2       | 300    |
+| 102         | O3       | 150    |
+| 102         | O4       | 100    |
+| 103         | O5       | 400    |
+
+#### Step 1: Aggregate by Customer
+We can group by `Customer_ID` and calculate useful stats:
+| Customer_ID | Total_Spent | Avg_Order_Value | Order_Count |
+| ----------- | ----------- | --------------- | ----------- |
+| 101         | 500         | 250             | 2           |
+| 102         | 250         | 125             | 2           |
+| 103         | 400         | 400             | 1           |
+
+Now you’ve created new features that represent each customer’s behavior.
+
+### Why It’s Useful
+
+- Models can now understand how valuable or active a customer is.
+- Reduces large, repetitive data (many rows → 1 summary row per entity).
+- Often used for customer analytics, sales forecasting, fraud detection, etc.
+
+
+[Got To Top](#content)
+
+---
+# Feature Interaction
+Feature Interaction means combining two or more existing features to create a new feature that captures their relationship or combined effect on the target variable.
+
+In short:\
+You create a new column that represents how two features work together.
+
+
+### Why It’s Useful
+
+Sometimes, two features individually might not affect the output much —
+but together they have a strong influence.
+
+**Example:**
+
+- “Salary” alone and “Age” alone may not predict spending habits accurately,
+- But “Salary × Age” might show that older people with higher salaries spend more.
+
+### Types of Feature Interaction
+
+#### 1. Mathematical Combination
+Combine numeric features using arithmetic operations:
+
+- Addition (+)
+- Subtraction (−)
+- Multiplication (×)
+- Division (÷)
+
+**Example:**
+| Height (cm) | Weight (kg) | BMI = Weight / (Height/100)² |
+| ----------- | ----------- | ---------------------------- |
+| 160         | 50          | 19.5                         |
+| 170         | 65          | 22.5                         |
+| 180         | 80          | 24.7                         |
+
+Here, BMI is a feature interaction created from height & weight.
+
+#### 2. Categorical Combination
+Combine categories to form new hybrid features.
+| City   | Product | Combined_Feature |
+| ------ | ------- | ---------------- |
+| Mumbai | Shoes   | Mumbai_Shoes     |
+| Delhi  | Shoes   | Delhi_Shoes      |
+| Mumbai | Watch   | Mumbai_Watch     |
+
+This helps models learn city-specific product patterns.
+
+#### 3. Polynomial Features (Advanced)
+Polynomial Features are new features created by raising existing features to powers or multiplying them together to capture non-linear relationships between variables.
+
+**Example:**\
+Let’s say you have one feature:
+```
+x = [1, 2, 3]
+```
+If you apply polynomial features of degree 2, it will create:
+```
+x^1 = [1, 2, 3]
+x^2 = [1, 4, 9]
+```
+So now your dataset becomes:
+| x | x² |
+| - | -- |
+| 1 | 1  |
+| 2 | 4  |
+| 3 | 9  |
+
+**Why?**\
+Because maybe the relation between your target (say, price) and feature (size) isn’t straight-line but curved — polynomial features help the model learn that curve.
+
+
+[Got To Top](#content)
+
+---
+# Decomposition
+Decomposition means breaking down complex data (especially time-series or high-dimensional data) into simpler, more meaningful components.
+
+Think of it like taking apart a machine to understand how each piece works individually.
+
+### Two Main Types of Decomposition
+
+#### 1. Time-Series Decomposition
+Used when your data changes over time (like sales, temperature, traffic, etc.)
+
+**Example:**\
+Let’s say you have monthly sales data for a shop for 2 years:
+| Month    | Sales |
+| -------- | ----- |
+| Jan 2023 | 100   |
+| Feb 2023 | 120   |
+| Mar 2023 | 150   |
+| Apr 2023 | 130   |
+| May 2023 | 170   |
+| Jun 2023 | 160   |
+| Jul 2023 | 180   |
+| Aug 2023 | 190   |
+| Sep 2023 | 210   |
+| Oct 2023 | 230   |
+| Nov 2023 | 260   |
+| Dec 2023 | 300   |
+| ...      | ...   |
+
+**Step 1 — Trend**
+
+- Sales are gradually increasing over months — that’s your trend.\
+➡️ Example: A smooth line going up from 100 → 300
+- Trend feature:\
+`trend = [100, 110, 120, 130, 150, ... 300]`
+
+**Step 2 — Seasonality**
+- Maybe every December sales spike because of festive shopping.\
+➡️ That repeating pattern each year = seasonality
+- Seasonal feature:\
+`seasonality = [−20, −10, +15, ... , +40]`
+
+**Step 3 — Residual / Noise**
+- Small, random fluctuations (like a sudden dip due to bad weather or a one-day sale)\
+➡️ These are the residuals
+- Residual feature:\
+`residual = [5, −10, +7, ...]`
+
+**And we can even create new columns like:**
+| Month    | Trend | Seasonality | Residual |
+| -------- | ----- | ----------- | -------- |
+| Jan 2023 | 100   | −20         | 5        |
+| Feb 2023 | 110   | −10         | −10      |
+| ...      | ...   | ...         | ...      |
+
+These new features can help an ML model predict future sales more accurately.
+
+
+#### 2. Feature Decomposition for High-Dimensional Data
+Used when you have many correlated features, like in images, text, or sensors.
+
+We use mathematical decomposition techniques such as:
+| Technique                              | Purpose                                                                             | Example                               |
+| -------------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------------- |
+| **PCA (Principal Component Analysis)** | Reduce many correlated features into a few main ones while keeping most information | 100 features → 3 principal components |
+| **SVD (Singular Value Decomposition)** | Similar to PCA, used in text (like NLP) and recommendation systems                  | Used in Netflix movie recommendation  |
+| **LDA (Linear Discriminant Analysis)** | Finds combinations of features that separate classes well                           | Used in face recognition              |
+
+
+**Example of Feature Decomposition (PCA Example)**\
+Now imagine you have a dataset of students with these features:
+| Student | Height (cm) | Weight (kg) | BMI  | Chest Size (cm) | Arm Size (cm) |
+| ------- | ----------- | ----------- | ---- | --------------- | ------------- |
+| A       | 160         | 60          | 23.4 | 85              | 28            |
+| B       | 170         | 75          | 25.9 | 92              | 31            |
+| C       | 180         | 90          | 27.8 | 98              | 34            |
+| D       | 165         | 65          | 23.9 | 88              | 29            |
+
+You can see — most features are correlated (taller → heavier → bigger chest).\
+Too many similar features can confuse the model.
+
+PCA compresses them into fewer, independent features — called Principal Components.
+
+| Student | PC1 (Body Size) | PC2 (Proportion) |
+| ------- | --------------- | ---------------- |
+| A       | -1.2            | 0.3              |
+| B       | 0.2             | -0.1             |
+| C       | 1.4             | 0.5              |
+| D       | -0.4            | -0.7             |
+
+Now, instead of 5 features, you only have 2, but they capture 90–95% of the original info!
 
 [Got To Top](#content)
 
