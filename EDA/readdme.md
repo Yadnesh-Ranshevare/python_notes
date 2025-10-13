@@ -19,7 +19,8 @@
     - [Aggregation](#aggregation)
     - [Feature Interaction](#feature-interaction)
     - [Decomposition](#decomposition)
-
+7. Implementation Of EDA
+    - [Zomato Dataset](#implementation-of-eda-using-zomato-dataset)
 
 ---
 
@@ -1287,6 +1288,101 @@ PCA compresses them into fewer, independent features — called Principal Compon
 | D       | -0.4            | -0.7             |
 
 Now, instead of 5 features, you only have 2, but they capture 90–95% of the original info!
+
+[Got To Top](#content)
+
+---
+
+# Implementation Of EDA using Zomato dataset
+
+### 1. import the necessary Packages
+```py
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+```
+
+### 2. Read the csv File
+```py
+df = pd.read_csv('/content/zomato.csv',encoding='latin-1')
+df.head()
+```
+**Output:**
+
+| Restaurant ID | Restaurant Name        | Country Code | City             | Address                                                  | Locality                                   | Locality Verbose                                             | Longitude  | Latitude  | Cuisines                         | Currency         | Has Table booking | Has Online delivery | Is delivering now | Switch to order menu | Price range | Aggregate rating | Rating color | Rating text | Votes |
+| ------------- | ---------------------- | ------------ | ---------------- | -------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------ | ---------- | --------- | -------------------------------- | ---------------- | ----------------- | ------------------- | ----------------- | -------------------- | ----------- | ---------------- | ------------ | ----------- | ----- |
+| 6317637       | Le Petit Souffle       | 162          | Makati City      | Third Floor, Century City Mall, Kalayaan Avenue...       | Century City Mall, Poblacion, Makati City  | Century City Mall, Poblacion, Makati City, Makati City       | 121.027535 | 14.565443 | French, Japanese, Desserts       | Botswana Pula(P) | Yes               | No                  | No                | No                   | 3           | 4.8              | Dark Green   | Excellent   | 314   |
+| 6304287       | Izakaya Kikufuji       | 162          | Makati City      | Little Tokyo, 2277 Chino Roces Avenue, Legaspi...        | Little Tokyo, Legaspi Village, Makati City | Little Tokyo, Legaspi Village, Makati City, Makati City      | 121.014101 | 14.553708 | Japanese                         | Botswana Pula(P) | Yes               | No                  | No                | No                   | 3           | 4.5              | Dark Green   | Excellent   | 591   |
+| 6300002       | Heat - Edsa Shangri-La | 162          | Mandaluyong City | Edsa Shangri-La, 1 Garden Way, Ortigas, Mandaluyong City | Edsa Shangri-La, Ortigas, Mandaluyong City | Edsa Shangri-La, Ortigas, Mandaluyong City, Mandaluyong City | 121.056831 | 14.581404 | Seafood, Asian, Filipino, Indian | Botswana Pula(P) | Yes               | No                  | No                | No                   | 4           | 4.4              | Green        | Very Good   | 270   |
+| 6318506       | Ooma                   | 162          | Mandaluyong City | Third Floor, Mega Fashion Hall, SM Megamall, Ortigas...  | SM Megamall, Ortigas, Mandaluyong City     | SM Megamall, Ortigas, Mandaluyong City, Mandaluyong City     | 121.056475 | 14.585318 | Japanese, Sushi                  | Botswana Pula(P) | No                | No                  | No                | No                   | 4           | 4.9              | Dark Green   | Excellent   | 365   |
+| 6314302       | Sambo Kojin            | 162          | Mandaluyong City | Third Floor, Mega Atrium, SM Megamall, Ortigas...        | SM Megamall, Ortigas, Mandaluyong City     | SM Megamall, Ortigas, Mandaluyong City, Mandaluyong City     | 121.057508 | 14.584450 | Japanese, Korean                 | Botswana Pula(P) | Yes               | No                  | No                | No                   | 4           | 4.8              | Dark Green   | Excellent   | 229   |
+
+Shape: 5 rows × 21 columns
+
+
+with this we can see:
+- all available feature
+- basic structure of our dataset
+- Key columns and what they mean    
+
+### 3. Retrieve all the columns
+```py
+df.columns
+```
+**Output:**
+```
+Index(['Restaurant ID', 'Restaurant Name', 'Country Code', 'City', 'Address',
+       'Locality', 'Locality Verbose', 'Longitude', 'Latitude', 'Cuisines',
+       'Average Cost for two', 'Currency', 'Has Table booking',
+       'Has Online delivery', 'Is delivering now', 'Switch to order menu',
+       'Price range', 'Aggregate rating', 'Rating color', 'Rating text',
+       'Votes'],
+      dtype='object')
+```
+
+### 4. Get quick summary of this Dataset
+```py
+df.info()
+```
+**Output:**
+```
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 9551 entries, 0 to 9550
+Data columns (total 21 columns):
+ #   Column                Non-Null Count  Dtype  
+---  ------                --------------  -----  
+ 0   Restaurant ID         9551 non-null   int64  
+ 1   Restaurant Name       9551 non-null   object 
+ 2   Country Code          9551 non-null   int64  
+ 3   City                  9551 non-null   object 
+ 4   Address               9551 non-null   object 
+ 5   Locality              9551 non-null   object 
+ 6   Locality Verbose      9551 non-null   object 
+ 7   Longitude             9551 non-null   float64
+ 8   Latitude              9551 non-null   float64
+ 9   Cuisines              9542 non-null   object 
+ 10  Average Cost for two  9551 non-null   int64  
+ 11  Currency              9551 non-null   object 
+ 12  Has Table booking     9551 non-null   object 
+ 13  Has Online delivery   9551 non-null   object 
+ 14  Is delivering now     9551 non-null   object 
+ 15  Switch to order menu  9551 non-null   object 
+ 16  Price range           9551 non-null   int64  
+ 17  Aggregate rating      9551 non-null   float64
+ 18  Rating color          9551 non-null   object 
+ 19  Rating text           9551 non-null   object 
+ 20  Votes                 9551 non-null   int64  
+dtypes: float64(3), int64(5), object(13)
+memory usage: 1.5+ MB
+```
+this tells us:
+- Number of rows and columns (9551 rows X 21 columns)
+- Column names
+- Data types (int64, float64, object, etc.)
+- Count of non-null (non-missing) values in each column
+- Memory usage (1.5+ MB)
 
 [Got To Top](#content)
 
