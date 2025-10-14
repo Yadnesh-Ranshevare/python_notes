@@ -1491,7 +1491,7 @@ df_cuntryCode.head()
 |3|37|Canada|
 |4|94|Indonesia|
 
-now if you look into the [column data](#3-retrieve-all-the-columns) youll find there is a column with name `Country Code`
+now if you look into the [column data](#3-retrieve-all-the-columns) youll find that there is a column with name `Country Code`
 
 we can use that column to merge this two datasets
 
@@ -1504,18 +1504,19 @@ final_df.head()
 **Output:**
 
 You can see the respective country in the last column
-
-|index|Restaurant ID|Restaurant Name|Country Code|City|Address|Locality|Locality Verbose|Longitude|Latitude|Cuisines|Average Cost for two|Currency|Has Table booking|Has Online delivery|Is delivering now|Switch to order menu|Price range|Aggregate rating|Rating color|Rating text|
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-|0|6317637|Le Petit Souffle|162|Makati City|Third Floor, Century City Mall, Kalayaan Avenue, Poblacion, Makati City|Century City Mall, Poblacion, Makati City|Century City Mall, Poblacion, Makati City, Makati City|121\.027535|14\.565443|French, Japanese, Desserts|1100|Botswana Pula\(P\)|Yes|No|No|No|3|4\.8|Dark Green|Excellent|
-|1|6304287|Izakaya Kikufuji|162|Makati City|Little Tokyo, 2277 Chino Roces Avenue, Legaspi Village, Makati City|Little Tokyo, Legaspi Village, Makati City|Little Tokyo, Legaspi Village, Makati City, Makati City|121\.014101|14\.553708|Japanese|1200|Botswana Pula\(P\)|Yes|No|No|No|3|4\.5|Dark Green|Excellent|
-|2|6300002|Heat - Edsa Shangri-La|162|Mandaluyong City|Edsa Shangri-La, 1 Garden Way, Ortigas, Mandaluyong City|Edsa Shangri-La, Ortigas, Mandaluyong City|Edsa Shangri-La, Ortigas, Mandaluyong City, Mandaluyong City|121\.056831|14\.581404|Seafood, Asian, Filipino, Indian|4000|Botswana Pula\(P\)|Yes|No|No|No|4|4\.4|Green|Very Good|
-|3|6318506|Ooma|162|Mandaluyong City|Third Floor, Mega Fashion Hall, SM Megamall, Ortigas, Mandaluyong City|SM Megamall, Ortigas, Mandaluyong City|SM Megamall, Ortigas, Mandaluyong City, Mandaluyong City|121\.056475|14\.585318|Japanese, Sushi|1500|Botswana Pula\(P\)|No|No|No|No|4|4\.9|Dark Green|Excellent|
-|4|6314302|Sambo Kojin|162|Mandaluyong City|Third Floor, Mega Atrium, SM Megamall, Ortigas, Mandaluyong City|SM Megamall, Ortigas, Mandaluyong City|SM Megamall, Ortigas, Mandaluyong City, Mandaluyong City|121\.057508|14\.58445|Japanese, Korean|1500|Botswana Pula\(P\)|Yes|No|No|No|4|4\.8|Dark Green|Excellent|
+| Restaurant ID | Restaurant Name        | Country Code | City             | Address                                                          | Locality                                   | Locality Verbose                                             | Longitude  | Latitude  | Cuisines                         | Has Table booking | Has Online delivery | Is delivering now | Switch to order menu | Price range | Aggregate rating | Rating color | Rating text | Votes | Country     |
+| ------------- | ---------------------- | ------------ | ---------------- | ---------------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------ | ---------- | --------- | -------------------------------- | ----------------- | ------------------- | ----------------- | -------------------- | ----------- | ---------------- | ------------ | ----------- | ----- | ----------- |
+| 6317637       | Le Petit Souffle       | 162          | Makati City      | Third Floor, Century City Mall, Kalayaan Avenue...               | Century City Mall, Poblacion, Makati City  | Century City Mall, Poblacion, Makati City, Makati City       | 121.027535 | 14.565443 | French, Japanese, Desserts       | Yes               | No                  | No                | No                   | 3           | 4.8              | Dark Green   | Excellent   | 314   | Phillipines |
+| 6304287       | Izakaya Kikufuji       | 162          | Makati City      | Little Tokyo, 2277 Chino Roces Avenue, Legaspi...                | Little Tokyo, Legaspi Village, Makati City | Little Tokyo, Legaspi Village, Makati City, Makati City      | 121.014101 | 14.553708 | Japanese                         | Yes               | No                  | No                | No                   | 3           | 4.5              | Dark Green   | Excellent   | 591   | Phillipines |
+| 6300002       | Heat - Edsa Shangri-La | 162          | Mandaluyong City | Edsa Shangri-La, 1 Garden Way, Ortigas, Mandaluyong City         | Edsa Shangri-La, Ortigas, Mandaluyong City | Edsa Shangri-La, Ortigas, Mandaluyong City, Mandaluyong City | 121.056831 | 14.581404 | Seafood, Asian, Filipino, Indian | Yes               | No                  | No                | No                   | 4           | 4.4              | Green        | Very Good   | 270   | Phillipines |
+| 6318506       | Ooma                   | 162          | Mandaluyong City | Third Floor, Mega Fashion Hall, SM Megamall, Ortigas             | SM Megamall, Ortigas, Mandaluyong City     | SM Megamall, Ortigas, Mandaluyong City, Mandaluyong City     | 121.056475 | 14.585318 | Japanese, Sushi                  | No                | No                  | No                | No                   | 4           | 4.9              | Dark Green   | Excellent   | 365   | Phillipines |
+| 6314302       | Sambo Kojin            | 162          | Mandaluyong City | Third Floor, Mega Atrium, SM Megamall, Ortigas, Mandaluyong City | SM Megamall, Ortigas, Mandaluyong City     | SM Megamall, Ortigas, Mandaluyong City, Mandaluyong City     | 121.057508 | 14.584450 | Japanese, Korean                 | Yes               | No                  | No                | No                   | 4           | 4.8              | Dark Green   | Excellent   | 229   | Phillipines |
 
 
 ### 9. Analyzed with respect to each country how many records are there
 
+
+#### Find how many dataentries are ther with respect to each country
 ```py
 final_df.Country.value_counts()
 ```
