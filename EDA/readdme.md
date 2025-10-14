@@ -1295,6 +1295,17 @@ Now, instead of 5 features, you only have 2, but they capture 90–95% of the or
 
 # Implementation Of EDA using Zomato dataset
 
+1. [import the necessary Packages](#1-import-the-necessary-packages)
+2. [ Read the csv File](#2-read-the-csv-file)
+3. [Retrieve all the columns](#3-retrieve-all-the-columns)
+4. [Get quick summary of this Dataset](#4-get-quick-summary-of-this-dataset)
+5. [Get all the integer data in the dataset](#5-get-all-the-integer-data-in-the-dataset)
+6. [Find all the missing values](#6-find-all-the-missing-values)
+7. [ Read the country code data](#7-read-the-country-code-data)
+8. [Merge the country code dataset with original dataset](#8-merge-the-country-code-dataset-with-original-dataset)
+9. [Analyzed with respect to each country how many records are there](#9-analyzed-with-respect-to-each-country-how-many-records-are-there)
+
+
 ### 1. import the necessary Packages
 ```py
 import pandas as pd
@@ -1383,6 +1394,190 @@ this tells us:
 - Data types (int64, float64, object, etc.)
 - Count of non-null (non-missing) values in each column
 - Memory usage (1.5+ MB)
+
+### 5. Get all the integer data in the dataset
+```py
+df.describe()
+```
+**Output:**
+| Statistic        | Restaurant ID | Country Code | Longitude   | Latitude    | Average Cost for two | Price range | Aggregate rating | Votes        |
+| ---------------- | ------------- | ------------ | ----------- | ----------- | -------------------- | ----------- | ---------------- | ------------ |
+| **count**        | 4394.000000   | 4394.000000  | 4394.000000 | 4394.000000 | 4394.000000          | 4393.000000 | 4393.000000      | 4393.000000  |
+| **mean**         | 9.028446e+06  | 27.283113    | 55.376435   | 25.872748   | 615.405781           | 1.951286    | 2.979308         | 231.038470   |
+| **std**          | 8.745323e+06  | 69.219163    | 54.565049   | 10.493219   | 612.208456           | 0.932071    | 1.400966         | 566.592104   |
+| **min**          | 5.300000e+01  | 1.000000     | -157.948486 | -38.634746  | 0.000000             | 1.000000    | 0.000000         | 0.000000     |
+| **25%**          | 3.017282e+05  | 1.000000     | 77.028818   | 28.434658   | 250.000000           | 1.000000    | 2.800000         | 10.000000    |
+| **50% (median)** | 5.600960e+06  | 1.000000     | 77.111097   | 28.532494   | 450.000000           | 2.000000    | 3.400000         | 53.000000    |
+| **75%**          | 1.831196e+07  | 1.000000     | 77.238927   | 28.634848   | 787.500000           | 3.000000    | 3.900000         | 202.000000   |
+| **max**          | 1.850065e+07  | 216.000000   | 153.593331  | 52.008289   | 7000.000000          | 4.000000    | 4.900000         | 10934.000000 |
+
+
+#### we perform the above steps to find out what are the different different column are there in our dataset and the info related to those columns
+
+### 6. Find all the missing values
+
+**Approach 1:**
+
+```py
+df.isnull().sum()
+```
+**Output**
+| Column Name          | Missing Values |
+| -------------------- | -------------- |
+| Restaurant ID        | 0              |
+| Restaurant Name      | 0              |
+| Country Code         | 0              |
+| City                 | 0              |
+| Address              | 0              |
+| Locality             | 0              |
+| Locality Verbose     | 0              |
+| Longitude            | 0              |
+| Latitude             | 0              |
+| Cuisines             | 9              |
+| Average Cost for two | 0              |
+| Currency             | 0              |
+| Has Table booking    | 0              |
+| Has Online delivery  | 0              |
+| Is delivering now    | 0              |
+| Switch to order menu | 1              |
+| Price range          | 1              |
+| Aggregate rating     | 1              |
+| Rating color         | 1              |
+| Rating text          | 1              |
+| Votes                | 1              |
+
+**Observations:**
+- there are 9 missing value i `Cuisines` column
+- there are 1 missing value in `Switch to order menu`, `Price range`, `Aggregate rating`, `Rating color`, `Rating text ` and `Votes`
+
+**Approach 2:**
+```py
+[feature for feature in df.columns if df[feature].isnull().sum()>0 ]
+```
+easier version of the above code
+```py
+missing_features = []   # empty list to store column names
+
+for feature in df.columns:          # loop through each column
+    if df[feature].isnull().sum() > 0:   # check if that column has any missing values
+        missing_features.append(feature) # add it to the list
+
+print(missing_features)
+```
+**Output:**
+
+```
+['Cuisines',
+ 'Switch to order menu',
+ 'Price range',
+ 'Aggregate rating',
+ 'Rating color',
+ 'Rating text',
+ 'Votes']
+```
+> it only give the list of column containing the missing value, does not provide the actual count of the missing rows but you can configure it to do so
+
+### 7. Read the country code data
+```py
+df_cuntryCode = pd.read_excel('/content/drive/MyDrive/Colab Notebooks/dataset/zomato/Country-Code.xlsx')
+df_cuntryCode.head()
+```
+**Output:**
+|index|Country Code|Country|
+|---|---|---|
+|0|1|India|
+|1|14|Australia|
+|2|30|Brazil|
+|3|37|Canada|
+|4|94|Indonesia|
+
+now if you look into the [column data](#3-retrieve-all-the-columns) youll find there is a column with name `Country Code`
+
+we can use that column to merge this two datasets
+
+### 8. Merge the country code dataset with original dataset
+
+```py
+final_df = pd.merge(df, df_cuntryCode, on="Country Code", how="left")
+final_df.head()
+```
+**Output:**
+
+You can see the respective country in the last column
+
+|index|Restaurant ID|Restaurant Name|Country Code|City|Address|Locality|Locality Verbose|Longitude|Latitude|Cuisines|Average Cost for two|Currency|Has Table booking|Has Online delivery|Is delivering now|Switch to order menu|Price range|Aggregate rating|Rating color|Rating text|
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+|0|6317637|Le Petit Souffle|162|Makati City|Third Floor, Century City Mall, Kalayaan Avenue, Poblacion, Makati City|Century City Mall, Poblacion, Makati City|Century City Mall, Poblacion, Makati City, Makati City|121\.027535|14\.565443|French, Japanese, Desserts|1100|Botswana Pula\(P\)|Yes|No|No|No|3|4\.8|Dark Green|Excellent|
+|1|6304287|Izakaya Kikufuji|162|Makati City|Little Tokyo, 2277 Chino Roces Avenue, Legaspi Village, Makati City|Little Tokyo, Legaspi Village, Makati City|Little Tokyo, Legaspi Village, Makati City, Makati City|121\.014101|14\.553708|Japanese|1200|Botswana Pula\(P\)|Yes|No|No|No|3|4\.5|Dark Green|Excellent|
+|2|6300002|Heat - Edsa Shangri-La|162|Mandaluyong City|Edsa Shangri-La, 1 Garden Way, Ortigas, Mandaluyong City|Edsa Shangri-La, Ortigas, Mandaluyong City|Edsa Shangri-La, Ortigas, Mandaluyong City, Mandaluyong City|121\.056831|14\.581404|Seafood, Asian, Filipino, Indian|4000|Botswana Pula\(P\)|Yes|No|No|No|4|4\.4|Green|Very Good|
+|3|6318506|Ooma|162|Mandaluyong City|Third Floor, Mega Fashion Hall, SM Megamall, Ortigas, Mandaluyong City|SM Megamall, Ortigas, Mandaluyong City|SM Megamall, Ortigas, Mandaluyong City, Mandaluyong City|121\.056475|14\.585318|Japanese, Sushi|1500|Botswana Pula\(P\)|No|No|No|No|4|4\.9|Dark Green|Excellent|
+|4|6314302|Sambo Kojin|162|Mandaluyong City|Third Floor, Mega Atrium, SM Megamall, Ortigas, Mandaluyong City|SM Megamall, Ortigas, Mandaluyong City|SM Megamall, Ortigas, Mandaluyong City, Mandaluyong City|121\.057508|14\.58445|Japanese, Korean|1500|Botswana Pula\(P\)|Yes|No|No|No|4|4\.8|Dark Green|Excellent|
+
+
+### 9. Analyzed with respect to each country how many records are there
+
+```py
+final_df.Country.value_counts()
+```
+**Output:**
+| Country        | Count |
+| -------------- | ----- |
+| India          | 8652  |
+| United States  | 434   |
+| United Kingdom | 80    |
+| Brazil         | 60    |
+| South Africa   | 60    |
+| UAE            | 60    |
+| New Zealand    | 40    |
+| Turkey         | 34    |
+| Australia      | 24    |
+| Phillipines    | 22    |
+| Indonesia      | 21    |
+| Qatar          | 20    |
+| Singapore      | 20    |
+| Sri Lanka      | 20    |
+| Canada         | 4     |
+
+**Observation:**
+- we can see how much zomato operate in each country
+- zomato is mostly avilible in india i.e, zomato has maximum number of transaction in india
+- also we can see that there us a huge gap in the datasentries of top most country and bottom most country, but at the same time each secion are not varying too much
+- we can see that between `india` and `canada` there is a huge gap but there is not much gap in `Qatar` and `canada`
+
+#### Understading this country distribution using pie chart
+```py
+country_Name = final_df.Country.value_counts().index
+value_Count = final_df.Country.value_counts().values
+
+plt.pie(value_Count, labels=country_Name)
+```
+
+**Output:**
+
+![image](./Images/zomato_country_distribution.png)
+
+- India (8652) completely dominates the chart.
+- Countries like Canada (4), Singapore (20), etc. are tiny fractions of the total.
+- Pie charts represent proportions — so very small slices collapse visually or become invisible/overlapping.
+- This makes it hard to read or compare smaller categories.
+
+#### therefor we keeps the pie chart readable by showing only the most significant parts.
+```py
+# pie chart for top 3 country that uses zomato
+country_Name = final_df.Country.value_counts().index
+value_Count = final_df.Country.value_counts().values
+
+plt.pie(value_Count[:3], labels=country_Name[:3])   # provide the list for top 3 country only
+```
+**Output:**
+
+![Image](./Images/top_country_distribution_pie.png)
+
+**Observation:**
+- we can see the overall distribution of zomato usage of the top 3 country 
+- here india domanate the overall list, with united state comming at second place followed by united kingdom
+
+
 
 [Got To Top](#content)
 
