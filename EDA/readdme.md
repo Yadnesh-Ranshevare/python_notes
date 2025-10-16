@@ -1304,6 +1304,7 @@ Now, instead of 5 features, you only have 2, but they capture 90–95% of the or
 7. [ Read the country code data](#7-read-the-country-code-data)
 8. [Merge the country code dataset with original dataset](#8-merge-the-country-code-dataset-with-original-dataset)
 9. [Analyzed with respect to each country how many records are there](#9-analyzed-with-respect-to-each-country-how-many-records-are-there)
+10. [Understand the rating distribution](#10-understand-the-rating-data-distribution)
 
 
 ### 1. import the necessary Packages
@@ -1579,6 +1580,110 @@ plt.pie(value_Count[:3], labels=country_Name[:3])   # provide the list for top 3
 - here india domanate the overall list, with united state comming at second place followed by united kingdom
 
 
+### 10. Understand the rating data distribution
+
+if you perform 
+```py
+final_df.columns
+```
+you'll get output as
+
+```
+Index(['Restaurant ID', 'Restaurant Name', 'Country Code', 'City', 'Address',
+       'Locality', 'Locality Verbose', 'Longitude', 'Latitude', 'Cuisines',
+       'Average Cost for two', 'Currency', 'Has Table booking',
+       'Has Online delivery', 'Is delivering now', 'Switch to order menu',
+       'Price range', 'Aggregate rating', 'Rating color', 'Rating text',
+       'Votes', 'Country'],
+      dtype='object')
+```
+Here you can see that there are some feature retated to rating like:
+- `Aggregate rating`
+- `Rating color`
+- `Rating text`
+
+Now to understand how this rating is distributed we group this features
+
+```py
+final_df.groupby(["Aggregate rating", 'Rating color', 'Rating text']).size().reset_index().rename(columns={0:"rating count"})
+```
+Here:
+- You’re grouping the DataFrame by three columns:
+    - `"Aggregate rating"`
+    - `"Rating color"`
+    - `"Rating text"`
+- So, Pandas will create groups for each unique combination of these three values.
+
+
+**output:**
+|index|Aggregate rating|Rating color|Rating text|rating count|
+|---|---|---|---|---|
+|0|0\.0|White|Not rated|2148|
+|1|1\.8|Red|Poor|1|
+|2|1\.9|Red|Poor|2|
+|3|2\.0|Red|Poor|7|
+|4|2\.1|Red|Poor|15|
+|5|2\.2|Red|Poor|27|
+|6|2\.3|Red|Poor|47|
+|7|2\.4|Red|Poor|87|
+|8|2\.5|Orange|Average|110|
+|9|2\.6|Orange|Average|191|
+|10|2\.7|Orange|Average|250|
+|11|2\.8|Orange|Average|315|
+|12|2\.9|Orange|Average|381|
+|13|3\.0|Orange|Average|468|
+|14|3\.1|Orange|Average|519|
+|15|3\.2|Orange|Average|522|
+|16|3\.3|Orange|Average|483|
+|17|3\.4|Orange|Average|498|
+|18|3\.5|Yellow|Good|480|
+|19|3\.6|Yellow|Good|458|
+|20|3\.7|Yellow|Good|427|
+|21|3\.8|Yellow|Good|400|
+|22|3\.9|Yellow|Good|335|
+|23|4\.0|Green|Very Good|266|
+|24|4\.1|Green|Very Good|274|
+|25|4\.2|Green|Very Good|221|
+|26|4\.3|Green|Very Good|174|
+|27|4\.4|Green|Very Good|144|
+|28|4\.5|Dark Green|Excellent|95|
+|29|4\.6|Dark Green|Excellent|78|
+|30|4\.7|Dark Green|Excellent|42|
+|31|4\.8|Dark Green|Excellent|25|
+|32|4\.9|Dark Green|Excellent|61|
+
+**Observation:**
+- Not rated (0.0) → Most restaurants are unrated (2148 entries).
+- Poor (1.8–2.4) → Very few restaurants fall in this low-quality range.
+- Average (2.5–3.4) → Most restaurants are in this mid-quality range.
+- Good (3.5–3.9) → Many restaurants have decent ratings in this range.
+- Very Good (4.0–4.4) → Fewer but strong-performing restaurants.
+- Excellent (4.5–4.9) → Rare, top-rated restaurants showing high quality.
+- Color scale (White → Red → Orange → Yellow → Green → Dark Green) matches rating improvement.
+
+#### Using graph for more understandig
+
+```py
+import matplotlib
+matplotlib.rcParams["figure.figsize"] = (12, 6) # to increace the figure size
+sns.barplot(x="Aggregate rating", y="rating count", data=rating)
+```
+**Output:**
+
+![Image](./Images/rating_without_color.png  )
+
+#### Using color for better understanding
+
+```py
+sns.barplot(x="Aggregate rating", y="rating count", hue="Rating color", data=rating, palette=["white", "red", "orange", "yellow", "green", "green"])
+```
+**Output:**
+
+![Image](./Images/rating_with_color.png)
+
+#### Graph Observation
+- Not rated count is very high
+- maximum number of rating is between 2.9 to 3.9 
 
 [Got To Top](#content)
 
