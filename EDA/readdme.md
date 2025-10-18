@@ -21,6 +21,7 @@
     - [Decomposition](#decomposition)
 7. Implementation Of EDA
     - [Zomato Dataset](#implementation-of-eda-using-zomato-dataset)
+    - [Black friday](./BlackFriday.md)
 
 ---
 
