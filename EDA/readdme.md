@@ -1305,7 +1305,8 @@ Now, instead of 5 features, you only have 2, but they capture 90–95% of the or
 8. [Merge the country code dataset with original dataset](#8-merge-the-country-code-dataset-with-original-dataset)
 9. [Analyzed with respect to each country how many records are there](#9-analyzed-with-respect-to-each-country-how-many-records-are-there)
 10. [Understand the rating distribution](#10-understand-the-rating-data-distribution)
-
+11. [Find the countries that have given a zero rating and the number of zero ratings for each country.](#11-find-the-countries-that-have-given-a-zero-rating-and-the-number-of-zero-ratings-for-each-country)
+12. [Find which country uses which currency](#12-find-which-country-uses-which-currency)
 
 ### 1. import the necessary Packages
 ```py
@@ -1683,7 +1684,99 @@ sns.barplot(x="Aggregate rating", y="rating count", hue="Rating color", data=rat
 
 #### Graph Observation
 - Not rated count is very high
-- maximum number of rating is between 2.9 to 3.9 
+- maximum number of rating is between 2.9 to 3.9, Therefor if you have any missing rating value you can use value between 2.9 to 3.9
+- the distribution is in bell shape
+
+### 11. Find the countries that have given a zero rating and the number of zero ratings for each country.
+
+#### Step 1: get the complete list of the column
+```py
+final_df.columns
+```
+**Output:**
+```
+Index(['Restaurant ID', 'Restaurant Name', 'Country Code', 'City', 'Address',
+       'Locality', 'Locality Verbose', 'Longitude', 'Latitude', 'Cuisines',
+       'Average Cost for two', 'Currency', 'Has Table booking',
+       'Has Online delivery', 'Is delivering now', 'Switch to order menu',
+       'Price range', 'Aggregate rating', 'Rating color', 'Rating text',
+       'Votes', 'Country'],
+      dtype='object')
+```
+Here:
+- you can see `'Aggregate rating'` which give us rating count
+- Also `'Country'` which give us respective country name
+- Therefor we use this two features to find the countries with zero rating
+ 
+#### Step 2: query the dataset for the country name with zero rating
+
+```py
+zero_rating_countery = final_df[final_df['Aggregate rating'] == 0].groupby("Country").size().reset_index().rename(columns={0:"zero rating count"})
+```
+Here:
+- `final_df['Aggregate rating'] == 0` -> will give us country with zero rating
+- `groupby("Country").size().reset_index().rename(columns={0:"zero rating count"}` -> will group the output dataset by country name so we can get the total count of the country
+
+**final output dataset:**
+|index|Country|zero rating count|
+|---|---|---|
+|0|Brazil|5|
+|1|India|2139|
+|2|United Kingdom|1|
+|3|United States|3|
+
+**Observation:**
+- most of the indian coustomer has give a zero rating
+
+
+### 12. Find which country uses which currency
+
+#### Step 1: get the complete list of the column
+```py
+final_df.columns
+```
+**Output:**
+```
+Index(['Restaurant ID', 'Restaurant Name', 'Country Code', 'City', 'Address',
+       'Locality', 'Locality Verbose', 'Longitude', 'Latitude', 'Cuisines',
+       'Average Cost for two', 'Currency', 'Has Table booking',
+       'Has Online delivery', 'Is delivering now', 'Switch to order menu',
+       'Price range', 'Aggregate rating', 'Rating color', 'Rating text',
+       'Votes', 'Country'],
+      dtype='object')
+```
+Here:
+- you can see `'Currency'` which give us name of perticular currency
+- Also `'Country'` which give us respective country name
+- Therefor we use this two features to find the which country use which currency
+
+#### Step 2: query the dataset to find currency with respect to country
+```py
+currency_data = final_df[["Country", "Currency"]].groupby(["Country", "Currency"]).size().reset_index().rename(columns={0:"count"})
+```
+Here:
+- `final_df[["Country", "Currency"]]` as we dont need all the features we are using only `"Country"` and `"Currency"`
+- `groupby(["Country", "Currency"]).size().reset_index().rename(columns={0:"count"})` -> will group the dataset with countery name and the currency
+
+**Final Output Dataset:**
+|index|Country|Currency|count|
+|---|---|---|---|
+|0|Australia|Dollar\($\)|24|
+|1|Brazil|Brazilian Real\(R$\)|60|
+|2|Canada|Dollar\($\)|4|
+|3|India|Indian Rupees\(Rs\.\)|8652|
+|4|Indonesia|Indonesian Rupiah\(IDR\)|21|
+|5|New Zealand|NewZealand\($\)|40|
+|6|Phillipines|Botswana Pula\(P\)|22|
+|7|Qatar|Qatari Rial\(QR\)|20|
+|8|Singapore|Dollar\($\)|20|
+|9|South Africa|Rand\(R\)|60|
+|10|Sri Lanka|Sri Lankan Rupee\(LKR\)|20|
+|11|Turkey|Turkish Lira\(TL\)|34|
+|12|UAE|Emirati Diram\(AED\)|60|
+|13|United Kingdom|Pounds\(£\)|80|
+|14|United States|Dollar\($\)|434|
+
 
 [Got To Top](#content)
 
