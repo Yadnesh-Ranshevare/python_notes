@@ -5,6 +5,9 @@
 3. [Get the Basic information about the dataset](#get-the-basic-information-about-the-dataset)
 4. [Delete some feature](#delete-some-feature)
 5. [Converting Categorical data ito numeric data](#converting-categorical-data-ito-numeric-data)
+    - [gender: one hot encoding using .map to updated](#convert-gender-from-categorical-to-numeric)
+    - [Age: ordinal encoding](#convert-age-from-categorical-to-numeric)
+    - [City_Category: one hot encoding by replacing the columns](#convert-city_category-from-categorical-to-numeric)
 
 ---
 
@@ -334,6 +337,8 @@ df.head()
 # Converting Categorical data ito numeric data
 
 1. [gender](#convert-gender-from-categorical-to-numeric)
+2. [Age](#convert-age-from-categorical-to-numeric)
+3. [City_Category](#convert-city_category-from-categorical-to-numeric)
 
 
 ### Convert gender from categorical to numeric
@@ -613,6 +618,159 @@ df['Age'].unique()
 </table>
 </div>
 
+
+### Convert City_Category from categorical to numeric 
+
+will be using one-hot encoding to convert this categorical data into integral and to do that 
+1. create the new columns for each category with data as follow
+    - `1` -> belong to this category
+    - `0` -> does not belong to this category
+2. delete the original column 
+3. append the new columns into the dataset
+
+**Example:**
+| Name  | Category |
+| ----- | -------- |
+| Aditi | A        |
+| Rahul | B        |
+| Sneha | A        |
+| Kiran | C        |
+
+**for this the final output dataset will be:**
+| Name  | A | B | C |
+| ----- | - | - | - |
+| Aditi | 1 | 0 | 0 |
+| Rahul | 0 | 1 | 0 |
+| Sneha | 1 | 0 | 0 |
+| Kiran | 0 | 0 | 1 |
+
+
+#### Using code:
+```py
+# create the new columns
+df_city=pd.get_dummies(df['City_Category'],drop_first=True)
+
+# append them into the original dataset
+df=pd.concat([df,df_city],axis=1)
+
+# remove the original City_Category column from the dataset
+df.drop('City_Category',axis=1,inplace=True)
+
+print(df.head())
+```
+
+**Output:**
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Product_ID</th>
+      <th>Gender</th>
+      <th>Age</th>
+      <th>Occupation</th>
+      <th>Stay_In_Current_City_Years</th>
+      <th>Marital_Status</th>
+      <th>Product_Category_1</th>
+      <th>Product_Category_2</th>
+      <th>Product_Category_3</th>
+      <th>Purchase</th>
+      <th>B</th>
+      <th>C</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>P00069042</td>
+      <td>0</td>
+      <td>1</td>
+      <td>10</td>
+      <td>2</td>
+      <td>0</td>
+      <td>3</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>8370.0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>P00248942</td>
+      <td>0</td>
+      <td>1</td>
+      <td>10</td>
+      <td>2</td>
+      <td>0</td>
+      <td>1</td>
+      <td>6.0</td>
+      <td>14.0</td>
+      <td>15200.0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>P00087842</td>
+      <td>0</td>
+      <td>1</td>
+      <td>10</td>
+      <td>2</td>
+      <td>0</td>
+      <td>12</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1422.0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>P00085442</td>
+      <td>0</td>
+      <td>1</td>
+      <td>10</td>
+      <td>2</td>
+      <td>0</td>
+      <td>12</td>
+      <td>14.0</td>
+      <td>NaN</td>
+      <td>1057.0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>P00285442</td>
+      <td>1</td>
+      <td>7</td>
+      <td>16</td>
+      <td>4+</td>
+      <td>0</td>
+      <td>8</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>7969.0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 [Go To Top](#content)
 
