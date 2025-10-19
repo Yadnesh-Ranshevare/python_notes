@@ -1,5 +1,7 @@
 # Roadmap for AI Ml
-1. [complete python](https://youtube.com/playlist?list=PLGjplNEQ1it8-0CmoljS5yeV-GlKSUEt0&si=Hjo8TkyaOSD9v6fQ)
+1. learn python
+    - [code snippet](./basics/)
+    - [youtube video](https://youtube.com/playlist?list=PLGjplNEQ1it8-0CmoljS5yeV-GlKSUEt0&si=Hjo8TkyaOSD9v6fQ)
 2. Learn numpy
     - [Direct Notes](./Jbooks/Numpy/readme.md)
     - [YouTube video](https://youtu.be/x7ULDYs4X84?si=j2ZcTN6lrNNl8nKM)
@@ -15,3 +17,4 @@
     - [Direct Notes](./EDA/readdme.md)
     - youtube Video
         - [Theoretical Part](https://youtu.be/FNLLxYcUnow?si=TCtZwC4B_2ZVDBWN)
+        - [Practical part](https://youtu.be/fHFOANOHwh8?si=dm8NoDXnD5lOZVT8)
