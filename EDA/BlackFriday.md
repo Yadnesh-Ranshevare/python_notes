@@ -9,6 +9,9 @@
     - [Age: ordinal encoding](#convert-age-from-categorical-to-numeric)
     - [City_Category: one hot encoding by replacing the columns](#convert-city_category-from-categorical-to-numeric)
 6. [Handling missing Values](#handling-missing-values)
+7. [Change the datatype - fom object/string to integer](#change-the-datatype---fom-objectstring-to-integer)
+
+> After performing all of the above steps your dataset will be ready for machine learning and to solve the given [problem statement](#problem-statement) 
 
 ---
 
@@ -1001,6 +1004,89 @@ print(df.head())
   </tbody>
 </table>
 </div>
+
+[Go To Top](#content)
+
+---
+# Change the datatype - fom object/string to integer
+
+```py
+df.info()
+```
+**Output:**
+```
+<class 'pandas.core.frame.DataFrame'>
+Int64Index: 783667 entries, 0 to 233598
+Data columns (total 12 columns):
+ #   Column                      Non-Null Count   Dtype  
+---  ------                      --------------   -----  
+ 0   Product_ID                  783667 non-null  object 
+ 1   Gender                      783667 non-null  int64  
+ 2   Age                         783667 non-null  int64  
+ 3   Occupation                  783667 non-null  int64  
+ 4   Stay_In_Current_City_Years  783667 non-null  object 
+ 5   Marital_Status              783667 non-null  int64  
+ 6   Product_Category_1          783667 non-null  int64  
+ 7   Product_Category_2          783667 non-null  float64
+ 8   Product_Category_3          783667 non-null  float64
+ 9   Purchase                    550068 non-null  float64
+ 10  B                           783667 non-null  uint8  
+ 11  C                           783667 non-null  uint8  
+dtypes: float64(3), int64(5), object(2), uint8(2)
+memory usage: 67.3+ MB
+```
+from the above code output we get the general idea about the current state of our dataset along with the datatype of each column 
+- we can see that almost every column has the int64 datatype
+- only `Stay_In_Current_City_Years` has the datatype of object 
+- in pandas string are generally define as objects
+- therefor we need to change its datatype from object to int64
+
+### understand the data
+```py
+df['Stay_In_Current_City_Years'].unique()
+```
+**Output:**
+```
+array(['2', '4+', '3', '1', '0'], dtype=object)
+```
+Here:
+- `dtype=object`: means datatype is object
+- we can also see that almost every value (`0`, `1`, `2`, `3`) in a specific number except `4+` which is a string
+- hence if we able to convert the `4+` to only `4` we can say that, now our whole column hold the numbers ranging from `0` to `4`
+- but just changing the value of `4+` to `4` will never change its datatype automatically, therefor we have tho change the datatype manually after changing `4+` 
+
+```py
+# changing 4+ -> 4
+df['Stay_In_Current_City_Years']=df['Stay_In_Current_City_Years'].str.replace('+','')
+
+# changing the datatype from object to string
+df['Stay_In_Current_City_Years']=df['Stay_In_Current_City_Years'].astype(int)
+
+print(df.info())
+```
+**Output:**
+```
+<class 'pandas.core.frame.DataFrame'>
+Int64Index: 783667 entries, 0 to 233598
+Data columns (total 12 columns):
+ #   Column                      Non-Null Count   Dtype  
+---  ------                      --------------   -----  
+ 0   Product_ID                  783667 non-null  object 
+ 1   Gender                      783667 non-null  int64  
+ 2   Age                         783667 non-null  int64  
+ 3   Occupation                  783667 non-null  int64  
+ 4   Stay_In_Current_City_Years  783667 non-null  int32  
+ 5   Marital_Status              783667 non-null  int64  
+ 6   Product_Category_1          783667 non-null  int64  
+ 7   Product_Category_2          783667 non-null  float64
+ 8   Product_Category_3          783667 non-null  float64
+ 9   Purchase                    550068 non-null  float64
+ 10  B                           783667 non-null  uint8  
+ 11  C                           783667 non-null  uint8  
+dtypes: float64(3), int32(1), int64(5), object(1), uint8(2)
+memory usage: 64.3+ MB
+```
+Now you can see our whole dataset is of same datatype i.e, numerical data
 
 [Go To Top](#content)
 
