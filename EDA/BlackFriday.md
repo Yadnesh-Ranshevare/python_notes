@@ -8,6 +8,7 @@
     - [gender: one hot encoding using .map to updated](#convert-gender-from-categorical-to-numeric)
     - [Age: ordinal encoding](#convert-age-from-categorical-to-numeric)
     - [City_Category: one hot encoding by replacing the columns](#convert-city_category-from-categorical-to-numeric)
+6. [Handling missing Values](#handling-missing-values)
 
 ---
 
@@ -764,6 +765,235 @@ print(df.head())
       <td>8</td>
       <td>NaN</td>
       <td>NaN</td>
+      <td>7969.0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+[Go To Top](#content)
+
+---
+# Handling missing Values
+
+
+### Step 1: Find how many null/missing values are there in the dataset
+```py
+df.isnull().sum()
+```
+**Output:**
+```
+Product_ID                         0
+Gender                             0
+Age                                0
+Occupation                         0
+Stay_In_Current_City_Years         0
+Marital_Status                     0
+Product_Category_1                 0
+Product_Category_2            245982
+Product_Category_3            545809
+Purchase                      233599
+B                                  0
+C                                  0
+dtype: int64
+```
+Here, we can see that:
+- `Product_Category_2` has `245982` missing values
+- `Product_Category_3` has `545809` missing values
+- `Purchase` has `233599` missing values
+
+### Step 2: check what type of data is present in the respective column
+
+```py
+df['Product_Category_2'].unique()
+```
+**Output:**
+```
+array([nan,  6., 14.,  2.,  8., 15., 16., 11.,  5.,  3.,  4., 12.,  9.,
+       10., 17., 13.,  7., 18.])
+```
+- `.unique` return the set(no duplicates) of data present into the respective column
+- with this we know what kind of data is present in this respective column
+- from our observation we can see that `Product_Category_2` contains discrete, not continuous numbers.
+
+### Step 3: understand the distribution of present value
+```py
+df['Product_Category_2'].value_counts()
+```
+**Output:**
+```
+8.0     91317
+14.0    78834
+2.0     70498
+16.0    61687
+15.0    54114
+5.0     37165
+4.0     36705
+6.0     23575
+11.0    20230
+17.0    19104
+13.0    15054
+9.0      8177
+12.0     7801
+10.0     4420
+3.0      4123
+18.0     4027
+7.0       854
+Name: Product_Category_2, dtype: int64
+```
+- now we know how each unique value is distributed in the given dataset
+
+### Step 4: choose which value to fill 
+since our column contain the discrete data we cannot fill mean or median, reason:
+- A discrete variable takes specific distinct values — usually counts or categories.
+- The mean might not be a valid discrete value.
+
+solution:
+- **mode**: the number (or category) that appears most often in your data.\
+**Example**
+    ```
+    1, 2, 2, 3, 3, 3, 4
+    ```
+    - 1 appears → 1 time
+    - 2 appears → 2 times
+    - 3 appears → 3 times
+    - 4 appears → 1 time
+
+    Mode = 3 (because 3 appears the most)
+- in pandas there is a inbuilt function called `mode()` that helps you find the mode on any dataset
+    ```py
+    df['Product_Category_2'].mode()[0]  # output -> 8.0
+    ```
+    - `.mode()` can return more than one mode if multiple values appear equally often.
+    - `[0]` is uses so that pandas can find the most common (mode) value in the column Product_Category_2, and take the first one if there are multiple.
+- once we fins the value of mode fill that value in place os missing values
+
+### Step 5: fill the missing values
+we use `fillna()` function of pandas to fill all of the missing values 
+```py
+df['Product_Category_2'] = df['Product_Category_2'].fillna(df['Product_Category_2'].mode()[0])
+
+print(df['Product_Category_2'].isnull().sum())  # to check whether any column is remain or not
+```
+**Output:**
+```
+0
+```
+
+> we perform same steps to handle the missing values of the `Product_Category_3` column as well
+
+```py
+df['Product_Category_3']=df['Product_Category_3'].fillna(df['Product_Category_3'].mode()[0])
+
+print(df.head())
+```
+**Output:**
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Product_ID</th>
+      <th>Gender</th>
+      <th>Age</th>
+      <th>Occupation</th>
+      <th>Stay_In_Current_City_Years</th>
+      <th>Marital_Status</th>
+      <th>Product_Category_1</th>
+      <th>Product_Category_2</th>
+      <th>Product_Category_3</th>
+      <th>Purchase</th>
+      <th>B</th>
+      <th>C</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>P00069042</td>
+      <td>0</td>
+      <td>1</td>
+      <td>10</td>
+      <td>2</td>
+      <td>0</td>
+      <td>3</td>
+      <td>8.0</td>
+      <td>16.0</td>
+      <td>8370.0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>P00248942</td>
+      <td>0</td>
+      <td>1</td>
+      <td>10</td>
+      <td>2</td>
+      <td>0</td>
+      <td>1</td>
+      <td>6.0</td>
+      <td>14.0</td>
+      <td>15200.0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>P00087842</td>
+      <td>0</td>
+      <td>1</td>
+      <td>10</td>
+      <td>2</td>
+      <td>0</td>
+      <td>12</td>
+      <td>8.0</td>
+      <td>16.0</td>
+      <td>1422.0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>P00085442</td>
+      <td>0</td>
+      <td>1</td>
+      <td>10</td>
+      <td>2</td>
+      <td>0</td>
+      <td>12</td>
+      <td>14.0</td>
+      <td>16.0</td>
+      <td>1057.0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>P00285442</td>
+      <td>1</td>
+      <td>7</td>
+      <td>16</td>
+      <td>4+</td>
+      <td>0</td>
+      <td>8</td>
+      <td>8.0</td>
+      <td>16.0</td>
       <td>7969.0</td>
       <td>0</td>
       <td>1</td>
