@@ -18,3 +18,11 @@
     - youtube Video
         - [Theoretical Part](https://youtu.be/FNLLxYcUnow?si=TCtZwC4B_2ZVDBWN)
         - [Practical part](https://youtu.be/fHFOANOHwh8?si=dm8NoDXnD5lOZVT8)
+6. Machine Leaning
+    - [Direct Note](./MachineLearning/Readme.md)
+
+
+# Other topics
+1. [Django](./Django/Readme.md)
+2. [Tkinter](./Tkinter/)
+3. [Jupiter Notebook](./Jbooks/readme.md)
