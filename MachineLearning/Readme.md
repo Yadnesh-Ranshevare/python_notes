@@ -2,6 +2,8 @@
 1. [AI vs ML vs DL vs DS](#ai-vs-ml-vs-dl-vs-ds)
 2. [Type of ML Algorithm](#type-of-ml-algorithm)
 3. [Regression and Classification](#regression-and-classification)
+4. [Clustering And Dimensionality Reduction](#clustering-and-dimensionality-reduction)
+5. [Clustering vs Classification](#clustering-vs-classification)
 
 
 ---
@@ -92,7 +94,7 @@ Here’s a clear breakdown with simple explanations and examples
 | Type            | Description                           | Example Algorithms                       |
 | --------------- | ------------------------------------- | ---------------------------------------- |
 | **Clustering**  | Groups similar data points            | K-Means, Hierarchical Clustering, DBSCAN |
-| **Association** | Finds relationships between variables | Apriori, Eclat                           |
+| **Dimensionality Reduction** | Reducing dataset features while preserving key information. | PCA (Principal Component Analysis),                            |
 
 
 ### 3. Semi-Supervised Learning
@@ -220,6 +222,151 @@ Then when a new email comes in, the model predicts whether it’s spam or not.
 | **KNN (K-Nearest Neighbors)**    | Classifies based on nearest data points      |
 | **SVM (Support Vector Machine)** | Finds the best boundary line between classes |
 | **Naive Bayes**                  | Based on probability and Bayes’ theorem      |
+
+
+
+[Go To Top](#content)
+
+---
+# Clustering And Dimensionality Reduction
+
+## Clustering
+
+Clustering is a type of Unsupervised Learning, where the algorithm groups similar data points together — without knowing any labels in advance.
+
+**It answers:**\
+“Which data points are similar to each other?”
+
+
+#### Example: Customer Segmentation
+Imagine you have shopping data from customers:
+| Customer | Age | Spending Score |
+| -------- | --- | -------------- |
+| A        | 18  | 80             |
+| B        | 22  | 75             |
+| C        | 45  | 30             |
+| D        | 48  | 25             |
+| E        | 28  | 85             |
+| F        | 50  | 20             |
+
+You don’t know who’s which type of customer,
+
+but clustering algorithms can group them like:
+- **Cluster 1**: Young customers who spend more (A, B, E)
+- **Cluster 2**: Older customers who spend less (C, D, F)
+
+So now, a marketing team can create different strategies for each cluster!
+
+#### How it works
+1. The algorithm calculates similarity between data points
+2. Then it groups the closest points together.
+3. Each group = one cluster.
+
+#### Understand Visually
+<img src="./images/Clustering.png" style="width:600px">
+
+### Common Clustering Algorithms
+| Algorithm                   | Description                                      | Example Use           |
+| --------------------------- | ------------------------------------------------ | --------------------- |
+| **K-Means**                 | Divides data into K clusters based on similarity | Customer segmentation |
+| **Hierarchical Clustering** | Builds tree-like clusters (dendrogram)           | Gene classification   |
+| **DBSCAN**                  | Groups dense regions and ignores noise           | Detecting outliers    |
+| **Mean Shift**              | Moves points toward cluster centers dynamically  | Image segmentation    |
+
+
+## Dimensionality Reduction
+Dimensionality Reduction means reducing the number of input features (columns) in your dataset while keeping the important information.
+
+The algorithm only looks at the input features to find patterns, correlations, or redundancies.
+
+The goal is to simplify the data structure, not predict an output.
+
+**In simple words:**\
+It’s about simplifying the data — keeping what matters, removing what doesn’t.
+
+#### Example: Student Data
+Suppose your dataset has:
+| Features    | Description       |
+| ----------- | ----------------- |
+| Marks       | Exam score        |
+| Attendance  | Percentage        |
+| Sleep Hours | Daily sleep       |
+| Study Hours | Daily study       |
+| Social Time | Time with friends |
+
+Maybe these 5 features overlap —\
+for example, “Study Hours” and “Marks” are strongly related.
+
+Dimensionality reduction can merge such correlated features into 2–3 “principal components” that still represent the pattern of the data.
+
+So, instead of working with 5 features, you work with 2 — easier, faster, and cleaner!
+
+#### How it works
+The algorithm finds new axes (directions) that capture most of the variation in the data and ignores the rest (less important info).
+
+#### Common Techniques
+| Technique                                               | Description                                                              | Use                                                  |
+| ------------------------------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------- |
+| **PCA (Principal Component Analysis)**                  | Projects data onto fewer dimensions while keeping variance high          | Most common, used for visualization or preprocessing |
+| **t-SNE (t-Distributed Stochastic Neighbor Embedding)** | Reduces data to 2D/3D for visualization while preserving local structure | Useful in clustering or image data                   |
+| **LDA (Linear Discriminant Analysis)**                  | Reduces dimensions while keeping class separation                        | Used in classification problems                      |
+| **Autoencoders**                                        | Deep learning models that compress and reconstruct data                  | Used in image or noise reduction                     |
+
+
+[Go To Top](#content)
+
+---
+# Clustering vs Classification
+
+### Classification = You already know the groups
+You teach the model what each group means.
+Then it learns to recognize which one new data belongs to.
+
+**Example:**\
+You show pictures of:
+- 🐱 Cats
+- 🐶 Dogs
+
+You tell the model:
+`“These are cats, these are dogs.”`
+
+Now, when you show a new photo,
+it says — “This is a dog!” 
+
+So, you already know the categories before training.
+
+### Clustering = You don’t know the groups
+You don’t give any labels — the model finds patterns on its own.
+
+**Example:**\
+You give the model 100 animal pictures — no names.
+
+It looks and groups them like:
+- Group 1 → furry, small = 🐱 cats
+- Group 2 → long ears = 🐶 dogs
+- Group 3 → feathers = 🐦 birds
+
+The model discovers the groups itself — you didn’t tell it what’s what.
+
+### Think like this:
+| Question                               | Classification               | Clustering                           |
+| -------------------------------------- | ---------------------------- | ------------------------------------ |
+| Do we know the answer before training? | ✅ Yes                        | ❌ No                                 |
+| What does the model do?                | Learns to label data         | Finds hidden groups                  |
+| Example                                | “Is this email spam or not?” | “Group similar emails automatically” |
+
+
+### Final comparison
+| Feature                   | **Clustering**                                   | **Classification**                                             |
+| ------------------------- | ------------------------------------------------ | -------------------------------------------------------------- |
+| **Type**                  | **Unsupervised Learning**                        | **Supervised Learning**                                        |
+| **Labeled Data?**         | ❌ No labels — the algorithm finds its own groups | ✅ Has labels — the model learns from them                      |
+| **Goal**                  | Find hidden **groups or patterns**               | Predict **predefined categories**                              |
+| **Output**                | Unknown clusters (e.g., Group 1, Group 2...)     | Known labels (e.g., Cat, Dog, Human)                           |
+| **Training Data Example** | Just features like Age, Income                   | Features + Labels (e.g., Age, Income → “Buyer” or “Non-Buyer”) |
+| **Evaluation**            | Harder — no true answers                         | Easier — compare predicted vs actual labels                    |
+| **Example Algorithms**    | K-Means, DBSCAN, Hierarchical                    | Decision Tree, Random Forest, SVM, Logistic Regression         |
+| **Common Use Cases**      | Customer segmentation, pattern discovery         | Spam detection, disease prediction                             |
 
 
 
