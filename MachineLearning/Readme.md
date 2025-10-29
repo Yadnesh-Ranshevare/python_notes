@@ -84,7 +84,7 @@ Here’s a clear breakdown with simple explanations and examples
 | **Classification** | Predicts discrete labels   | Logistic Regression, Random Forest, SVM, KNN |
 
 ### 2. Unsupervised Learning
-- The model learns from unlabeled data — it finds hidden patterns or structures on its own.
+- The model learns from unlabeled data — only inputs, no known outputs.
 - **Goal:** Discover groups, similarities, or patterns without knowing the output.
 - **Example:** Grouping customers with similar buying behavior (Clustering).
 
@@ -160,7 +160,7 @@ This line can be represented as: `Y = mX + c`
 - m → Slope (how much price changes per sq ft)
 - c → Intercept (base price)
 
-![Image](./images/regration_example.png)
+<img src="./images/regration_example.png" style="width:600px">
 
 from this graph we can predict the housing price for 1600 sq ft.
 - for above graph calculated slope is `m = 0.04`
@@ -202,6 +202,7 @@ Then when a new email comes in, the model predicts whether it’s spam or not.
 
 ### To visually understand how classification works
 ![Image](./images/classification-algorithm-in-machine-learning.png)
+
 
 #### Types of Classification
 | Type                           | Description                              | Example                            |
