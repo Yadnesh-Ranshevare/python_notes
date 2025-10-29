@@ -85,6 +85,12 @@ Here’s a clear breakdown with simple explanations and examples
 | **Regression**     | Predicts continuous values | Linear Regression, Decision Tree Regressor   |
 | **Classification** | Predicts discrete labels   | Logistic Regression, Random Forest, SVM, KNN |
 
+> Input and Output variable are also know as dependent and independent variables
+>
+> **Independent variable** -> inputs\
+> **Dependent variable** -> output
+
+
 ### 2. Unsupervised Learning
 - The model learns from unlabeled data — only inputs, no known outputs.
 - **Goal:** Discover groups, similarities, or patterns without knowing the output.
@@ -369,6 +375,87 @@ The model discovers the groups itself — you didn’t tell it what’s what.
 | **Common Use Cases**      | Customer segmentation, pattern discovery         | Spam detection, disease prediction                             |
 
 
+
+[Go To Top](#content)
+
+---
+# Liner Regression
+Linear Regression is a Supervised Learning algorithm used to predict a continuous value
+by finding the best straight line that fits the data.
+
+**In short:**\
+It tries to find a relationship between input (X) and output (Y) using a straight line.
+
+The main goal of liner regression is to find the best straight line that shows the relationship between input (X) and output (Y) —
+so we can predict Y for new values of X.
+
+### Think of it like this:
+- You have a bunch of points (data).
+- Linear regression tries to draw one line that’s as close as possible to all those points.
+- That line helps you:
+    - Understand the trend → e.g., as area increases, price increases.
+    -  Predict new values → if I know area = 1600, what will be the price?
+
+### Example
+
+![image](./images/liner_regression.png)
+
+### General Hypothesis Equation
+There are multiple string line equation that you can use for liner regression like 
+:
+1. **Slope–Intercept Form:** $y = mx + c$
+2. **Point–Slope Form:** $y-y_1 = m(x-x_1)$
+3. **Two–Point Form:** $y-y_1 = \frac{y_2 - y_1}{x_2-x_!}(x-x_1)$
+
+4. **Intercept Form:** $\frac{x}{a}+\frac{y}{b} = 1$  
+5. **General Form:** $Ax + By + C = 0$
+
+but in most our case will be using `General Hypothesis Equation`
+
+In linear regression, we assume the relationship between input x and output y is linear:
+
+$$h_\Theta (x) = \Theta_0 + \Theta_1 (x)$$
+
+Where:
+- $h_\Theta (x)$ → predicted value (hypothesis function)
+- $\Theta_0$ → intercept (bias term)
+- $\Theta_1$ → weight/slope parameter
+- $x$ → input feature (independent variable) 
+
+[Go To Top](#content)
+
+---
+# Cost Function
+The Cost Function (also called Loss Function) tells the model how wrong its predictions are.
+It’s like a scorecard — the lower the cost, the better your model is doing.
+
+**In short:**\
+The cost function measures the error between the model’s predicted values and the actual values.
+
+### Example
+Let’s say your model predicts house prices:
+| Actual Price (Y) | Predicted Price (Ŷ) | Error (Y - Ŷ) |
+| ---------------- | ------------------- | ------------- |
+| 50               | 48                  | 2             |
+| 60               | 65                  | -5            |
+| 70               | 68                  | 2             |
+
+Here, the errors are small, but we want to measure the total error to see how far off we are.
+
+### Mean Squared Error (MSE)
+In [Linear Regression](#liner-regression), the most common cost function is Mean Squared Error:
+
+$$J(m,c) = \frac{1}{n}\sum(Y_i - \bar{Y_i})^2$$
+
+Where:
+- $Y_i$ → Actual value
+- $\bar{Y_i}$ → Predicted value
+- $n$ → Number of data points
+- $J(m,c)$ → Cost (depends on slope m and intercept c)
+
+The model tries to find values of m and c that make J(m, c) as small as possible.
+
+This is done using an optimization method like Gradient Descent, which gradually adjusts m and c to reduce cost.
 
 [Go To Top](#content)
 
