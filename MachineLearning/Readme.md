@@ -4,7 +4,8 @@
 3. [Regression and Classification](#regression-and-classification)
 4. [Clustering And Dimensionality Reduction](#clustering-and-dimensionality-reduction)
 5. [Clustering vs Classification](#clustering-vs-classification)
-
+6. [Liner Regression](#liner-regression)
+7. [Cost Function](#cost-function)
 
 ---
 
@@ -456,6 +457,157 @@ Where:
 The model tries to find values of m and c that make J(m, c) as small as possible.
 
 This is done using an optimization method like Gradient Descent, which gradually adjusts m and c to reduce cost.
+
+### Example
+let say you have dataset like
+| input | output|
+|--- | ---|
+|1|1|
+|2|2
+3|3
+
+
+Using general hypothesis equation
+
+$$h_\Theta (x) = \Theta_0 + \Theta_1 (x)$$
+
+
+lets assume $\Theta_0 = 0$ 
+
+Therefor our equation becomes:
+
+$$h_\Theta (x) =  \Theta_1 (x)$$
+
+
+#### For $\Theta_1 = 1$
+
+| input $(x_i)$ | predicted Output $h_\Theta(x_i)$| Actual Output $(y_i)$
+---| --- | ---
+1|1 |1
+2|2 | 2
+3|3 |3
+
+cost function = $J(\Theta_1) = \frac{1}{n}\sum(Y_i - h_\Theta(x_i))^2 = \frac{1}{3}[(1-1)^2 + (2-2)^2 + (3-3)^2] = 0$  
+
+<img src="./images/cost_1.png" style="width:600px">
+
+#### For $\Theta_1 = 0.5$
+
+| input $(x_i)$ | predicted Output $h_\Theta(x_i)$| Actual Output $(y_i)$
+---| --- | ---
+1|0.5 |1
+2|1 | 2
+3|1.5 |3
+
+cost function = $J(\Theta_1) = \frac{1}{n}\sum(Y_i - h_\Theta(x_i))^2 = \frac{1}{3}[(1-0.5)^2 + (2-1)^2 + (3-1.5)^2] ≈ 0.58$ 
+
+<img src="./images/cost_2.png" style="width:600px">
+
+#### For $\Theta_1 = 0$
+
+| input $(x_i)$ | predicted Output $h_\Theta(x_i)$| Actual Output $(y_i)$
+---| --- | ---
+1|0 |1
+2|0 | 2
+3|0 |3
+
+cost function = $J(\Theta_1) = \frac{1}{n}\sum(Y_i - h_\Theta(x_i))^2 = \frac{1}{3}[(1-0)^2 + (2-0)^2 + (3-0)^2] ≈ 2.3$  
+
+<img src="./images/cost_3.png" style="width:600px">
+
+#### From those three cases, here’s what we can conclude about the relationship between $\Theta_1$ and the cost function $J(\Theta_1)$
+
+| Θ₁ value | Cost Function (J(Θ₁)) | Interpretation                                                   |
+| -------- | --------------------- | ---------------------------------------------------------------- |
+| 1        | 0                     | Perfect fit — predictions exactly match the actual values.       |
+| 0.5      | 0.58                  | Predictions are somewhat close but not perfect — moderate error. |
+| 0        | 2.3                   | Predictions are completely off — large error.                    |
+
+
+[Go To Top](#content)
+
+---
+
+# Gradient Descent
+Gradient Descent is an optimization algorithm that helps a model learn the best parameters (like slope `m` and intercept `c` in linear regression) by minimizing the cost function.
+
+### Example
+let say you have dataset like
+| input | output|
+|--- | ---|
+|1|1|
+|2|2
+3|3
+
+
+
+
+Using general hypothesis equation
+
+$$h_\Theta (x) = \Theta_0 + \Theta_1 (x)$$
+
+Where:
+- $h_\Theta (x)$ → predicted value (hypothesis function)
+- $\Theta_0$ → intercept (bias term)
+- $\Theta_1$ → weight/slope parameter
+- $x$ → input feature (independent variable) 
+
+
+lets assume $\Theta_0 = 0$ 
+
+Therefor our equation becomes:
+
+$$h_\Theta (x) =  \Theta_1 (x)$$
+
+
+#### For $\Theta_1 = 1$
+
+| input $(x_i)$ | predicted Output $h_\Theta(x_i)$| Actual Output $(y_i)$
+---| --- | ---
+1|1 |1
+2|2 | 2
+3|3 |3
+
+cost function = $J(\Theta_1) = \frac{1}{n}\sum(Y_i - h_\Theta(x_i))^2 = \frac{1}{3}[(1-1)^2 + (2-2)^2 + (3-3)^2] = 0$  
+
+
+
+#### For $\Theta_1 = 0.5$
+
+| input $(x_i)$ | predicted Output $h_\Theta(x_i)$| Actual Output $(y_i)$
+---| --- | ---
+1|0.5 |1
+2|1 | 2
+3|1.5 |3
+
+cost function = $J(\Theta_1) = \frac{1}{n}\sum(Y_i - h_\Theta(x_i))^2 = \frac{1}{3}[(1-0.5)^2 + (2-1)^2 + (3-1.5)^2] ≈ 0.58$  
+
+#### For $\Theta_1 = 0$
+
+| input $(x_i)$ | predicted Output $h_\Theta(x_i)$| Actual Output $(y_i)$
+---| --- | ---
+1|0 |1
+2|0 | 2
+3|0 |3
+
+cost function = $J(\Theta_1) = \frac{1}{n}\sum(Y_i - h_\Theta(x_i))^2 = \frac{1}{3}[(1-0)^2 + (2-0)^2 + (3-0)^2] ≈ 2.3$  
+
+#### Similarly when you calculated $J(\Theta_1)$ other values of $\Theta_1$ you'll get following data
+|  Θ₁  | Predictions (hΘ(x)) | Errors (y - hΘ(x)) | Sum of squared errors   | J(Θ₁) = 1/3 * SSE |
+| :--: | :------------------ | :----------------- | :---------------------- | :---------------: |
+|   0  | [0, 0, 0]           | [1, 2, 3]          | 1² + 2² + 3² = 14       |      **4.67**     |
+|  0.5 | [0.5, 1, 1.5]       | [0.5, 1, 1.5]      | 0.25 + 1 + 2.25 = 3.5   |      **1.17**     |
+|   1  | [1, 2, 3]           | [0, 0, 0]          | 0                       |       **0**       |
+|  1.5 | [1.5, 3, 4.5]       | [-0.5, -1, -1.5]   | 0.25 + 1 + 2.25 = 3.5   |      **1.17**     |
+|   2  | [2, 4, 6]           | [-1, -2, -3]       | 1 + 4 + 9 = 14          |      **4.67**     |
+| -0.5 | [-0.5, -1, -1.5]    | [1.5, 3, 4.5]      | 2.25 + 9 + 20.25 = 31.5 |      **10.5**     |
+
+
+Now if you plot the graph using this data then you get:
+
+<img src="./images/cost_fun_grapn.png" style="width:600px">
+
+
 
 [Go To Top](#content)
 
