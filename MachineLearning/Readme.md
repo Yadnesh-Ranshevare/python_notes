@@ -6,8 +6,10 @@
 5. [Clustering vs Classification](#clustering-vs-classification)
 6. [Liner Regression](#liner-regression)
 7. [Cost Function](#cost-function)
-8. [Gradient Decent](#gradient-descent)
-9. [Convergence Algorithm](#convergence-algorithm)
+8. Gradient Decent Algorithm
+    - [Gradient Decent](#gradient-descent)
+    - [Convergence Equation](#convergence-equation)
+    - [Gradient Decent Algorithm For Liner Regression](#gradient-decent-algorithm-for-liner-regression)
 ---
 
 # AI vs ML vs DL vs DS
@@ -651,7 +653,227 @@ Now if you plot the graph using this data then you get:
 
 ---
 
-# Convergence Algorithm
+# Convergence Equation
+- When we train a model (like using Gradient Descent), we keep updating parameters (θ) step by step to reduce error (Cost Function J).
+- The process keeps going until the error stops changing much — that point is called Convergence.
+
+### Equation
+$$
+\Theta_j = \Theta_j - \alpha \frac{\partial J(\Theta)}{\partial \Theta_j}
+$$
+
+
+- this equation is the heart of gradient descent, and it’s used for one simple reason: \
+to reduce the error (cost function) step by step until it reaches the minimum.
+
+- we use this equation because it tells how to update our parameters (θ values) so that our model learns and the error decreases.
+
+| Part                                             | Meaning                                              | Purpose                                                              |
+| ------------------------------------------------ | ---------------------------------------------------- | -------------------------------------------------------------------- |
+| $ \frac{\partial J(\Theta)}{\partial \Theta_j} $ | The **slope** of cost function (direction of change) | Tells whether we need to go **left or right** to reduce error        |
+| $ \alpha $                                      | Learning rate                                        | Controls **how big the step** should be                              |
+| ( - ) (minus sign)                               | Move in **opposite direction** of slope              | Because slope shows **increasing error**, we want to **decrease it** |
+| $ \Theta_j $                                     | Model parameter                                      | Gets updated each iteration to get closer to best value              |
+
+
+### Type of slope
+The slope tells us how steep a line or curve is and which direction it’s going.
+
+#### Positive Slope
+- The line or curve is going upward as you move right.
+- It means the value of $J(\Theta)$ (cost) increases when you increase $\Theta$
+- So, to reduce cost, you should go left (decrease $\Theta$)
+
+#### Negative Slope
+- The line or curve is going downward as you move right.
+- It means $J(\Theta)$ decreases when $\Theta$ increases.
+- So, to reduce cost even more, you should go right (increase $\Theta$)
+
+#### Example
+<img src="./images/slope_positive_negative.svg" style="width:600px">
+
+
+
+#### In short
+| Slope Type         | Curve Direction          | What It Means                           | Move Which Way To Reduce Cost? |
+| ------------------ | ------------------------ | --------------------------------------- | --------------- |
+| **Positive (+ve)** | Goes up as θ increases   | You’re on the left side of the minimum  | Move **left**   |
+| **Negative (−ve)** | Goes down as θ increases | You’re on the right side of the minimum | Move **right**  |
+
+
+
+### How it helps find the minima
+1. **Find the slope (gradient)**
+    - The slope tells you which way the hill is tilted.
+    -   If the slope is positive → the hill goes up to the right.
+    - If the slope is negative → the hill goes up to the left.
+2. **Move in the opposite direction**
+    - Because we want to go downhill, not uphill.
+    - That’s why we use the minus (−) in the equation.
+    - So if slope is positive → go left (decrease $\Theta$)
+    - If slope is negative → go right (increase $\Theta$)
+3. **Control how big each step is → that’s what α (alpha) does.**
+    - Big α → big steps (you might jump over the bottom).
+    - Small α → small steps (you’ll reach slowly but safely).
+4. **Keep repeating**
+    - After each step, check the slope again.
+    - As you get closer to the bottom, the slope becomes smaller.
+    - When slope ≈ 0 → you’re at the lowest point (minima).
+
+
+### Example
+Suppose our cost function is:
+
+$$J(\Theta) = \Theta^2$$
+
+That’s a simple U-shaped curve — its minimum is at $\Theta = 0$
+
+#### Step 1: Compute derivative
+
+$$\frac{dJ}{d\Theta} = 2\Theta$$
+
+This tells us the slope at any point.
+
+#### Step 2: Use gradient descent update rule
+
+$$\Theta = \Theta - \alpha(2\Theta)$$
+
+or
+ 
+$$\Theta = \Theta(1 - 2\alpha)$$
+
+#### Step 3: Start with some initial value
+
+Let’s take:
+- Initial $\Theta = 4$
+- Learning rate $\alpha = 0.1$
+
+Now, update step by step
+| Step | Old $\Theta $ | Derivative (2Θ) | New $ \Theta = \Theta - \alpha(2Θ) $ |
+| ---- | -------------- | --------------- | ------------------------------------ |
+| 1    | 4.0            | 8               | 4 - 0.1×8 = **3.2**                  |
+| 2    | 3.2            | 6.4             | 3.2 - 0.1×6.4 = **2.56**             |
+| 3    | 2.56           | 5.12            | 2.56 - 0.1×5.12 = **2.048**          |
+| 4    | 2.048          | 4.096           | 2.048 - 0.1×4.096 = **1.638**        |
+
+After each step, θ keeps getting smaller → we’re moving toward 0, the minimum of the curve.
+
+[Go To Top](#content)
+
+---
+# Gradient Decent Algorithm For Liner Regression
+
+from convergence equation
+
+$$
+\Theta_j = \Theta_j - \alpha \frac{\partial J(\Theta_0, \Theta_1)}{\partial \Theta_j}
+$$
+
+We know that 
+
+$$J(\Theta_0, \Theta_1) = \frac{1}{2n}\sum(h_0(x^i) - y^i)^2$$
+
+is a cost function where:
+- $h_0(x^i)$ -> predicted value 
+- $y^i$  -> actual value
+- $n$ → Number of data points
+
+### Compute derivative
+
+$$\frac{\partial J(\Theta_0, \Theta_1)}{\partial \Theta_j} = \frac{\partial }{\partial \Theta_j}[\frac{1}{n} \sum(h_0(x^i) - y^i)^2]$$
+
+
+> $\frac{\partial x^2}{\partial x} = 2x$
+>
+>similaly
+>
+>$\frac{\partial \sum (x^2)}{\partial x} = 2\sum(x)$
+
+
+For j = 1
+
+$$\frac{\partial J(\Theta_0, \Theta_1)}{\partial \Theta_1} = \frac{\partial }{\partial \Theta_1}[\frac{1}{n} \sum(h_0(x^i) - y^i)^2]$$
+
+<p style="text-align: center;">from general hypothesis equation we know that</p>
+
+
+$$h_\Theta (x^i) = \Theta_0 + \Theta_1 (x^i)$$
+
+$$\frac{\partial h_\theta(x^i)}{\partial \Theta_1} = x^i$$
+
+<p style="text-align: center;">Therefor, we multiply this x^i in our final equation</p>
+
+$$\frac{\partial J(\Theta_0, \Theta_1)}{\partial \Theta_1} = \frac{2}{n} \sum(h_0(x^i) - y^i)(x^i)$$
+
+For j = 0
+
+$$\frac{\partial J(\Theta_0, \Theta_1)}{\partial \Theta_0} = \frac{\partial }{\partial \Theta_0}[\frac{1}{n} \sum(h_0(x^i) - y^i)^2]$$
+
+<p style="text-align: center;">from general hypothesis equation we know that</p>
+
+
+$$h_\Theta (x^i) = \Theta_0 + \Theta_1 (x^i)$$
+
+$$\frac{\partial h_\theta(x^i)}{\partial \Theta_1} = \Theta_0$$
+
+<p style="text-align: center;">Therefor, we doesn't multiply anything in our final equation</p>
+
+$$\frac{\partial J(\Theta_0, \Theta_1)}{\partial \Theta_0} = \frac{2}{n} \sum(h_0(x^i) - y^i)$$
+
+### Put this values in convergence equation
+
+original equation
+
+
+$$
+\Theta_j = \Theta_j - \alpha \frac{\partial J(\Theta_0, \Theta_1)}{\partial \Theta_j}
+$$
+
+for $\Theta_0$
+
+$$\Theta_0 = \Theta_0 - \alpha[\frac{2}{n} \sum(h_0(x^i) - y^i)]$$
+
+
+for $\Theta_1$
+
+$$\Theta_1 = \Theta_1 - \alpha[\frac{2}{n} \sum(h_0(x^i) - y^i)(x^i)]$$
+
+
+### These equations tell us:
+
+- How to update both parameters (θ₀ and θ₁) step by step so that the prediction error (cost) keeps decreasing
+- These two equations work together to slowly adjust the line so that it fits the data points perfectly — i.e., they find the minimum cost through gradient descent.
+
+#### for $\Theta_0$
+
+$$\Theta_0 = \Theta_0 - \alpha[\frac{2}{n} \sum(h_0(x^i) - y^i)]$$
+
+- It updates the intercept of the line.
+- It shifts the line up or down to reduce overall error.
+- The term $(h_0(x^i) - y^i)$ shows how far predictions are from real values.
+
+So:\
+If predictions are too high → θ₀ decreases (moves line down)\
+If predictions are too low → θ₀ increases (moves line up)
+
+
+#### for $\Theta_1$
+
+$$\Theta_1 = \Theta_1 - \alpha[\frac{2}{n} \sum(h_0(x^i) - y^i)(x^i)]$$
+
+- It updates the slope of the line.
+- It controls how tilted the line is.
+- The extra $(x^i)$ term helps the model learn how much each feature (x) affects the output.
+
+So:\
+If the line is too flat → θ₁ increases (line tilts upward)\
+If the line is too steep → θ₁ decreases (line tilts downward)
+
+#### In short
+| Parameter | Controls                  | What the equation does        |
+| --------- | ------------------------- | ----------------------------- |
+| **θ₀**    | Line’s height (intercept) | Moves line up or down         |
+| **θ₁**    | Line’s tilt (slope)       | Changes how steep the line is |
 
 
 [Go To Top](#content)

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="404.888 210.075 307.032 298.055" overflow="hidden" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="clip0">
+      <rect x="0" y="0" width="1280" height="720"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#clip0)">
+    <rect x="0" y="0" width="1280" height="720" fill="#FFFFFF"/>
+    <path d="M440.5 345.176C457.886 403.231 463.071 423.291 478.017 428.154 492.963 433.018 510.807 385.146 530.176 374.355 549.544 363.565 575.929 372.684 594.23 363.413 612.531 354.143 623.054 320.101 639.983 318.733 656.911 317.365 658.055 321.696 677.5 340.617" stroke="#BFBFBF" stroke-width="1.33333" stroke-miterlimit="8" fill="none" fill-rule="evenodd"/>
+    <path d="M0 0 26.8503 32.2109" stroke="#000000" stroke-width="1.33333" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1 0 0 -1 481.5 434.711)"/>
+    <path d="M480.5 428.5 481.095 451.487" stroke="#FF0000" stroke-width="0.666667" stroke-miterlimit="8" stroke-dasharray="2.66667 2" fill="none" fill-rule="evenodd"/>
+    <path d="M495.5 417.5 495.5 475.741" stroke="#FF0000" stroke-width="0.666667" stroke-miterlimit="8" stroke-dasharray="2.66667 2" fill="none" fill-rule="evenodd"/>
+    <text fill="#FF0000" font-family="Calibri,Calibri_MSFontService,sans-serif" font-weight="400" font-size="16" transform="translate(478.411 466)" style="white-space: pre;">a</text>
+    <path d="M416 451 665.711 451" stroke="#969696" stroke-width="2" stroke-miterlimit="8" fill="none" fill-rule="evenodd"/>
+    <path d="M651.5 451.167 664.427 451.167 664.427 451.833 651.5 451.833ZM663.094 447.5 671.094 451.5 663.094 455.5Z" fill="#969696"/>
+    <path d="M428.167 306.992 428.167 288.167 428.833 288.167 428.833 306.992ZM424.5 289.5 428.5 281.5 432.5 289.5Z" fill="#969696"/>
+    <path d="M0 0 0.000104987 178.67" stroke="#969696" stroke-width="2" stroke-miterlimit="8" fill="none" fill-rule="evenodd" transform="matrix(1 0 0 -1 428 467.67)"/>
+    <text font-family="Calibri,Calibri_MSFontService,sans-serif" font-weight="400" font-size="16" transform="translate(675.354 455)" style="white-space: pre;">x<tspan font-size="16" x="-241.192" y="-174">f(x)</tspan></text>
+    <rect x="407.5" y="213.5" width="301" height="292" stroke="#DDDDDD" stroke-width="0.333333" stroke-miterlimit="8" fill="none"/>
+    <path d="M475.702 433.59 451.5 394.5" stroke="#000000" stroke-width="1.33333" stroke-miterlimit="8" fill="none" fill-rule="evenodd"/>
+    <path d="M463.5 414.5 463.5 475.992" stroke="#FF0000" stroke-width="0.666667" stroke-miterlimit="8" stroke-dasharray="2.66667 2" fill="none" fill-rule="evenodd"/>
+    <text fill="#FF0000" font-family="Calibri,Calibri_MSFontService,sans-serif" font-weight="400" font-size="16" transform="translate(445.781 485)" style="white-space: pre;">a <tspan font-size="16" x="11.3333" y="0">-</tspan><tspan font-size="16" x="19.8333" y="0">1</tspan><tspan font-size="16" x="39.0456" y="1">a + 1</tspan><tspan fill="#000000" font-size="16" x="79.8488" y="-71">Positive </tspan><tspan fill="#000000" font-size="16" x="79.8488" y="-52">slope</tspan><tspan fill="#000000" font-size="16" x="18.1416" y="-136">Negative </tspan><tspan fill="#000000" font-size="16" x="18.1416" y="-117">slope</tspan></text>
+    <path d="M522.91 428.978 506.261 414.178 506.704 413.68 523.353 428.479ZM504.822 417.805 501.5 409.5 510.137 411.825Z" fill="#DDDDDD"/>
+    <path d="M0.284964-0.172935 12.5443 20.0281 11.9743 20.374-0.284964 0.172935ZM14.9871 16.986 15.718 25.9004 8.148 21.1364Z" fill="#DDDDDD" transform="matrix(-1 0 0 1 470.218 370.5)"/>
+    <path d="M477 428.5C477 427.119 478.119 426 479.5 426 480.881 426 482 427.119 482 428.5 482 429.881 480.881 431 479.5 431 478.119 431 477 429.881 477 428.5Z" fill="#FF0000" fill-rule="evenodd"/>
+  </g>
+</svg>
