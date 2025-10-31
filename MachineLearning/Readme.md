@@ -9,7 +9,7 @@
 8. Gradient Decent Algorithm
     - [Gradient Decent](#gradient-descent)
     - [Convergence Equation](#convergence-equation)
-    - [Gradient Decent Algorithm For Liner Regression](#gradient-decent-algorithm-for-liner-regression)
+9. [Gradient Decent Algorithm For Liner Regression](#gradient-decent-algorithm-for-liner-regression)
 ---
 
 # AI vs ML vs DL vs DS
@@ -583,7 +583,7 @@ cost function = $J(\Theta_1) = \frac{1}{n}\sum(Y_i - h_\Theta(x_i))^2 = \frac{1}
 2|1 | 2
 3|1.5 |3
 
-cost function = $J(\Theta_1) = \frac{1}{n}\sum(Y_i - h_\Theta(x_i))^2 = \frac{1}{3}[(1-0.5)^2 + (2-1)^2 + (3-1.5)^2] ≈ 0.58$  
+cost function = $J(\Theta_1) = \frac{1}{n}\sum(Y_i - h_\Theta(x_i))^2 = \frac{1}{3}[(1-0.5)^2 + (2-1)^2 + (3-1.5)^2] ≈ 1.17$  
 
 #### For $\Theta_1 = 0$
 
@@ -593,7 +593,7 @@ cost function = $J(\Theta_1) = \frac{1}{n}\sum(Y_i - h_\Theta(x_i))^2 = \frac{1}
 2|0 | 2
 3|0 |3
 
-cost function = $J(\Theta_1) = \frac{1}{n}\sum(Y_i - h_\Theta(x_i))^2 = \frac{1}{3}[(1-0)^2 + (2-0)^2 + (3-0)^2] ≈ 2.3$  
+cost function = $J(\Theta_1) = \frac{1}{n}\sum(Y_i - h_\Theta(x_i))^2 = \frac{1}{3}[(1-0)^2 + (2-0)^2 + (3-0)^2] ≈ 4.67$  
 
 #### Similarly when you calculated $J(\Theta_1)$ other values of $\Theta_1$ you'll get following data
 |  Θ₁  | Predictions (hΘ(x)) | Errors (y - hΘ(x)) | Sum of squared errors   | J(Θ₁) = 1/3 * SSE |
@@ -670,10 +670,10 @@ to reduce the error (cost function) step by step until it reaches the minimum.
 
 | Part                                             | Meaning                                              | Purpose                                                              |
 | ------------------------------------------------ | ---------------------------------------------------- | -------------------------------------------------------------------- |
-| $ \frac{\partial J(\Theta)}{\partial \Theta_j} $ | The **slope** of cost function (direction of change) | Tells whether we need to go **left or right** to reduce error        |
-| $ \alpha $                                      | Learning rate                                        | Controls **how big the step** should be                              |
+| $\frac{\partial J(\Theta)}{\partial \Theta_j}$ | The **slope** of cost function (direction of change) | Tells whether we need to go **left or right** to reduce error        |
+| $\alpha$                                      | Learning rate                                        | Controls **how big the step** should be                              |
 | ( - ) (minus sign)                               | Move in **opposite direction** of slope              | Because slope shows **increasing error**, we want to **decrease it** |
-| $ \Theta_j $                                     | Model parameter                                      | Gets updated each iteration to get closer to best value              |
+| $\Theta_j$                                     | Model parameter                                      | Gets updated each iteration to get closer to best value              |
 
 
 ### Type of slope
