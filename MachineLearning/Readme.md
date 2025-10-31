@@ -6,7 +6,8 @@
 5. [Clustering vs Classification](#clustering-vs-classification)
 6. [Liner Regression](#liner-regression)
 7. [Cost Function](#cost-function)
-
+8. [Gradient Decent](#gradient-descent)
+9. [Convergence Algorithm](#convergence-algorithm)
 ---
 
 # AI vs ML vs DL vs DS
@@ -607,6 +608,50 @@ Now if you plot the graph using this data then you get:
 
 <img src="./images/cost_fun_grapn.png" style="width:600px">
 
+- When we draw the cost function (J) against the model parameter (like θ₁), we get a U-shaped curve.
+- The lowest point on this curve (for example, at θ₁ = 1) shows where the error is smallest.
+- Since the error is smallest there, that θ₁ value gives the best possible line that fits our data.
+
+> The bottom of the curve = minimum error = best fit line.
+
+### Minima
+- The lowest point in gradient decent is called minima
+- When we talk about minima in Gradient Descent (i.e., the points where cost function is low), there are a few types
+
+| Feature                            | 🟢 **Global Minimum**                                  | 🟡 **Local Minimum**                                              |
+| ---------------------------------- | ------------------------------------------------------ | ----------------------------------------------------------------- |
+| **Definition**                     | The **lowest point** on the entire cost function curve | A **low point** in a small region, but **not the lowest overall** |
+| **Error value**                    | **Smallest possible error** (best result)              | Error is **low**, but not the smallest                            |
+| **Gradient value (slope)**         | Zero (no lower point exists)                           | Zero (but there are lower points elsewhere)                       |
+| **Outcome**                        | Gives the **best model parameters**                    | Gives **sub-optimal parameters**                                  |
+| **Linear Regression**              | Always reaches global minimum                          | — (no local minima exist here)                                    |
+| **Deep Learning / Complex Models** | Hard to find (many local minima exist)                 | Very common in complex models                                     |
+| **Example**                        | The **bottom of the deepest valley**                   | A **smaller dip** before the deepest valley                       |
+
+
+<img src="./images/local_vs_global_minima.png" style="width:600px">
+
+### Maxima
+- When we maximize something (like accuracy or profit), we look for the highest point on a curve instead of the lowest.
+- It’s the opposite of minima.
+
+| Feature              | 🔵 **Global Maximum**                         | 🟣 **Local Maximum**                                            |
+| -------------------- | --------------------------------------------- | --------------------------------------------------------------- |
+| **Definition**       | The **highest point** on the entire curve     | A **high point** in a small region, but not the highest overall |
+| **Value**            | **Largest possible value** (best performance) | **High**, but not the highest                                   |
+| **Gradient (slope)** | Zero (no higher point exists)                 | Zero (but higher points exist elsewhere)                        |
+| **Outcome**          | Gives **best possible performance**           | Gives **good but not best** performance                         |
+| **Example**          | **Top of the tallest mountain**               | **Top of a smaller hill** nearby                                |
+
+<img src="./images/local_vs_global_maxima.png" style="width:600px">
+
+
+
+[Go To Top](#content)
+
+---
+
+# Convergence Algorithm
 
 
 [Go To Top](#content)
