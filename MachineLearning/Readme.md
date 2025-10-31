@@ -676,6 +676,21 @@ to reduce the error (cost function) step by step until it reaches the minimum.
 | $\Theta_j$                                     | Model parameter                                      | Gets updated each iteration to get closer to best value              |
 
 
+### Why we need 𝛼 (learning rate)
+Think of gradient descent like walking downhill to reach the lowest point (global minima).
+- The gradient (slope) tells you which direction to move.
+- But it doesn’t tell you how far to move in that direction. That’s where α comes in — it controls the step size.
+
+| α (learning rate) | What happens                                                                             
+| ----------------- | ---------------------------------------------------------------------------------------- | 
+| **Too large**     | You take huge steps — might **jump over** the minimum or even **oscillate** forever.     | 
+| **Too small**     | You take tiny steps — you **move very slowly**, might take forever to reach the minimum. | 
+| **Just right**    | You smoothly go downhill and reach the **global minimum** quickly.                       | 
+
+![Image](./images/leaarning_rate.png)
+
+
+
 ### Type of slope
 The slope tells us how steep a line or curve is and which direction it’s going.
 
@@ -794,14 +809,14 @@ For j = 1
 
 $$\frac{\partial J(\Theta_0, \Theta_1)}{\partial \Theta_1} = \frac{\partial }{\partial \Theta_1}[\frac{1}{n} \sum(h_0(x^i) - y^i)^2]$$
 
-<p style="text-align: center;">from general hypothesis equation we know that</p>
+from general hypothesis equation we know that
 
 
 $$h_\Theta (x^i) = \Theta_0 + \Theta_1 (x^i)$$
 
 $$\frac{\partial h_\theta(x^i)}{\partial \Theta_1} = x^i$$
 
-<p style="text-align: center;">Therefor, we multiply this x^i in our final equation</p>
+Therefor, we multiply this $x^i$ in our final equation
 
 $$\frac{\partial J(\Theta_0, \Theta_1)}{\partial \Theta_1} = \frac{2}{n} \sum(h_0(x^i) - y^i)(x^i)$$
 
@@ -809,14 +824,14 @@ For j = 0
 
 $$\frac{\partial J(\Theta_0, \Theta_1)}{\partial \Theta_0} = \frac{\partial }{\partial \Theta_0}[\frac{1}{n} \sum(h_0(x^i) - y^i)^2]$$
 
-<p style="text-align: center;">from general hypothesis equation we know that</p>
+from general hypothesis equation we know that
 
 
 $$h_\Theta (x^i) = \Theta_0 + \Theta_1 (x^i)$$
 
 $$\frac{\partial h_\theta(x^i)}{\partial \Theta_1} = \Theta_0$$
 
-<p style="text-align: center;">Therefor, we doesn't multiply anything in our final equation</p>
+Therefor, we doesn't multiply anything in our final equation
 
 $$\frac{\partial J(\Theta_0, \Theta_1)}{\partial \Theta_0} = \frac{2}{n} \sum(h_0(x^i) - y^i)$$
 
