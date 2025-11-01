@@ -10,6 +10,11 @@
     - [Gradient Decent](#gradient-descent)
     - [Convergence Equation](#convergence-equation)
 9. [Gradient Decent Algorithm For Liner Regression](#gradient-decent-algorithm-for-liner-regression)
+10. [Performance Matrix](#performance-matrix)
+    - [R² Score](#score)
+11. [Underfitting & Overfitting](#underfitting--overfitting)
+
+
 ---
 
 # AI vs ML vs DL vs DS
@@ -894,3 +899,252 @@ If the line is too steep → θ₁ decreases (line tilts downward)
 [Go To Top](#content)
 
 ---
+
+# Performance Matrix
+
+A performance metric is a numerical measure used to evaluate how good (or bad) your model’s predictions are compared to actual results.
+
+It tells:
+
+- How accurate is it?
+- How much error is it making?
+- Is it predicting too high or too low?
+
+### Common Performance Metrics
+
+
+1. For Regression Problems
+
+| Metric                        | Formula                                | Meaning                                                    |   
+| ----------------------------- | -------------------------------------- | ---------------------------------------------------------- |
+| **MSE** (Mean Squared Error)  | $\frac{1}{n}\sum(y_i - \hat{y}_i)^2$ | Average of squared errors. Penalizes big errors.           |                                                           
+| **RMSE** (Root MSE)           | $\sqrt{MSE}$                         | Easier to interpret (same units as output).                |            
+| **MAE** (Mean Absolute Error) | $\frac{1}{n}\sum y_i - \hat{y}_i$                      | Average of absolute differences. Less harsh on outliers.         |  
+| [**R² Score**](#score)                  | $1 - \frac{SS_{res}}{SS_{tot}}$      | How much of data variance is explained by the model (0–1). |                                                           
+
+
+2. For Classification Problems
+
+| Metric               | Meaning                                              |
+| -------------------- | ---------------------------------------------------- |
+| **Accuracy**         | How many predictions are correct overall.            |
+| **Precision**        | Of all predicted “positives”, how many were correct. |
+| **Recall**           | Of all actual “positives”, how many did we find.     |
+| **F1 Score**         | Balance between Precision and Recall.                |
+| **Confusion Matrix** | Table showing True/False Positive/Negative counts.   |
+
+
+[Go To Top](#content)
+
+---
+# $R^2$ Score
+It tells how well your regression line fits the data
+
+### Formula
+
+$$R^2 = 1-\frac{SS_{res}}{SS_{tot}}$$
+
+
+Where:
+- $SS_{res} = \sum(y_i - \hat y_i)^2$ 
+- $SS_{tot} = \sum(y_i - \bar y)^2$ 
+
+Here also:
+
+- $\hat y_i$ → value predicted by your model for input $x_i$ (represent best fit line)
+- $\bar y$ → average of all actual outputs in your dataset (represent average fit line)
+- $y_i$ → actual datapoint
+
+![Img](./images/avg_line.png)
+
+> Average fit line will always be a flat line, and in $SS_{tot}$ we try to find the error with respect to this average fit line (thats way in $SS_{tot}$ $\bar y$ is constant) 
+
+
+### Example
+
+Let’s say we want to predict marks based on study hours.
+
+| Hours (x) | Actual Marks (y) | Predicted Marks (ŷ) |
+| --------- | ---------------- | ------------------- |
+| 1         | 20               | 22                  |
+| 2         | 40               | 38                  |
+| 3         | 60               | 58                  |
+| 4         | 80               | 78                  |
+
+Now:
+
+$$SS_{res} = (20 - 22)^2 + (40 - 38)^2 + (60 - 58)^2 + (80 - 78)^2 = 16$$
+
+<br>
+
+$$\bar y = \frac{20 + 40 + 60 + 80}{4} = 50$$
+
+<br>
+
+$$SS_{tot} = (20 - 50)^2 + (40 - 20)^2 + (60 - 20)^2 + (80 - 20)^2 = 2000$$
+
+<br>
+
+$$R^2 = 1 - \frac{16}{2000} = 0.992$$
+
+So, R² = 0.992, meaning our model explains 99.2% of the variation — an excellent fit!
+
+### Problem with $R^2$ 
+
+- When You Add a Useful (Relevant) Feature:
+
+    - That feature actually helps your model predict better.
+    - So:
+        - Prediction error decreases
+        - Cost function J(Θ) decreases
+        - R² increases
+
+- When You Add an Unnecessary (Irrelevant) Feature:
+    - That feature doesn’t help prediction (maybe just random noise).
+    - Then:
+        - R² still increases slightly (mathematically, it never decreases)
+        > Because R² measures how much variation your model explains compared to a flat mean line. Even if you add noise, the model can “fit” that noise a little, making the R² look better — but not actually better.
+- Conclusion:\
+Adding Irrelevant new feature increases the $R^2$ value for no reason, deceiving the computer to think model with irrelevant feature is the better model cause it has high $R^2$ value
+
+
+### Why R² increases when we add more input variables
+
+R² tells us how well our model fits the data.
+
+When you add more inputs (even random ones), the model gets more flexibility to “bend” and fit the data a bit better — so the total error slightly decreases,
+
+So:
+- “More flexibility to bend” → model adjusts more to match the data
+- “Total error decreases” → predictions become slightly closer to the real values
+- But sometimes, it starts matching noise (random variations), not real patterns
+
+That’s why R² goes up — because it only checks if prediction error got smaller,
+not if it’s meaningful.
+
+<img src="./images/R_squre_adding_input.png" style="width:800px">
+
+## Adjusted R²
+- Adjusted R² is an improved version of R² that checks if the new features you add really help your model or not.
+- If a new feature doesn’t make predictions better, it reduces the score instead of increasing it.
+
+#### Why do we need it?
+
+Problem with normal R²:\
+R² always increases when you add more features —
+even if those features are useless!
+
+That can make you think your model got better, but it actually just got more complex, not more accurate.
+
+#### Adjusted R² fixes this
+- It adjusts R² based on how many predictors (features) you have.
+- If you add a new feature that doesn’t improve the model,
+- Adjusted R² will decrease — telling you it was unnecessary.
+
+#### Formula
+
+$$\text{Adjusted $R^2$} = 1 - [\frac{(1-R^2)(n-1)}{n-p-1}]$$
+
+Where:
+- $n$ = number of data points
+- $p$ = number of features (independent variables) also called predictor
+- $R^2$ = normal R² score
+
+> The more features (p) you add, the denominator grows, which reduces the Adjusted R² 
+
+
+[Go To Top](#content)
+
+---
+# Underfitting & Overfitting
+
+
+
+
+When you build an ML model, you want it to learn patterns from known data and then make predictions on new, unseen data.
+
+To do that, we split our dataset into two (sometimes three) parts:
+1. Training Data
+2. Testing Data
+
+> training & test data help you spot overfitting and underfitting.
+
+### 1. Training Data
+- This is the data the model learns from.
+- The model adjusts its parameters (like slope and intercept in linear regression) by minimizing error on this data.
+- Think of it like studying for an exam — this is your practice material.
+
+
+### 2. Testing Data
+- This data is not shown to the model during training.
+- It is used after training to check how well the model can generalize — i.e., predict unseen data.
+- Think of it like your final exam — you test how well you actually learned.
+
+### When a model “fits” the training data…
+We look at two types of errors:
+1. Training error → how well the model fits the data it has seen i.e training data
+2. Testing error → how well the model predicts data it hasn’t seen i.e testing data
+
+The balance between these two tells us whether the model is:
+
+- good (generalizes well)
+- overfitting
+- underfitting
+
+### Underfitting → “Didn’t learn enough”
+| Data              | What Happens                                            |
+| ----------------- | ------------------------------------------------------- |
+| **Training Data** | Model performs poorly — can’t capture the pattern.      |
+| **Testing Data**  | Also performs poorly — since it never learned properly. |
+
+Example:
+| Dataset  | Error  |
+| -------- | ------ |
+| Training | High ❌ |
+| Testing  | High ❌ |
+
+Model didn’t learn the pattern → underfit.
+
+<img src="./images/underfit.png" style="width:700px">
+
+
+### Overfitting → “Learned too much (memorized)”
+| Data              | What Happens                                      |
+| ----------------- | ------------------------------------------------- |
+| **Training Data** | Model performs *extremely well* (memorized data). |
+| **Testing Data**  | Performs *poorly* — fails on unseen data.         |
+
+Example:
+| Dataset  | Error      |
+| -------- | ---------- |
+| Training | Very Low ✅ |
+| Testing  | High ❌     |
+
+Model learned noise, not the actual pattern → overfit.
+
+<img src="./images/overfit.png" style="width:700px">
+
+### Good Fit (Just Right)
+| Data              | What Happens                    |
+| ----------------- | ------------------------------- |
+| **Training Data** | Fits well (low error).          |
+| **Testing Data**  | Also performs well (low error). |
+
+Model learned the true relationship and generalizes correctly.
+
+<img src="./images/gootFit.png" style="width:700px">
+
+
+### Summary Table
+| Type             | Training Error | Testing Error | Model Behavior |
+| ---------------- | -------------- | ------------- | -------------- |
+| **Underfitting** | High           | High          | Too simple     |
+| **Overfitting**  | Low            | High          | Too complex    |
+| **Good Fit**     | Low            | Low           | Just right     |
+
+
+[Go To Top](#content)
+
+---
+
+
