@@ -13,6 +13,8 @@
 10. [Performance Matrix](#performance-matrix)
     - [R² Score](#score)
 11. [Underfitting & Overfitting](#underfitting--overfitting)
+12. [Ridge Regression](#ridge-regression)
+13. [Lasso Regression](#lasso-regression)
 
 
 ---
@@ -1142,6 +1144,159 @@ Model learned the true relationship and generalizes correctly.
 | **Overfitting**  | Low            | High          | Too complex    |
 | **Good Fit**     | Low            | Low           | Just right     |
 
+
+### Bias–Variance Tradeoff
+
+
+1. Bias\
+Bias means how much your model’s predictions are off from the true values — it’s the error due to wrong assumptions in the model.
+    - High bias → High Error→ Model is too simple, doesn’t learn enough patterns.
+    - Low bias → Low Error → Model captures the trend correctly.
+2. Variance\
+Variance means how much your model’s predictions change when given different data — it’s the sensitivity to training data.
+    - High variance → Model reacts too much to small changes (memorizes data).
+    - Low variance → Model remains stable even if data changes slightly.
+
+You can think of it like a see-saw:
+- If you reduce bias too much, variance increases.
+- If you reduce variance too much, bias increases.
+
+#### Why this happen?
+When training a model, you have two goals:
+- Learn the real pattern (↓ bias)
+- Stay stable on new data (↓ variance)
+
+Let’s say you make your model more complex (add more features or increase polynomial degree).
+
+Effect:
+- It can fit the training data better → bias decreases 
+- But it also starts reacting to tiny random changes or noise in the data → variance increases
+- The model starts memorizing — so it performs perfectly on training data, but poorly on unseen data.
+That’s overfitting.
+
+Now, if you make your model simpler (fewer features or lower polynomial degree):
+
+Effect:
+- It stops reacting to small details → variance decreases 
+- But now it can’t capture the full pattern → bias increases
+- It generalizes too much — predicting roughly the same for all inputs.
+That’s underfitting.
+
+>The trick is to find a sweet spot — not too simple, not too complex — where the model captures the true pattern and still generalizes well.
+
+| Type             | Bias    | Variance | Model Behavior                    | Example                       |
+| ---------------- | ------- | -------- | --------------------------------- | ----------------------------- |
+| **Underfitting** | 🔺 High | 🔻 Low   | Too simple, misses patterns       | Straight line for curved data |
+| **Overfitting**  | 🔻 Low  | 🔺 High  | Too complex, memorizes data       | Wiggly curve following noise  |
+| **Good Fit**     | ✅ Low   | ✅ Low    | Learns pattern + generalizes well | Smooth curve matching trend   |
+
+#### In short:
+- Underfitting = High Bias, Low Variance → model is dumb  (doesn’t learn enough)
+- Overfitting = Low Bias, High Variance → model is too smart  (learns even noise)
+- Good Fit = Balance → learns real pattern and generalizes well
+
+[Go To Top](#content)
+
+---
+
+# Ridge Regression
+Ridge Regression is a type of Linear Regression that adds a penalty to the model to prevent overfitting.
+
+It’s also called L2 Regularization.
+
+### Normal Linear Regression equation
+The goal in normal regression is to minimize the cost function:
+
+$$J(\Theta) = \frac{1}{n}\sum(Y_i - \bar{Y_i})^2$$
+
+Where:
+- $Y_i$ → Actual value
+- $\bar{Y_i}$ → Predicted value
+- $n$ → Number of data points
+- $J(\Theta)$ → Cost (depends on slope m and intercept c)
+
+This just tries to make predictions close to actual values.
+
+let say somehow you'll get the best fit line as follow
+
+<img src="./images/ridge_overfit.png" style="width:600px">
+
+if you calculate the cost function for this graph then:
+
+$$J(\Theta) = \frac{1}{2}[(2-2) + (8-8)] = 0$$
+
+Whenever $J(\Theta)$ becomes 0 its the condition of overfitting
+
+in such cases use Ridge equation
+
+### Ridge Regression equation
+
+$$J(\Theta) = \frac{1}{n}\sum(Y_i - \bar{Y_i})^2 + \lambda(slope)^2$$
+
+Here,
+- $\lambda$ = regularization strength (a positive number) that tells how much slope should change during each iteration
+
+if you calculate the slope of above graph then you'll get:
+
+$$Slope = \frac{8 - 2}{4 - 1} = \frac{6}{3} = 2$$
+
+now our cost function becomes:
+- take $\lambda$ = 1
+
+$$J(\Theta_1) = \frac{1}{2}[(2-2)^2 + (8-8)^2] + (1 \times 2^2) = 0 + 4 = 4$$
+
+now as $J(\Theta_1) = 4$ is high our machine will try to reduce it and change the value of $\Theta_1$
+
+Now let say we get our next befit line as follow:
+
+<img src="./images/ridge_overfit_improved.png" style="width:600px">
+
+
+Now our new cost function (Ridge Regression equation) becomes
+
+$$Slope = \frac{7.3 - 2.8}{4-1} = \frac{4.5}{3} = 1.5$$
+
+
+$$J(\Theta_2) = \frac{1}{2}[(2-2.8)^2 + (8-7.3)^2] + (1 \times 1.5^2)$$
+
+$$J(\Theta_2) = \frac{1}{2}[0.64 + 0.49] + 2.25 = 0.565 + 2.25 = 2.81$$
+
+As you can see 2.81 < 4 we can say that the value of cost function is less for $\Theta_2$ than that of $\Theta_1$
+
+That means:
+- $\Theta_1$ = high cost → because of overfitting issue
+- $\Theta_2$ = low cost → less overfitting
+- Therefor $\Theta_2$ will be preferred over $\Theta_1$
+
+[Go To Top](#content)
+
+---
+# Lasso Regression
+Lasso Regression is another type of Regularized Linear Regression, just like Ridge.
+
+It’s also called L1 Regularization.
+
+### The Lasso Cost Function:
+
+$$J(\Theta) = \frac{1}{n}\sum(Y_i - \bar{Y_i})^2 + \lambda|slope|$$
+
+
+Because of the absolute value penalty (`|slope|`), Lasso can remove unimportant features by setting their weights to zero.
+
+So, Lasso not only reduces overfitting, but also performs feature selection!
+
+Example:
+- Imagine you have 10 input features (x₁, x₂, …, x₁₀).
+- After applying Lasso, maybe only 3 features get non-zero coefficients.
+- So the final model becomes simpler and focuses only on the important ones.
+
+### How it works (conceptually)
+When we train a model, we try to find the best $\Theta$ (coefficients) that minimize the cost function $J(\Theta)$
+
+Now, because of the |Θⱼ| penalty:
+- If a feature (say x₃) doesn’t help in predicting y much,
+- The algorithm realizes that it can reduce the cost more by setting Θ₃ = 0 (since |Θ₃| adds unnecessary penalty).
+- So it “drops” that feature automatically.
 
 [Go To Top](#content)
 
