@@ -17,6 +17,7 @@
 13. [Lasso Regression](#lasso-regression)
 14. [Why Not To Use Liner Regression for classification?](#why-not-to-use-liner-regression-for-classification)
 15. [Logistic Regression](#logistic-regression)
+16. [Sigmoidal Function](#sigmoidal-function)
 
 
 ---
@@ -1392,6 +1393,159 @@ So, this example makes it clear why Linear Regression isn’t used for classific
 
 ---
 # Logistic Regression
+
+Logistic Regression is a supervised machine learning algorithm used for classification problems, not regression (despite its name).
+
+It predicts categorical outcomes, like:
+- Whether an email is spam or not spam,
+- Whether a student passes or fails,
+- Whether a customer will buy a product or not, etc.
+
+It works like Linear Regression, but instead of predicting continuous values, it predicts the probability that a data point belongs to a certain class (usually 0 or 1).
+### Example:
+Suppose you want to predict if a student passes based on hours studied.
+| Hours Studied | Pass (y) |
+| ------------- | -------- |
+| 1             | 0        |
+| 2             | 0        |
+| 3             | 0        |
+| 4             | 1        |
+| 5             | 1        |
+| 6             | 1        |
+
+A logistic regression model will learn a curve like this:
+
+<img src="./images/logistic_regrassion_example.png" style="width:600px">
+
+That “S-shaped” curve is the Sigmoid function, showing how probability increases with study hours.
+
+from this curve we can find the probability of student passes on the bases of their study hours
+
+
+[Go To Top](#content)
+
+---
+# Sigmoidal Function
+
+The sigmoid function (also called the logistic function) is a mathematical function that converts any real number into a value between 0 and 1.
+
+That’s why it’s often used in logistic regression — to express probabilities.
+
+### Squashing
+
+> squash means to press something so that it is damaged, changes shape or becomes flat
+
+in logistic regression, we take the linear line (from linear regression) and then squash it using sigmoidal function so that the outputs become probabilities between 0 and 1.
+
+<img src="./images/linear-regression-vs-logistic-regression-2.webp" style="width:800px">
+
+
+
+
+
+### Definition
+
+$$g(z) = \frac{1}{1 + e^{-z}}$$
+
+where:
+- $z$ = the input (can be any number, from -∞ to +∞)
+- $e$ = Euler’s number (~2.718)
+
+### Behavior
+| z (input) | Output σ(z) | Meaning              |
+| --------- | ----------- | -------------------- |
+| -∞        | 0           | almost 0 probability |
+| -2        | 0.12        | low probability      |
+| 0         | 0.5         | 50% probability      |
+| 2         | 0.88        | high probability     |
+| +∞        | 1           | almost 1 probability |
+
+So, the sigmoid turns large negative values into near 0, and large positive values into near 1.
+
+**For more understanding:**
+
+
+<img src="./images/logistic_function.png" style="width:600px">
+
+from this graph we can say that:
+- if $z$ >= 0 then $g(z)$ >= 0.5
+
+### How to use in Logistic Regression
+we know that in logistic regression we just squash the straight line which we can construct using liner regression
+
+Therefor, equation of straight line:
+
+$$h(x) = \Theta_0 + \Theta_1x$$
+
+Where:
+- $h(x)$ = predicted output for input $x$ in liner regression
+- $\Theta_0$ = intercept
+- $\Theta_1$ = slope
+- $x$ = input
+
+this will give us the needed straight line, then we just apply the sigmoidal function to squash it down
+
+$$g(h_0(x)) = \frac{1}{1 + e^{-h(x)}}$$
+
+$$g(h_0(x)) = \frac{1}{1 + e^{-(\Theta_0 + \Theta_1x)}}$$
+
+Now this will become our new equation of line for logistic regression which will give us the probability for any input value
+
+Therefor we can say that for logistic regression:
+
+$$h_0(x) = g(h(x))$$
+
+$$h_0(x) = \frac{1}{1 + e^{-(\Theta_0 + \Theta_1x)}}$$
+
+Here:
+- $h_0(x)$ = potability for input $x$ in logistic equation regression
+- $\Theta_0$ = intercept of liner line
+- $\Theta_1$ = slope of liner line
+- $x$ = input
+
+[Go To Top](#content)
+
+---
+# Cost Function For Logistic Regression
+> make sure you know about [Cost Function](#cost-function) before you jump onto this topic
+
+we know thw cost function of [liner regression](#cost-function):
+
+$$J(\Theta) = \frac{1}{n}\sum(Y_i - h_0(x_i))^2 _{---------}(i)$$
+
+Where:
+- $Y_i$ → Actual value
+- $h_0(x_i)$ → Predicted value
+- $n$ → Number of data points
+- $J(m,c)$ → Cost (depends on slope m and intercept c)
+
+we also know that for logistic regression:
+
+$$h_0(x) = \frac{1}{1 + e^{-(\Theta_0 + \Theta_1x)}}_{-------}(ii)$$
+
+
+now by putting the equation (ii) into equation (i) we will get the cost function for logistic regression
+
+
+### Although this equation work we never use it as equation (ii) is non-convex function
+
+
+<img src="./images/non-convex-vs-convex.png" style="width:600px">
+
+- non-convex function has multiple local minima
+- because of the presence of local minima our ML model might get stuck on those local minima resulting in poor prediction
+
+### Another Equation
+
+$$
+Cost(h_\theta(x), y) =
+\begin{cases}
+  -\log(h_\theta(x)) & \text{if } y = 1, \\
+  -\log(1 - h_\theta(x)) & \text{if } y = 0
+\end{cases}
+$$
+
+
 
 [Go To Top](#content)
 
