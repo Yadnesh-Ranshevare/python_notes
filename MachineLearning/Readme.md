@@ -15,6 +15,8 @@
 11. [Underfitting & Overfitting](#underfitting--overfitting)
 12. [Ridge Regression](#ridge-regression)
 13. [Lasso Regression](#lasso-regression)
+14. [Why Not To Use Liner Regression for classification?](#why-not-to-use-liner-regression-for-classification)
+15. [Logistic Regression](#logistic-regression)
 
 
 ---
@@ -432,6 +434,43 @@ Where:
 - $\Theta_0$ → intercept (bias term)
 - $\Theta_1$ → weight/slope parameter
 - $x$ → input feature (independent variable) 
+
+
+### Linear Regression assumption
+
+#### 1. Linearity
+The relationship between independent variables (X) and dependent variable (Y) should be linear.
+That is,
+
+**Example**
+| Hours Studied (X) | Marks Scored (Y) |
+| ----------------- | ---------------- |
+| 1                 | 20               |
+| 2                 | 40               |
+| 3                 | 60               |
+| 4                 | 80               |
+
+This forms a straight-line pattern → as hours increase, marks increase proportionally. The model can easily fit a straight line through the points.
+
+#### 2. No Multicollinearity
+Independent variables should not be highly correlated with each other.
+
+**Example:**
+
+Predicting salary based on:
+- Years of experience
+- Education level
+
+These are independent enough.
+
+Predicting salary based on:
+- Years of experience
+- Number of projects handled
+
+If more experience almost always means more projects, both variables say the same thing → high multicollinearity.
+
+This makes the model unstable — coefficients (weights) fluctuate unpredictably.
+
 
 [Go To Top](#content)
 
@@ -1297,6 +1336,62 @@ Now, because of the |Θⱼ| penalty:
 - If a feature (say x₃) doesn’t help in predicting y much,
 - The algorithm realizes that it can reduce the cost more by setting Θ₃ = 0 (since |Θ₃| adds unnecessary penalty).
 - So it “drops” that feature automatically.
+
+[Go To Top](#content)
+
+---
+# Why Not To Use Liner Regression for classification?
+
+Let’s say you want to predict whether a student will pass (1) or fail (0) based on study hours.
+- more than 3.5 hours → pass
+- less than 3.4 hours → fail
+
+with dataset like 
+| Study Hours (x) | Result (y) |
+| --------------- | ---------- |
+| 1               | 0          |
+| 2               | 0          |
+| 3               | 0          |
+| 4               | 1          |
+| 5               | 1          |
+| 6 | 1|
+
+if we plot a graph:
+
+<img src="./images/liner_regression_for_classification.png" style="width:600px">
+
+from this graph we can say that:
+- Result >= 0.5 → Hours >= 3.5 → pass 
+- Result < 0.5 → Hours < 3.5 → fail
+
+But let say there is a valid outlier where is it recorded that a student is pass by studying for 9 hours, Therefor we get new entry as:
+- Study Hours(x) = 9 ; Result(y) = 1
+
+now the graph we get:
+
+<img src="./images/liner_regression_for_classification_with_error.png" style="width:600px">
+
+now as you can see there is a bit disturbance at the boundary of pass and fail
+
+This time our ML model says:
+- Result >= 0.5 → Hours >= 3.83 
+- Result < 0.45 → Hours < 3.5 
+
+now let say i want to find whether the student who have study for 3.6 hours will pass or not?
+- From our graph
+    - For Hours = 3.6 → Result = 1.48
+    - Hours > 3.5 but Result < 0.5
+- for student to consider pass his result must be greater than 0.5 otherwise the respective student is fail
+- but in our case even though the student has studied more than 3.5 hours his result is less than 0.5 i.e, fail
+- This error occur because our line has tilted towards the outlier causing the disturbance in boundary
+
+So, this example makes it clear why Linear Regression isn’t used for classification — it can’t handle class boundaries properly.
+
+
+[Go To Top](#content)
+
+---
+# Logistic Regression
 
 [Go To Top](#content)
 
