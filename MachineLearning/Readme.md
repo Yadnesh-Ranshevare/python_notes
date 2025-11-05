@@ -1545,6 +1545,66 @@ Cost(h_\theta(x), y) =
 \end{cases}
 $$
 
+we know that $h_0(x)$ tells probability and probability is always in between of 0 to 1, hence we can say that $h_0(x)$ will always can stat from 0 up to 1
+
+Therefor
+#### for y = 1
+will get graph:
+
+<img src="./images/cost_fun_for_logisitic_regression_y_1.png" style="width:600px">
+
+this graph says that for:\
+if y = 1 and $h(x)$ = 1 then cost = 0
+
+
+#### for y = 0
+will get graph:
+
+<img src="./images/cost_fun_for_logisitic_regression_y_0.png" style="width:600px">
+
+this graph says that for:\
+if y = 0 and $h(x)$ = 0 then cost = 0
+
+
+### Now when you combine this two graph you'll get 
+
+
+<img src="./images/cost_fun_for_logisitic_regression_combine.png" style="width:600px">
+
+this is a convex graph
+
+### Updated cost function
+
+$$\boxed{cost(h_\Theta(x^i, y)) = -y\ log(h_\Theta(x^i)) - (1-y)\ log(1-h_\Theta(x))}$$
+
+<!-- Note that:
+- for y = 0 : $cost(h_\Theta(x^i, y)) = -0 - 1 \times log(1-h_\Theta(x)) = - log(1-h_\Theta(x))$
+- for y = 1 : $cost(h_\Theta(x^i, y)) = -1 \times log(h_\Theta(x^i)) - 0 = -log(h_\Theta(x^i))$
+- this is how we handle those boundary condition -->
+
+#### Explanation
+
+**When y=1:**
+
+$$cost(h_\Theta(x^i, y)) = -log(h_\Theta(x^i))$$
+
+The second term becomes zero, since $(1 - y ) = 0$
+
+
+**When y=0:**
+
+$$cost(h_\Theta(x^i, y)) = -log(1 - h_\Theta(x^i))$$
+
+The first term becomes zero, since $y = 0$
+
+
+**Therefor we can wite:**
+
+$$\boxed{J(\Theta_1) =-\frac{1}{n} \sum \left[ -y\ log(h_\Theta(x^i)) - (1-y)\ log(1-h_\Theta(x))\right]}$$
+
+Where:
+
+$$h_0(x^i) = \frac{1}{1 + e^{\Theta_ix}}$$
 
 
 [Go To Top](#content)
