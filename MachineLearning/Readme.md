@@ -18,6 +18,7 @@
 14. [Why Not To Use Liner Regression for classification?](#why-not-to-use-liner-regression-for-classification)
 15. [Logistic Regression](#logistic-regression)
 16. [Sigmoidal Function](#sigmoidal-function)
+17. [Cost Function For Logistic Regression](#cost-function-for-logistic-regression)
 18. [Performance Matrix](#performance-matrix)
     - [Confusion Matrix](#confusion-matrix)
     - [Accuracy](#calculate-accuracy-from-the-confusion-matrix)
