@@ -18,6 +18,10 @@
 14. [Why Not To Use Liner Regression for classification?](#why-not-to-use-liner-regression-for-classification)
 15. [Logistic Regression](#logistic-regression)
 16. [Sigmoidal Function](#sigmoidal-function)
+18. [Performance Matrix](#performance-matrix)
+    - [Confusion Matrix](#confusion-matrix)
+    - [Accuracy](#calculate-accuracy-from-the-confusion-matrix)
+    - [Precision, Recall, and F1 (F-Beta)](#precision-recall-and-f1-f-beta)
 
 
 ---
@@ -854,7 +858,7 @@ $$\frac{\partial J(\Theta_0, \Theta_1)}{\partial \Theta_j} = \frac{\partial }{\p
 
 For j = 1
 
-$$\frac{\partial J(\Theta_0, \Theta_1)}{\partial \Theta_1} = \frac{\partial }{\partial \Theta_1}[\frac{1}{n} \sum(h_0(x^i) - y^i)^2]$$
+$$\frac{\partial J(\Theta_0, \Theta_1)}{\partial \Theta_1} = \frac{\partial }{\partial \Theta_1}\left[\frac{1}{n} \sum(h_0(x^i) - y^i)^2\right]$$
 
 from general hypothesis equation we know that
 
@@ -865,11 +869,11 @@ $$\frac{\partial h_\theta(x^i)}{\partial \Theta_1} = x^i$$
 
 Therefor, we multiply this $x^i$ in our final equation
 
-$$\frac{\partial J(\Theta_0, \Theta_1)}{\partial \Theta_1} = \frac{2}{n} \sum(h_0(x^i) - y^i)(x^i)$$
+$$\boxed{\frac{\partial J(\Theta_0, \Theta_1)}{\partial \Theta_1} = \frac{2}{n} \sum(h_0(x^i) - y^i)(x^i)}$$
 
 For j = 0
 
-$$\frac{\partial J(\Theta_0, \Theta_1)}{\partial \Theta_0} = \frac{\partial }{\partial \Theta_0}[\frac{1}{n} \sum(h_0(x^i) - y^i)^2]$$
+$$\frac{\partial J(\Theta_0, \Theta_1)}{\partial \Theta_0} = \frac{\partial }{\partial \Theta_0}\left[\frac{1}{n} \sum(h_0(x^i) - y^i)^2\right]$$
 
 from general hypothesis equation we know that
 
@@ -880,7 +884,7 @@ $$\frac{\partial h_\theta(x^i)}{\partial \Theta_1} = \Theta_0$$
 
 Therefor, we doesn't multiply anything in our final equation
 
-$$\frac{\partial J(\Theta_0, \Theta_1)}{\partial \Theta_0} = \frac{2}{n} \sum(h_0(x^i) - y^i)$$
+$$\boxed{\frac{\partial J(\Theta_0, \Theta_1)}{\partial \Theta_0} = \frac{2}{n} \sum(h_0(x^i) - y^i)}$$
 
 ### Put this values in convergence equation
 
@@ -893,12 +897,12 @@ $$
 
 for $\Theta_0$
 
-$$\Theta_0 = \Theta_0 - \alpha[\frac{2}{n} \sum(h_0(x^i) - y^i)]$$
+$$\Theta_0 = \Theta_0 - \alpha\left[\frac{2}{n} \sum(h_0(x^i) - y^i)\right]$$
 
 
 for $\Theta_1$
 
-$$\Theta_1 = \Theta_1 - \alpha[\frac{2}{n} \sum(h_0(x^i) - y^i)(x^i)]$$
+$$\Theta_1 = \Theta_1 - \alpha\left[\frac{2}{n} \sum(h_0(x^i) - y^i)(x^i)\right]$$
 
 
 ### These equations tell us:
@@ -959,7 +963,7 @@ It tells:
 
 | Metric                        | Formula                                | Meaning                                                    |   
 | ----------------------------- | -------------------------------------- | ---------------------------------------------------------- |
-| **MSE** (Mean Squared Error)  | $\frac{1}{n}\sum(y_i - \hat{y}_i)^2$ | Average of squared errors. Penalizes big errors.           |                                                           
+| [**MSE** (Mean Squared Error)](#cost-function)  | $\frac{1}{n}\sum(y_i - \hat{y}_i)^2$ | Average of squared errors. Penalizes big errors.           |                                                           
 | **RMSE** (Root MSE)           | $\sqrt{MSE}$                         | Easier to interpret (same units as output).                |            
 | **MAE** (Mean Absolute Error) | $\frac{1}{n}\sum y_i - \hat{y}_i$                      | Average of absolute differences. Less harsh on outliers.         |  
 | [**R² Score**](#score)                  | $1 - \frac{SS_{res}}{SS_{tot}}$      | How much of data variance is explained by the model (0–1). |                                                           
@@ -969,11 +973,11 @@ It tells:
 
 | Metric               | Meaning                                              |
 | -------------------- | ---------------------------------------------------- |
-| **Accuracy**         | How many predictions are correct overall.            |
-| **Precision**        | Of all predicted “positives”, how many were correct. |
-| **Recall**           | Of all actual “positives”, how many did we find.     |
-| **F1 Score**         | Balance between Precision and Recall.                |
-| **Confusion Matrix** | Table showing True/False Positive/Negative counts.   |
+| [**Confusion Matrix**](#confusion-matrix) | Table showing True/False Positive/Negative counts.   |
+| [**Accuracy**](#calculate-accuracy-from-the-confusion-matrix)         | How many predictions are correct overall.            |
+| [**Precision**](#precision-recall-and-f1-f-beta)        | Of all predicted “positives”, how many were correct. |
+| [**Recall**](#precision-recall-and-f1-f-beta)          | Of all actual “positives”, how many did we find.     |
+| [**F1 Score**](#precision-recall-and-f1-f-beta)         | Balance between Precision and Recall.                |
 
 
 [Go To Top](#content)
@@ -1495,7 +1499,7 @@ Therefor we can say that for logistic regression:
 
 $$h_0(x) = g(h(x))$$
 
-$$h_0(x) = \frac{1}{1 + e^{-(\Theta_0 + \Theta_1x)}}$$
+$$\boxed{h_0(x) = \frac{1}{1 + e^{-(\Theta_0 + \Theta_1x)}}}$$
 
 Here:
 - $h_0(x)$ = potability for input $x$ in logistic equation regression
@@ -1606,6 +1610,201 @@ Where:
 
 $$h_0(x^i) = \frac{1}{1 + e^{\Theta_ix}}$$
 
+
+[Go To Top](#content)
+
+---
+# Confusion Matrix
+
+the confusion matrix is one of the most important tools to evaluate a classification model (like logistic regression).
+
+A confusion matrix is a summary table used to evaluate how well a classification model performs — especially binary models like Logistic Regression.
+
+It tells you where your model is getting confused — i.e., which classes it predicts correctly and which ones it mistakes.
+
+### Structure of the Matrix
+For binary classification (two classes: 0 and 1):
+| **Actual \ Predicted**   | **Predicted: 1 (Positive)** | **Predicted: 0 (Negative)** |
+| ------------------------ | --------------------------- | --------------------------- |
+| **Actual: 1 (Positive)** | ✅ **True Positive (TP)**    | ❌ **False Negative (FN)**   |
+| **Actual: 0 (Negative)** | ❌ **False Positive (FP)**   | ✅ **True Negative (TN)**    |
+
+### What Each Term Means
+
+| Term                    | Meaning                                         | Real Example (Spam Email)                          |
+| ----------------------- | ----------------------------------------------- | -------------------------------------------------- |
+| **TP** (True Positive)  | Model predicted **1** and it was actually **1** | Predicted spam → actually spam ✅                   |
+| **TN** (True Negative)  | Model predicted **0** and it was actually **0** | Predicted not spam → actually not spam ✅           |
+| **FP** (False Positive) | Model predicted **1** but it was **0**          | Predicted spam → actually not spam ❌ (false alarm) |
+| **FN** (False Negative) | Model predicted **0** but it was **1**          | Predicted not spam → actually spam ❌ (missed case) |
+xx  
+
+### Example
+Suppose you built a model to detect spam emails:
+| Actual | Predicted |
+| :----: | :-------: |
+|    1   |     1     |
+|    0   |     0     |
+|    1   |     0     |
+|    0   |     1     |
+|    1   |     1     |
+
+Now count:
+- TP = 2 → (1→1 twice)
+- TN = 1 → (0→0 once)
+- FP = 1 → (0→1 once)
+- FN = 1 → (1→0 once)
+
+In matrix format:
+
+|                          | Predicted: Spam (1) | Predicted: Not Spam (0) |
+| ------------------------ | ------------------- | ----------------------- |
+| **Actual: Spam (1)**     | **TP = 2**          | **FN = 1**              |
+| **Actual: Not Spam (0)** | **FP = 1**          | **TN = 1**              |
+
+[Go To Top](#content)
+
+---
+
+# Calculate Accuracy from the Confusion Matrix
+
+> Make sure you know about [confusion matrix](#confusion-matrix)
+
+### Formula for Accuracy:
+
+$$Accuracy = \frac{TP + TN}{TP + TN + FP + FN}$$
+
+Where:
+- TP = True Positive
+- TN = True Negative
+- FP = False Positive
+- FN = False Negative
+
+> Accuracy = (All Correct Predictions) / (All Predictions)
+
+### Example
+| **Actual \ Predicted** | **Predicted: 1** | **Predicted: 0** |
+| ---------------------- | ---------------- | ---------------- |
+| **Actual: 1**          | TP = 50          | FN = 10          |
+| **Actual: 0**          | FP = 5           | TN = 35          |
+
+Now plug values into the formula:
+
+$$Accuracy = \frac{TP + TN}{TP + TN + FP + FN}$$
+
+$$Accuracy = \frac{50 + 35}{50 + 35 + 5 + 10} = \frac{85}{100} = 0.85$$
+
+Accuracy = 85%
+
+[Go To Top](#content)
+
+---
+# Precision, Recall, and F1 (F-Beta)
+
+> Make sure you know about [confusion matrix](#confusion-matrix) as they all come directly from the Confusion Matrix
+
+### 1. Precision
+Definition:\
+Of all the points predicted as positive, how many were actually positive?
+
+$$Precision = \frac{TP}{TP + FP}$$
+
+High precision = very few false alarms (model rarely predicts “positive” when it’s wrong).
+
+
+Example (spam filter):\
+If 100 emails were predicted as spam, and 90 were actually spam →
+
+$$Precision = \frac{90}{100} = 0.9$$
+
+> Model predict -> 100 positive -> out of those 100 only 90 are actually positive
+
+> We do not care how many positive entries are present in our original dataset — it might have 120 or only 90 positive entries. What we care about is: out of all the positive predictions, what percentage of predictions is correct.
+
+> Think of it like: “Be careful when calling something positive”
+
+
+### 2. Recall (Sensitivity or True Positive Rate)
+Definition:\
+Of all the actual positives, how many did the model correctly detect?
+
+$$Recall = \frac{TP}{TP + FN}$$
+
+High recall = model catches almost all real positives (even if some false positives).
+
+Example (spam filter):\
+If there were 120 spam emails total and your model caught 90 →
+
+$$Recall = \frac{90}{120} = 0.75$$
+
+> model predict -> 90 positive -> original dataset have 120 positive
+
+> Here we care about our original dataset and check how many positive entry was detected by our model 
+
+> Think of it like: “How many actual positives you catch”
+
+### 3. F1 Score (or F-Beta Score)
+Definition:\
+The harmonic mean of precision and recall — it balances both.
+
+$$F1 = (1 + \beta^2) \times \frac{Precision \times Recall}{Precision + Recall}$$
+
+High F1 means both precision and recall are good (balanced performance).
+If one is low, F1 also drops.
+
+Example:\
+If Precision = 0.9, Recall = 0.75, Beta = 1
+
+$$F1 = 2 \times \frac{0.9 \times 0.75}{0.9 + 0.75} = 0.814$$
+
+> Note: \
+$\beta = 1$ means focus is on both FP and FN \
+$\beta \lt 1$ means FP is more important than that of FN\
+$\beta \gt 1$ means FN is more important than that of FP
+
+### Example:
+
+A hospital uses an AI model to detect if a person has diabetes.\
+(1 = has diabetes, 0 = healthy)
+
+| Patient | **Actual (True)** | **Predicted (Model)** |
+| :------ | :---------------: | :-------------------: |
+| 1       |         1         |           1           |
+| 2       |         0         |           0           |
+| 3       |         1         |           1           |
+| 4       |         1         |           0           |
+| 5       |         0         |           1           |
+| 6       |         0         |           0           |
+| 7       |         1         |           1           |
+| 8       |         0         |           0           |
+
+Confusion Matrix:
+| **Actual \ Predicted**   | **Predicted: Diabetes (1)** | **Predicted: Healthy (0)** |
+| ------------------------ | --------------------------- | -------------------------- |
+| **Actual: Diabetes (1)** | ✅ **TP = 3**                | ❌ **FN = 1**               |
+| **Actual: Healthy (0)**  | ❌ **FP = 1**                | ✅ **TN = 3**               |
+
+**Precision**
+
+$$Precision = \frac{TP}{TP+FP} = \frac{3}{3+1} = 0.75$$
+
+Precision = 75%
+> Out of all people predicted diabetic Patient, 75% actually had diabetes.
+
+**Recall (Sensitivity)**
+
+$$Precision = \frac{TP}{TP+FN} = \frac{3}{3+1} = 0.75$$
+
+Recall = 75%
+> The model correctly identified 75% of all actual diabetic patients.
+
+**F1 Score ($\beta = 1$)**
+
+$$F1 = (1 + \beta^2) \times \frac{Precision \times Recall}{Precision + Recall}$$
+
+$$F1 = 2 \times \frac{0.75 \times 0.75}{0.75 + 0.75} = 0.75$$
+
+F1 = 75%
 
 [Go To Top](#content)
 
