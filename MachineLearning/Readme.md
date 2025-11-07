@@ -1878,6 +1878,8 @@ Naïve Bayes is a supervised learning algorithm based on Bayes’ Theorem, used 
 
 It’s called “naïve” because it assumes all features are independent — which is rarely true in real life, but surprisingly it still works very well.
 
+> It Assume each feature is independent of one another but output is still depend on each individual feature
+
 **Formula Using Bayes’ theorem:**
 
 $$P(Y∣X_1​,X_2​,...,X_n​) = \frac{P(X_1​,X_2​,...,X_n​∣Y)⋅P(Y)​}{P(X_1​,X_2​,...,X_n​)}$$
@@ -1887,7 +1889,7 @@ $$P(Y∣X_1​,X_2​,...,X_n​) = \frac{P(X_1​,X_2​,...,X_n​∣Y)⋅P(Y)
 <br/>
 
 
-we cal also write:
+As each feature is independent of one another we can also write:
 
 $$P(X_1​,X_2​,...,X_n​∣Y) = P(X_1|Y) \times P(X_2|Y) ...... P(X_n|Y)_{-------------}(i)$$
 
@@ -1908,31 +1910,31 @@ Here:
 Since $p(X_1) \times p(X_2) ...... p(X_n)$ is same for all of the classes, we only care about the numerator and can ignore the denominator
 
 
-> this equation simply say that what will be the probability of $Y$ given $X_i$ features
+> This equation says that what is the probability features $X_i$ belongs to class $Y$
 
 
 ### Lets understand how this equation works
 let say we have multiple feature called $X$ and two classes let say Yes(1) and NO(0)
 
-now we want to check whether our new data entry for features $X_i$ is belong to which class?
+now we want to check whether our new data entry containing all  features $X_i$ is belong to which class?
 
 <br/>
 <br/>
 
-to check is it belong to class Yes:
+to check whether it is belong to class Yes:
 
-$$P(Y = Yes∣X_1​,X_2​,...,X_n​) = P(Y = Yes) ⋅ \left[P(X_1|Y) \times P(X_2|Y) ...... P(X_n|Y)  \right]$$
+$$P(Y = Yes∣X_1​,X_2​,...,X_n​) = P(Y = Yes) \times \left[P(X_1|Y) \times P(X_2|Y) ...... P(X_n|Y)  \right]$$
 
-> This equation says that what is the probability of $Y$ being Yes for features $X_i$
+> This equation says that what is the probability features $X_i$ belongs to class $Y = Yes$
 
 <br/>
 <br/>
 
-to check is it belong to class No:
+to check whether it is belong to class No:
 
-$$P(Y = No ∣X_1​,X_2​,...,X_n​) = P(Y = No) ⋅ \left[P(X_1|Y) \times P(X_2|Y) ...... P(X_n|Y)  \right]$$
+$$P(Y = No ∣X_1​,X_2​,...,X_n​) = P(Y = No) \times \left[P(X_1|Y) \times P(X_2|Y) ...... P(X_n|Y)  \right]$$
 
-> This equation says that what is the probability of $Y$ being No for features $X_i$
+> This equation says that what is the probability features $X_i$ belongs to class $Y = No$
 
 
 <br/>
@@ -1955,7 +1957,7 @@ Normalize this probability:
 $$P(Y = Yes∣X_1​,X_2​,...,X_n​) = \frac{0.13}{0.13 + 0.05} = 0.72 = \text{72\%}$$
 $$P(Y = No∣X_1​,X_2​,...,X_n​) = \frac{0.05}{0.13 + 0.05} = 0.28 = \text{28\%}$$
 
-from this observation we can say that for input feature $X_i$ we will get $Y = Yes$
+from this we can say that for input features $X_i$ we will get $Y = Yes$
 
 That is inputted data($X_i$ features) belongs to class($Y$) Yes
 
