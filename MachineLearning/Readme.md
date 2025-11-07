@@ -1898,7 +1898,7 @@ $$P(X_1​,X_2​,...,X_n​) = p(X_1) \times p(X_2) ...... p(X_n)_{------------
 
 Therefor by putting $i$ and $ii$ into our main equation we get:
 
-$$P(Y∣X_1​,X_2​,...,X_n​) = \frac{P(Y) ⋅ \left[P(X_1|Y) \times P(X_2|Y) ...... P(X_n|Y)  \right]}{p(X_1) \times p(X_2) ...... p(X_n) } $$
+$$\boxed{P(Y∣X_1​,X_2​,...,X_n​) = \frac{P(Y) ⋅ \left[P(X_1|Y) \times P(X_2|Y) ...... P(X_n|Y)  \right]}{p(X_1) \times p(X_2) ...... p(X_n) } }$$
 
 Here:
 - $X_i$ = features
@@ -1911,7 +1911,7 @@ Since $p(X_1) \times p(X_2) ...... p(X_n)$ is same for all of the classes, we on
 > this equation simply say that what will be the probability of $Y$ given $X_i$ features
 
 
-### Example
+### Lets understand how this equation works
 let say we have multiple feature called $X$ and two classes let say Yes(1) and NO(0)
 
 now we want to check whether our new data entry for features $X_i$ is belong to which class?
@@ -1958,6 +1958,88 @@ $$P(Y = No∣X_1​,X_2​,...,X_n​) = \frac{0.05}{0.13 + 0.05} = 0.28 = \text
 from this observation we can say that for input feature $X_i$ we will get $Y = Yes$
 
 That is inputted data($X_i$ features) belongs to class($Y$) Yes
+
+
+### Example:
+lets predict whether a person buys a computer based on Age and Income.
+
+| Age    | Income | Buys |
+| ------ | ------ | ---- |
+| Young  | High   | No   |
+| Young  | High   | No   |
+| Middle | High   | Yes  |
+| Old    | Medium | Yes  |
+| Old    | Low    | Yes  |
+| Old    | Low    | No   |
+| Middle | Low    | Yes  |
+| Young  | Medium | No   |
+| Young  | Low    | Yes  |
+| Old    | Medium | Yes  |
+
+We’ll predict for this person:\
+**Age = Young, Income = Medium**
+
+#### Step 1: Find Prior Probabilities
+Count how many “Yes” and “No” labels:
+- Yes = 6
+- No = 4
+- Total = 10
+
+$$P(Yes) = \frac{6}{10} = 0.6$$
+
+$$P(No) = \frac{4}{10} = 0.4$$
+
+
+#### Step 2: Find Conditional Probabilities
+
+For Age:
+
+Age | Yes count | No count | P(Yes) = Yes count/Total Yes count | P(No) = No count/Total No count
+---| ---| ---| ---| ---
+Young | 1 | 3 | 1/6 | 3/4
+Middle | 2 | 0 |2/6 | 0/4
+Old | 3 | 1 | 3/6 | 1/4
+Total | 6 | 4
+
+
+For Income:
+
+Income | Yes count | No count | P(Yes) = Yes count/Total Yes count | P(No) = No count/Total No count
+---| ---| ---| ---| ---
+High | 1 | 2 | 1/6 | 2/4
+Medium | 2 | 1 |2/6 | 1/4
+Low | 3 | 1 | 3/6 | 1/4
+Total | 6 | 4
+
+#### Step 3: Apply Bayes’ Theorem
+For the person (Young, Medium)
+
+<br/>
+<br/>
+
+**Case 1: “Yes”**
+
+$$P(Yes∣Young,Medium) = P(Yes) \times P(Young | yes) \times P(Medium | yes)$$
+
+$$ = 0.6 \times \frac{1}{6} \times \frac{2}{6} = 0.033  $$
+
+<br/>
+<br/>
+
+**Case 1: No**
+
+$$P(No∣Young,Medium) = P(No) \times P(Young | No) \times P(Medium | No)$$
+
+$$ = 0.4 \times \frac{3}{4} \times \frac{1}{4} = 0.075  $$
+
+#### Step 4: Normalization, Compare and Decide
+
+$$P(Yes∣Young,Medium) = \frac{0.033}{0.033 + 0.075} = 0.30 = 30\%$$
+
+$$P(No∣Young,Medium) = \frac{0.075}{0.033 + 0.075} = 0.70 = 70\%$$
+
+The higher probability is for “No”\
+Prediction → Person will NOT buy a computer
 
 
 [Go To Top](#content)
