@@ -23,6 +23,7 @@
     - [Confusion Matrix](#confusion-matrix)
     - [Accuracy](#calculate-accuracy-from-the-confusion-matrix)
     - [Precision, Recall, and F1 (F-Beta)](#precision-recall-and-f1-f-beta)
+19. [Naïve Bayes Algorithm](#naïve-bayes-algorithm)
 
 
 ---
@@ -1806,6 +1807,158 @@ $$F1 = (1 + \beta^2) \times \frac{Precision \times Recall}{Precision + Recall}$$
 $$F1 = 2 \times \frac{0.75 \times 0.75}{0.75 + 0.75} = 0.75$$
 
 F1 = 75%
+
+[Go To Top](#content)
+
+---
+# Naïve Bayes Algorithm
+Naïve Bayes is a probabilistic model based on Bayes’ Theorem, assuming that all input features are independent given the target.
+
+### Independent and Dependent Events
+
+An event is any possible outcome or set of outcomes from an experiment.
+
+Example:
+- Toss a coin → event “Head”
+- Roll a die → event “getting 6”
+
+**Independent Events**
+- Two events are independent if the occurrence of one does not affect the occurrence of the other.
+- Example:
+    - Event A: Toss a coin → get Head
+    - Event B: Roll a die → get 6
+
+    These two events don’t affect each other.
+So they are independent.
+- Mathematically:
+$$\text{P(A and B)} = P(A) \times P(B)$$
+
+**Dependent Events**
+- Two events are dependent if the occurrence of one affects the probability of the other.
+- Example:\
+You draw 2 cards from a deck without replacement
+(meaning you don’t put the first card back).
+    - Event A: First card is an Ace
+    - Event B: Second card is an Ace
+
+    After drawing the first Ace, there are fewer Aces and fewer total cards left.\
+    So event B depends on event A → dependent events.
+
+- Mathematically:
+
+$$\text{P(A and B)} = P(A) \times P(B|A)$$
+
+Where $\text{P(A and B)}$ means “probability of B given A has already happened”.
+
+**Quick Comparison**
+| Type                   | Definition                               | Example                           | Formula                    |      
+| ---------------------- | ---------------------------------------- | --------------------------------- | -------------------------- | 
+| **Independent Events** | One doesn’t affect the other             | Tossing a coin & rolling a die    | $P(A \cap B) = P(A)P(B)$   |      
+| **Dependent Events**   | One affects the probability of the other | Drawing cards without replacement | $P(A \cap B) = P(A)P(BA)$ |  
+
+
+### Bayes’ Theorem
+Bayes’ theorem helps us update our belief about an event when we get new evidence.
+
+It answers this question:\
+“Given that we have some evidence, what is the probability that our hypothesis is true?”
+
+**Formula**
+
+$$P(B∣A) = \frac{p(A|B) \times P(B)}{P(A)}$$
+
+Where:
+
+| Term     | Meaning                                                                    |                                                                                               
+| -------- | -------------------------------------------------------------------------- | 
+| P(A) | **Prior probability** → your initial belief about A before seeing evidence |                                                                                               
+|  P(B)  | **Evidence** → probability of seeing B (used for normalization)            |                                                                                               
+### Naïve Bayes
+Naïve Bayes is a supervised learning algorithm based on Bayes’ Theorem, used mainly for classification (like spam detection, sentiment analysis, disease prediction, etc.).
+
+It’s called “naïve” because it assumes all features are independent — which is rarely true in real life, but surprisingly it still works very well.
+
+**Formula Using Bayes’ theorem:**
+
+$$P(Y∣X_1​,X_2​,...,X_n​) = \frac{P(X_1​,X_2​,...,X_n​∣Y)⋅P(Y)​}{P(X_1​,X_2​,...,X_n​)}$$
+
+
+<br/>
+<br/>
+
+
+we cal also write:
+
+$$P(X_1​,X_2​,...,X_n​∣Y) = P(X_1|Y) \times P(X_2|Y) ...... P(X_n|Y)_{-------------}(i)$$
+
+$$P(X_1​,X_2​,...,X_n​) = p(X_1) \times p(X_2) ...... p(X_n)_{------------}(ii)$$
+
+<br/>
+<br/>
+
+Therefor by putting $i$ and $ii$ into our main equation we get:
+
+$$P(Y∣X_1​,X_2​,...,X_n​) = \frac{P(Y) ⋅ \left[P(X_1|Y) \times P(X_2|Y) ...... P(X_n|Y)  \right]}{p(X_1) \times p(X_2) ...... p(X_n) } $$
+
+Here:
+- $X_i$ = features
+- $Y$ = classes
+
+
+Since $p(X_1) \times p(X_2) ...... p(X_n)$ is same for all of the classes, we only care about the numerator and can ignore the denominator
+
+
+> this equation simply say that what will be the probability of $Y$ given $X_i$ features
+
+
+### Example
+let say we have multiple feature called $X$ and two classes let say Yes(1) and NO(0)
+
+now we want to check whether our new data entry for features $X_i$ is belong to which class?
+
+<br/>
+<br/>
+
+to check is it belong to class Yes:
+
+$$P(Y = Yes∣X_1​,X_2​,...,X_n​) = P(Y = Yes) ⋅ \left[P(X_1|Y) \times P(X_2|Y) ...... P(X_n|Y)  \right]$$
+
+> This equation says that what is the probability of $Y$ being Yes for features $X_i$
+
+<br/>
+<br/>
+
+to check is it belong to class No:
+
+$$P(Y = No ∣X_1​,X_2​,...,X_n​) = P(Y = No) ⋅ \left[P(X_1|Y) \times P(X_2|Y) ...... P(X_n|Y)  \right]$$
+
+> This equation says that what is the probability of $Y$ being No for features $X_i$
+
+
+<br/>
+<br/>
+
+Let say we get output like:
+
+$$P(Y = Yes∣X_1​,X_2​,...,X_n​) = 0.13$$
+
+$$P(Y = No ∣X_1​,X_2​,...,X_n​) = 0.05$$
+
+> In binary classification we know that:
+>
+>Y = 1 if and only if P(Y) >= 0.5\
+>if P(Y) < 0.5 then Y = 0
+
+Normalize this probability:
+> Normalization means scaling data so that all feature values lie in a similar range (commonly between 0 and 1).
+
+$$P(Y = Yes∣X_1​,X_2​,...,X_n​) = \frac{0.13}{0.13 + 0.05} = 0.72 = \text{72\%}$$
+$$P(Y = No∣X_1​,X_2​,...,X_n​) = \frac{0.05}{0.13 + 0.05} = 0.28 = \text{28\%}$$
+
+from this observation we can say that for input feature $X_i$ we will get $Y = Yes$
+
+That is inputted data($X_i$ features) belongs to class($Y$) Yes
+
 
 [Go To Top](#content)
 
