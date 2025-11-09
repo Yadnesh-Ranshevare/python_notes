@@ -24,7 +24,8 @@
     - [Accuracy](#calculate-accuracy-from-the-confusion-matrix)
     - [Precision, Recall, and F1 (F-Beta)](#precision-recall-and-f1-f-beta)
 19. [Naïve Bayes Algorithm](#naïve-bayes-algorithm)
-
+20. [KNN Algorithm](#knn-algorithm)
+21. [Decision Tree](#decision-tree)
 
 ---
 
@@ -2185,6 +2186,49 @@ If you mix “age (0–100)” and “income (0–1000000)”, income will outwe
 If 90% are “Pass” and 10% are “Fail,” most predictions will be “Pass.”
 5. **Noisy Data**
     - If training data contains outliers or mislabeled points, KNN will easily get confused since it treats all data equally.
+
+
+[Go To Top](#content)
+
+---
+# Decision Tree
+A Decision Tree is a supervised learning algorithm that makes predictions by asking a series of yes/no questions based on feature values — just like how humans make decisions.
+
+> “If marks > 80 → Pass else → Fail.”
+
+### Structure
+```css
+        [Root Node]
+           ↓
+   ┌───────┴────────┐
+[Decision Node]   [Decision Node]
+   ↓                   ↓
+[Leaf Node]         [Leaf Node]
+```
+- Root Node → first split (best feature)
+- Decision Node → internal condition
+- Leaf Node → final output (class/value)
+
+### Example:
+let say we have code like
+```py
+if(age <= 20):
+    print("study")
+elif(age > 20 and age <= 35):
+    print("work")
+else:
+    print("retire")
+```
+Decision Tree Representation
+```yaml
+                [age <= 20 ?]
+                  /       \
+              Yes          No
+            study        [age <= 35 ?]
+                           /       \
+                        Yes         No
+                       work       retire
+```
 
 
 [Go To Top](#content)
