@@ -2047,5 +2047,148 @@ Prediction → Person will NOT buy a computer
 [Go To Top](#content)
 
 ---
+# KNN Algorithm
+- Also known as K-Nearest Neighbors
+- KNN is a supervised learning algorithm used for classification and regression problems.
+- It works purely on the idea of similarity (distance)
+    > “If something looks like its neighbors, it probably belongs to the same group.”
+
+### How it Works for Classification Problem
+Let’s assume we’re classifying whether a student will pass or fail based on hours studied and sleep hours.
+
+1. **Store all training data points**\
+Each data point has features (hours studied, sleep hours) and a label (Pass/Fail).
+2. **Pick the number `K`**\
+Example: `K = 3` → look at 3 nearest neighbors.
+3. **Calculate distance**\
+For a new student’s data, calculate the distance between this student and all others 
+4. **Find K nearest neighbors**\
+Sort distances and take the K(`K = 3`) closest points.
+5. **Majority voting (for classification)**\
+Check which label (Pass or Fail) appears most among these K points.
+
+6. **Assign the class**\
+The new student gets the label that most neighbors have.
+
+### Example
+
+| Hours Studied | Sleep Hours | Result |
+| ------------: | ----------: | :----- |
+|           5.0 |         7.0 | Pass   |
+|           2.0 |         5.5 | Fail   |
+|           4.5 |         5.0 | Pass   |
+|           1.0 |         3.0 | Fail   |
+|           6.5 |         8.0 | Pass   |
+|           3.0 |         4.0 | Fail   |
+|           5.5 |         6.5 | Pass   |
+|           2.5 |         3.5 | Fail   |
+
+
+Predict for `(3, 5)` (new student).
+
+1. Compute distances to all points
+2. Select 3 nearest points (`K=3`)
+3. Suppose 2 are “Fail” and 1 is “Pass”\
+✅ → Predicted: Fail
+
+#### To understand visually:
+
+
+
+<img src="./images/KNN_classsification.png" style="background:white; width:600px">
+
+
+### How it Works for Regression Problem
+1. **Store all training data points**\
+Each data point has features (hours studied, sleep hours) and a label (Pass/Fail).
+2. **Pick the number `K`**\
+Example: `K = 3` → look at 3 nearest neighbors.
+3. **Calculate distance**\
+For a new student’s data, calculate the distance between this student and all others 
+4. **Find K nearest neighbors**\
+Sort distances and take the K(`K = 3`) closest points.
+
+5. **Take the average of their target values**\
+Instead of “majority vote,” we take the mean (or weighted mean).
+
+6. **Assign that average as the prediction**\
+That’s your final output.
+
+### Example
+| Size (sq.ft) | Price ($000) |
+| -----------: | -----------: |
+|          950 |          145 |
+|         1100 |          175 |
+|         1350 |          190 |
+|         1600 |          230 |
+|         1800 |          260 |
+|         2100 |          300 |
+|         2500 |          350 |
+|         2900 |          420 |
+
+
+Predict for size = 2000 and K = 3
+
+1. Compute distances:
+
+2. nearest 3 neighbors: (1600→230), (1800→260), (2100→300)
+3. Average: (230 + 260 + 300)/3 = 790/3 = 263.33
+
+Predicted price = $263,333
+
+#### To understand visually
+
+<img src="./images/KNN_regression.png" style="background:white; width:600px">
+
+
+### Formula to calculate distance
+
+#### 1. Euclidean Distance (default)
+
+$$d(p, q) = \sqrt{(x_1 - y_1)^2 + (x_2 - y_2)^2 + ... + (x_n - y_n)^2}$$
+
+**Example**\
+Between (2,3) and (5,7):
+
+$$\sqrt{(2-5)^2 + (3-7)^2} = \sqrt{9 + 16} = 5$$
+
+
+#### 2. Manhattan Distance (City Block Distance)
+
+$$d(p, q) = |x_1 - y_1| + |x_2 + y_2| + ... + |x_n + y_n|$$
+
+**Example:**\
+Between (2,3) and (5,7):
+
+$$∣2−5∣+∣3−7∣=3+4=7$$
+
+#### Difference between Euclidean and Manhattan Distance
+
+<img src="./images/distance_type.jpg" style="background:white; width:600px">
+
+
+### When KNN fails
+1. **High-Dimensional Data (Curse of Dimensionality)**
+    - When you have many features (columns) — like 100+ — the distance between points becomes less meaningful.
+    - All points start to seem equally far apart, so "nearest" neighbors aren’t truly similar anymore.
+
+2. **Large Datasets**
+    - KNN is a lazy learner, meaning it stores all training data and compares with every point during prediction.
+    - For large datasets, this makes predictions slow (O(n) time per query).
+3. **Unscaled Features**
+    - KNN relies on distance — if features are on different scales, one feature can dominate.
+    - Example:\
+If you mix “age (0–100)” and “income (0–1000000)”, income will outweigh age.
+4. **Imbalanced Data**
+    - When one class has many more samples, the majority class dominates neighbor votes.
+    - Example:\
+If 90% are “Pass” and 10% are “Fail,” most predictions will be “Pass.”
+5. **Noisy Data**
+    - If training data contains outliers or mislabeled points, KNN will easily get confused since it treats all data equally.
+
+
+[Go To Top](#content)
+
+---
 
 
