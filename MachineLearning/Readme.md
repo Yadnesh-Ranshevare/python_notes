@@ -2287,11 +2287,109 @@ All “Yes” → Pure Split
 
 Mixed “Yes” and “No” → Impure Split
 
+### Purity 
+Purity tells how mixed or uniform a group (node) is after a split.
+- If all records belong to the same class → node is pure (good).
+- If records are mixed (Yes/No, Spam/NotSpam) → node is impure (bad).
+
+> Pure Split → high Purity (good)\
+> Impure Split → low Purity (bad)
+
+There are various way to calculate the purity of the node but most useful are as follow
+1. [Entropy](#entropy) : measure of uncertainty, disorder, or impurity in the data.
+2. Gini Coefficient
 
 [Go To Top](#content)
 
 ---
 # Entropy
+Entropy = measure of uncertainty, disorder, or impurity in the data.
+- If all outcomes are the same → no uncertainty → low entropy (0)
+- If outcomes are mixed → high uncertainty → high entropy (1)
+
+It tells the algorithm how confused it is about the class labels in a group.
+
+### Mathematical Formula
+
+$$Entropy = - \sum p_i\ \log_2(p_i)$$
+
+where:
+
+- $p_i$ = probability of class i (like Yes or No)
+- The sum runs over all possible classes.
+
+### Example
+Imagine you have a box of balls:
+
+| Box | Red Balls | Blue Balls | Total |
+| --- | --------- | ---------- | ----- |
+| A   | 5         | 0          | 5     |
+| B   | 3         | 2          | 5     |
+| C   | 2         | 2          | 4     |
+
+We’ll calculate Entropy for each box using:
+
+$$Entropy = - \left[P_{red}\ \log_2(P_{red}) + P_{blue}\ \log_2(P_{blue})  \right]$$
+
+
+#### For Box A
+Red = 5, Blue = 0, Total = 5
+
+$$P_{red} = 5 / 5 = 1$$
+
+$$P_{blue} = 0 / 5 = 0$$
+
+$$Entropy = - \left[ 1 \times\log_2 (1) + 0 \times\log_2 (0) \right]$$
+
+
+Since $\log_2(1) = 0$ and $0\log_2(0)$ is treated as 0
+
+$$Entropy = - \left[ 1 \times 0 + 0 \right] = 0$$
+
+Box A Entropy = 0 (pure)
+
+
+#### For Box B
+Red = 3, Blue = 2, Total = 5
+
+$$P_{red} = 3 / 5 = 0.6$$
+
+$$P_{blue} = 2 / 5 = 0.4$$
+
+$$Entropy = - \left[ 0.6 \times\log_2 (0.6) + 0.4 \times\log_2 (0.4) \right]$$
+
+
+Now calculate:
+- $\log_2(0.6) = -0.737$
+- $\log_2(0.4) = -1.322$
+
+$$Entropy = - \left[ 0.6 \times -0.737 + 0.4 \times -1.322 \right]$$
+
+$$Entropy = - \left[ -0.422 - 0.529 \right] = 0.971$$
+
+Box B Entropy ≈ 0.97 (medium impurity)
+
+
+#### For Box B
+Red = 2, Blue = 2, Total = 4
+
+$$P_{red} = 2 / 4 = 0.5$$
+
+$$P_{blue} = 2 / 4 = 0.5$$
+
+$$Entropy = - \left[ 0.5 \times\log_2 (0.5) + 0.5 \times\log_2 (0.5) \right]$$
+
+
+Now calculate:
+- $\log_2(0.5) = -1$
+
+$$Entropy = - \left[ 0.5 \times -1 + 0.5 \times -1 \right]$$
+
+$$Entropy = - \left[ -0.5 - 0.5 \right] = 1$$
+
+Box C Entropy = 1 (completely impure)
+
+
 
 [Go To Top](#content)
 
