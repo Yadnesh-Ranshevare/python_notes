@@ -26,6 +26,9 @@
 19. [Naïve Bayes Algorithm](#naïve-bayes-algorithm)
 20. [KNN Algorithm](#knn-algorithm)
 21. [Decision Tree](#decision-tree)
+    - [Entropy](#entropy)
+    - [Gini Coefficient](#gini-coefficient)
+    - [Decision Tree for Classification](#decision-tree-for-classification)
 
 ---
 
@@ -2209,6 +2212,7 @@ A Decision Tree is a supervised learning algorithm that makes predictions by ask
 - Decision Node → internal condition
 - Leaf Node → final output (class/value)
 
+
 ### Example:
 let say we have code like
 ```py
@@ -2230,6 +2234,101 @@ Decision Tree Representation
                        work       retire
 ```
 
+### Example with dataset
+here we split the dataset into groups (branches)
+|person| Weather | will dink cola? |
+| --- | --- | --- |
+| A | worm | yes
+| B | cool | no
+| C | mild | yes
+| D | mild | no
+
+```yaml
+   [ Whether ]
+   /    |    \
+ worm  mild  cool 
+ /     /  \    \
+yes  yes  no    no
+```
+
+
+### Pure and Impure Split
+When we split the dataset into groups (branches),
+we want each group to contain only one type of output class (like all “Yes” or all “No”).
+
+- Pure Split:\
+→ All samples in the branch belong to one class.\
+→ Example: all are “Play = Yes”.
+- Impure Split:\
+→ The branch has a mix of classes.\
+→ Example: some “Yes” and some “No”.
+
+**Example: Play Tennis Dataset**
+| Outlook  | Temperature | Humidity | Play |
+| -------- | ----------- | -------- | ---- |
+| Sunny    | Hot         | High     | No   |
+| Sunny    | Mild        | Normal   | Yes  |
+| Overcast | Cool        | Normal   | Yes  |
+
+Let’s say we split by Outlook.
+
+**Split 1: Outlook = "Overcast"**
+| Outlook  | Play |
+| -------- | ---- |
+| Overcast | Yes  |
+
+All “Yes” → Pure Split
+
+**Split 2: Outlook = "Sunny"**
+| Outlook | Play |
+| ------- | ---- |
+| Sunny   | No   |
+| Sunny   | Yes  |
+
+Mixed “Yes” and “No” → Impure Split
+
+
+[Go To Top](#content)
+
+---
+# Entropy
+
+[Go To Top](#content)
+
+---
+# Gini Coefficient
+
+[Go To Top](#content)
+
+---
+# Decision Tree for Classification
+In classification, a Decision Tree predicts a category (like Yes/No, Pass/Fail, Spam/Not Spam).
+
+### Understand how it work 
+let say we have dataset like:
+
+| Outlook  | Temperature | Humidity | Wind   | Play Tennis |
+| -------- | ----------- | -------- | ------ | ----------- |
+| Sunny    | Hot         | High     | Weak   | No          |
+| Sunny    | Hot         | High     | Strong | No          |
+| Overcast | Hot         | High     | Weak   | Yes         |
+| Rain     | Mild        | High     | Weak   | Yes         |
+| Rain     | Cool        | Normal   | Weak   | Yes         |
+| Rain     | Cool        | Normal   | Strong | No          |
+| Overcast | Cool        | Normal   | Strong | Yes         |
+| Sunny    | Mild        | High     | Weak   | No          |
+| Sunny    | Cool        | Normal   | Weak   | Yes         |
+| Rain     | Mild        | Normal   | Weak   | Yes         |
+| Sunny    | Mild        | Normal   | Strong | Yes         |
+| Overcast | Mild        | High     | Strong | Yes         |
+| Overcast | Hot         | Normal   | Weak   | Yes         |
+| Rain     | Mild        | High     | Strong | No          |
+
+Target variable → Play Tennis (Yes / No)
+
+and our goal is to build a Decision Tree to predict Play Tennis (Yes or No) based on the weather conditions.
+
+### Step 1: Calculate Total Entropy
 
 [Go To Top](#content)
 
