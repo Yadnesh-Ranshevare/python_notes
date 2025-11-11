@@ -2395,6 +2395,178 @@ Box C Entropy = 1 (completely impure)
 
 ---
 # Gini Coefficient
+Gini impurity tells us how mixed the classes are in a group (or node).
+
+It answers this question:
+> “If I randomly pick two items from this group, what are the chances they belong to different classes?”
+
+> Lower Gini → low mixed → purer node → better split.\
+> Higher Gini → high mixed → impure node → poor split
+
+### Formula
+
+$$Gini = 1 - \sum(p_i)^2$$
+
+Where:
+- $p_i$ = probability of each class 𝑖
+
+
+### Example
+let say you have dataset like:
+
+| Person | Weather  | Play Tennis |
+| ------ | -------- | ----------- |
+| 1      | Sunny    | No          |
+| 2      | Sunny    | No          |
+| 3      | Overcast | Yes         |
+| 4      | Rain     | Yes         |
+| 5      | Rain     | Yes         |
+| 6      | Rain     | No          |
+| 7      | Overcast | Yes         |
+| 8      | Sunny    | Yes         |
+
+We want to build a Decision Tree that predicts Play Tennis (Yes/No) using Weather as the feature.
+
+To do that, we’ll calculate the Gini impurity of each split.
+
+#### Gini of the Whole Dataset
+Count the classes:
+| Class | Count |
+| ----- | ----- |
+| Yes   | 5     |
+| No    | 3     |
+
+Total = 8 samples
+
+$$p(yes) = 5/8,\ \ \ p(no) = 3/8 $$
+
+$$Gini = 1 - \left[p(yes)^2 + p(no)^2 \right]$$
+
+$$ = 1 - \left[(5/8)^2 + (3/8)^2 \right]$$
+
+$$= 1 - (0.3906 + 0.1406) = 0.4688$$
+
+**Gini(Whole Dataset) = 0.47**
+
+#### Split by “Weather” - Weather = Sunny
+| Play | Count |
+| ---- | ----- |
+| Yes  | 1     |
+| No   | 2     |
+
+$$p(yes) = 1/3,\ \ \ p(no) = 2/3 $$
+
+$$Gini(sunny) = 1 - \left[(1/3)^2 + (2/3)^2 \right]$$
+
+$$ = 1-(0.111 + 0.444) = 0.445$$
+
+**Gini(Sunny) = 0.445**
+
+
+#### Split by “Weather” - Weather = Overcast
+| Play | Count |
+| ---- | ----- |
+| Yes  | 2     |
+| No   | 0     |
+
+
+$$p(yes) = 1,\ \ \ p(no) = 0 $$
+
+$$Gini(Overcast) = 1 - \left(1^2 + 0^2 \right) = 0$$
+
+
+**Pure node → Gini = 0**
+
+#### Split by “Weather” - Weather = Rain
+| Play | Count |
+| ---- | ----- |
+| Yes  | 2     |
+| No   | 1     |
+
+
+$$p(yes) = 2/3,\ \ \ p(no) = 1/3 $$
+
+$$Gini(Rain) = 1 - \left[(2/3)^2 + (1/3)^2 \right]$$
+
+$$ = 1-(0.444 + 0.111) = 0.445$$
+
+**Gini(Rain) = 0.445**
+
+
+
+[Go To Top](#content)
+
+---
+# Information Gain
+Information Gain (IG) tells us how much “purity” improves after we split the dataset using a feature.
+
+In other words:\
+ It measures how much uncertainty (impurity) is reduced by a particular feature split.
+
+> higher the IG higher the purity of node after splitting
+
+### Formula (using Entropy)
+
+$$IG = Entropy(Parent) - \sum \left(\frac{n_{child}}{n_{parent} } \times Entropy(Child) \right)$$
+
+Here:
+- $n_{child}$ = no. child sample
+- $n_{parent}$ = no. parent sample
+
+> Information Gain = Original Entropy − Weighted Average Entropy of Child Nodes
+
+> Instead of Entropy we can also use Gini coefficient
+
+### Example
+Let’s take a mini dataset
+| Weather  | Play |
+| -------- | ---- |
+| Sunny    | No   |
+| Sunny    | No   |
+| Overcast | Yes  |
+| Rain     | Yes  |
+| Rain     | No   |
+
+#### Step 1 — Calculate Entropy before split
+| Play | Count |
+| ---- | ----- |
+| Yes  | 2     |
+| No   | 3     |
+
+$$p(Yes) = 2/5, \ \ \ p(No) = 3/5$$
+
+$$Entropy(Parent) = - \left( \frac{2}{5} \log_2 \frac{2}{5} + \frac{3}{5} \log_2 \frac{3}{5} \right)$$
+
+$$=−(0.4×−1.32+0.6×−0.736)=0.971$$
+
+**Entropy(Parent) = 0.97**
+
+#### Step 2️ — Split by “Weather”
+- Weather = Sunny:\
+2 samples → [No, No] → Pure → Entropy = 0
+
+- Weather = Overcast:\
+1 sample → [Yes] → Pure → Entropy = 0
+
+- Weather = Rain:\
+2 samples → [Yes, No] → Mixed
+
+    $Entropy = -(0.5 \log_2 0.5 + 0.5 \log_2 0.5) = 1$
+
+#### Step 3️ — Weighted Average Entropy after split
+
+$$\sum \left(\frac{n_{child}}{n_{parent} } \times Entropy(Child) \right) = \left(\frac{2}{5} \times 0 \right) + \left(\frac{1}{5} \times 0 \right) + \left(\frac{2}{5} \times 1 \right) = 0.4$$
+
+#### Step 4️ — Information Gain
+
+$$IG = Entropy(Parent) - \sum \left(\frac{n_{child}}{n_{parent} } \times Entropy(Child) \right)$$
+
+$$IG = 0.97 - 0.4 = 0.57$$
+
+**Information Gain = 0.57**
+
+That means:\
+Splitting by Weather reduces our confusion by 0.57 bits of information — it made the data much more pure.
 
 [Go To Top](#content)
 
@@ -2427,6 +2599,147 @@ Target variable → Play Tennis (Yes / No)
 and our goal is to build a Decision Tree to predict Play Tennis (Yes or No) based on the weather conditions.
 
 ### Step 1: Calculate Total Entropy
+We have:
+- 9 “Yes”
+- 5 “No”
+
+$$Entropy(S) = -\frac{9}{14} \log_2 (\frac{9}{14})-\frac{5}{14} \log_2 (\frac{5}{14})$$
+
+$$Entropy(S)=0.94$$
+
+This is our starting impurity before splitting.
+
+### Step 2: Test Each Feature to Find the Best Split
+We’ll compute Information Gain (IG) for each feature —
+the one with the highest IG becomes the Root Node.
+
+#### Feature 1: Outlook
+| Outlook  | Yes | No | Entropy |
+| -------- | --- | -- | ------- |
+| Sunny    | 2   | 3  | 0.97    |
+| Overcast | 4   | 0  | 0       |
+| Rain     | 3   | 2  | 0.97    |
+
+Weighted Entropy:
+
+$$E(Outlook) = \frac{5}{14}(0.97) + \frac{4}{14}(0) + \frac{5}{14}(0.97) = 0.693$$
+
+Information Gain:
+
+$$\boxed{IG(Outlook)=0.94−0.693=0.247}$$
+
+#### Feature 2: Temperature
+| Temp | Yes | No | Entropy |
+| ---- | --- | -- | ------- |
+| Hot  | 2   | 2  | 1.0     |
+| Mild | 4   | 2  | 0.918   |
+| Cool | 3   | 1  | 0.811   |
+
+Weighted Entropy:
+
+$$E(Temp) = \frac{4}{14}(1) + \frac{6}{14}(0.918) + \frac{4}{14}(0.811) = 0.911$$
+
+Information Gain:
+
+$$\boxed{IG(Temp)=0.94−0.911=0.029}$$
+
+#### Feature 3: Humidity
+| Humidity | Yes | No | Entropy |
+| -------- | --- | -- | ------- |
+| High     | 3   | 4  | 0.985   |
+| Normal   | 6   | 1  | 0.592   |
+
+Weighted Entropy:
+
+$$E(Humidity) = \frac{7}{14}(0.985) + \frac{7}{14}(0.592)  = 0.789$$
+
+Information Gain:
+
+$$\boxed{IG(Humidity)=0.94−0.789=0.151}$$
+
+#### Feature 4: Wind
+| Wind   | Yes | No | Entropy |
+| ------ | --- | -- | ------- |
+| Weak   | 6   | 2  | 0.811   |
+| Strong | 3   | 3  | 1.0     |
+
+Weighted Entropy:
+
+$$E(Wind) = \frac{8}{14}(0.811) + \frac{6}{14}(1)  = 0.892$$
+
+Information Gain:
+
+$$\boxed{IG(Wind)=0.94−0.892=0.048}$$
+
+### Step 3: Choose the Best Split
+
+Information Gain (IG) tells us how much “purity” improves after we split the dataset using a feature.
+> higher the IG higher the purity of node after splitting
+
+| Feature     | Info Gain |
+| ----------- | --------- |
+| Outlook     | 0.247 ✅   |
+| Temperature | 0.029     |
+| Humidity    | 0.151     |
+| Wind        | 0.048     |
+
+So the best feature = Outlook → it becomes our Root Node.
+
+### Step 4: Split the Tree by Outlook
+```
+             [Outlook]
+            /    |     \
+         Sunny  Overcast  Rain
+```
+Now handle each branch separately
+
+> Perform step 1 to 4 for each branch
+
+#### Case 1: Outlook = Overcast
+All “Yes” → pure branch → Leaf Node = Yes
+
+#### Case 2: Outlook = Sunny
+Subset:
+
+| Humidity | Play |
+| -------- | ---- |
+| High     | No   |
+| High     | No   |
+| High     | No   |
+| Normal   | Yes  |
+| Normal   | Yes  |
+
+- If Humidity = High → No
+- If Humidity = Normal → Yes
+
+Split rule: Sunny → Humidity
+
+#### Case 3: Outlook = Rain
+Subset:
+| Wind   | Play |
+| ------ | ---- |
+| Weak   | Yes  |
+| Weak   | Yes  |
+| Weak   | Yes  |
+| Strong | No   |
+| Strong | No   |
+
+- If Wind = Weak → Yes
+- If Wind = Strong → No
+
+Split rule: Rain → Wind
+
+### Final Decision Tree
+```
+                [Outlook]
+              /     |      \
+        Sunny     Overcast    Rain
+         |            |          |
+     [Humidity]       Yes      [Wind]
+      /      \                  /   \
+   High      Normal        Strong   Weak
+    No          Yes           No      Yes
+```
 
 [Go To Top](#content)
 
