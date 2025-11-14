@@ -29,6 +29,7 @@
     - [Entropy](#entropy)
     - [Gini Coefficient](#gini-coefficient)
     - [Decision Tree for Classification](#decision-tree-for-classification)
+    - [Decision Tree for Regression](#decision-tree-for-regression)
 
 ---
 
@@ -2740,6 +2741,93 @@ Split rule: Rain → Wind
    High      Normal        Strong   Weak
     No          Yes           No      Yes
 ```
+
+[Go To Top](#content)
+
+---
+# Decision Tree for Regression
+A Regression Tree splits the data into groups so that each group has similar numeric values.
+Instead of trying to make groups “pure by class,” it tries to make groups where the numbers are close to each other.
+
+### Example
+| Hours | Marks |
+| ----- | ----- |
+| 1     | 40    |
+| 2     | 45    |
+| 3     | 50    |
+| 6     | 80    |
+| 7     | 85    |
+
+We will build a regression tree to predict Marks.
+
+We will try splits on Hours and choose the best one using [MSE](#mean-squared-error-mse).
+
+### STEP 1 → Try a split
+Try split at Hours < 4
+
+#### Left node (Hours: 1,2,3)
+
+Marks → [40, 45, 50]
+
+Mean: 
+
+$$\bar{Y}_L = \frac{40 + 45 + 50}{3} = 45$$
+
+MSE Left: 
+
+$$(40−45)^2+(45−45)^2+(50−45)^2 = 50 $$
+
+#### Right node (Hours: 6,7)
+Marks → [80, 85]
+
+Mean:
+
+$$\bar{Y}​_R​=82.5$$
+
+MSE Right:
+
+$$(80−82.5)_2+(85−82.5)_2 = 12.5$$
+
+### STEP 2 → Weighted Total MSE
+
+$$\text{Total MSE} = \frac{3}{5}(50) + \frac{2}{5} = (12.5) = 35$$
+
+Total MSE for split “Hours < 4” = 35
+
+### Now Tree Will Try Other Splits
+Possible split points:
+- Hours < 2
+- Hours < 3
+- Hours < 4
+- Hours < 6
+
+For each split, compute:
+1. Mean of left group
+2. MSE of left group
+3. Mean of right group
+4. MSE of right group
+5. Weighted total MSE
+
+Finally…\
+Choose the split with the LOWEST total MSE.
+
+### Final Regression Tree
+```
+                (root)
+             Hours < 4 ?
+             /         \
+            /           \
+       YES /             \ NO
+          /               \
+  Predict = 45         Predict = 82.5
+(Avg of 40,45,50)   (Avg of 80,85)
+```
+
+[Go To Top](#content)
+
+---
+# Ensemble Techniques
+
 
 [Go To Top](#content)
 
