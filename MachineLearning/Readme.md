@@ -30,6 +30,7 @@
     - [Gini Coefficient](#gini-coefficient)
     - [Decision Tree for Classification](#decision-tree-for-classification)
     - [Decision Tree for Regression](#decision-tree-for-regression)
+22. [Ensemble Techniques](#ensemble-techniques)
 
 ---
 
@@ -2827,7 +2828,58 @@ Choose the split with the LOWEST total MSE.
 
 ---
 # Ensemble Techniques
+Ensemble techniques = using multiple models together to make a final prediction.
 
+It means you don’t rely on one model, but combine many models to get:
+- higher accuracy
+- less overfitting
+- more stable predictions
+
+> Think of it like taking multiple opinions instead of trusting only one person.
+
+## Types of Ensembles
+
+### 1. Bagging (Bootstrap Aggregating)
+Idea: Train many same type of models on different random subsets of the data.
+
+**Example**\
+Imagine you train 100 decision trees:
+- each tree gets a random sample of rows
+- each tree trains separately
+- all trees vote together
+
+Final prediction = majority vote (classification) or average (regression)
+
+> you can combine multiple models (liner regression + KNN, etc) to make prediction each model will be trained on different subset
+
+### 2. Boosting
+Idea: Train weak models one after another.
+Each new model focuses on errors made by previous models.
+
+**Example**
+1. Train Tree 1
+2. Check where Tree 1 made mistakes
+3. Give those wrongly predicted samples more weight
+4. Train Tree 2
+5. Repeat…
+
+Final prediction = weighted votes from all small trees.
+
+### 3. Stacking     
+Idea: Use different models together and let another model learn how to combine them.
+
+**Ensemble**
+- Model 1 → Logistic Regression
+- Model 2 → Naive Bayes
+- Model 3 → Decision Tree
+
+All three give predictions.
+
+Now you train a meta-model (e.g., Linear Regression) on those predictions to make the final output.
+
+## To understand visually
+
+<img src="./images/bagging-boosting-stacking.webp" style="width:600px">
 
 [Go To Top](#content)
 
