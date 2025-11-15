@@ -28,12 +28,14 @@
 21. [Decision Tree](#decision-tree)
     - [Entropy](#entropy)
     - [Gini Coefficient](#gini-coefficient)
+    - [Information Gain](#information-gain)
     - [Decision Tree for Classification](#decision-tree-for-classification)
     - [Decision Tree for Regression](#decision-tree-for-regression)
     - [Decision Trees Overfit](#decision-trees-overfit)
 22. [Ensemble Techniques](#ensemble-techniques)
     - [Random Forest](#random-forest)
     - [AdaBoost](#adaboost)
+23. [K-Means Clustering](#k-means-clustering)
 
 ---
 
@@ -3192,6 +3194,137 @@ $$\text{final prediction} = sign(\alpha_1 \times prediction_1 + \alpha_2 \times 
 > negative  → -1\
 > zero      → tie
 
+
+[Go To Top](#content)
+
+---
+# K-Means Clustering
+K-Means is an unsupervised learning algorithm used to group similar data points into K clusters.
+
+<img src="./images/k-mean.webp" style="width:600px">
+
+### How It Works
+
+- **Step 1: Choose K**\
+Decide how many clusters you want.
+- **Step 2: Pick K random centroids**\
+These are like “centers” of your clusters.
+    > **Centroid:**\
+    >A centroid is just the middle point of that group.
+- **Step 3: Assign points to nearest centroid**\
+Distance is usually Euclidean distance.
+    > Euclidean Distance = straight-line distance\
+    > Mathematically:
+    > $$Distance = \sqrt{(x_2 - x_1)^2 + (y_2-y_1)^2}$$
+- **Step 4: Recalculate centroids**\
+Each cluster’s centroid becomes the mean of all points inside it.
+
+- **Step 5: Repeat Steps 3–4**\
+Stop when centroids stop moving (converged).
+
+
+### Example
+Let’s say your dataset has students’ marks in two subjects:
+| Student | Math | Science |
+| ------- | ---- | ------- |
+| A       | 35   | 30      |
+| B       | 40   | 25      |
+| C       | 70   | 80      |
+| D       | 75   | 78      |
+| E       | 82   | 88      |
+
+We want K = 2 clusters
+(Cluster of weak students & cluster of strong students)
+
+#### Step 1: Random centroids (start points)
+Let’s pick:
+- Centroid 1 = (40, 30)
+- Centroid 2 = (70, 87)
+
+<img src="./images/k-mean-example-1.png" style="width:400px">
+
+#### Step 2: Assign students to nearest centroid
+Cluster 1 (near C1):
+- A (35, 30)
+- B (40, 25)
+
+Cluster 2 (near C2):
+- C (70, 80)
+- D (75, 78)
+- E (82, 88)
+
+
+#### Step 3: Recalculate new centroids
+**New Centroid 1**
+- Mean of A & B:
+    - Math = (35 + 40) / 2 = 37.5
+    - Science = (30 + 25) / 2 = 27.5
+- New C1 = (37.5, 27.5)
+
+**New Centroid 2**
+- Mean of C, D, E:
+    - Math = (70 + 75 + 82) / 3 = 75.66
+    - Science = (80 + 78 + 88) / 3 = 82
+- New C2 = (75.66, 82)
+
+<img src="./images/k-mean-example-2.png" style="width:400px">
+
+#### Step 4: Reassign points
+Try assigning again —
+you’ll see students remain in the same clusters, so we stop.
+
+#### Final Clusters
+Cluster 1 → Weak Students
+- A
+- B
+
+Cluster 2 → Strong Students
+- C
+- D
+- E
+
+This is exactly what K-Means tries to find.
+
+### Data points pull the centroid toward the center.
+from above example we can see that every data point acts like a magnet, pulling the centroid towards them
+
+Therefor the centroid moves to the place where all points are balance i.e the center of the cluster.
+
+#### Imagine this
+Suppose you have 3 points:
+```
+●         ●       ●
+2         6       10
+```
+The centroid becomes the average, which is 6.
+
+Why?\
+Because:
+- Point at 10 pulls it right
+- Point at 2 pulls it left
+- It settles in the middle where pulls are balanced.
+
+### Elbow Method
+
+for simple graph we can easily decide the how many cluster it wil form but for complex and multi dimensional graph it becomes hard and confusion, therefor to find the number of cluster we use Elbow method
+
+It is a way to find the best number of clusters (K) in K-Means.
+
+Here we use iterative approach
+- K = 1
+- K = 2
+- K = 3
+- K = 4\
+… and so on
+
+For each K, you calculate the sum of square within each cluster
+
+Now when you plot the graph you'll get something like:
+
+<img src="./images/elbow-method.png" style="width:600px">
+
+Elbow Point:\
+It is the place where improvement suddenly slows down and this is also the place where we get the best K value.
 
 [Go To Top](#content)
 
