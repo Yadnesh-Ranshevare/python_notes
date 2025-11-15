@@ -30,7 +30,10 @@
     - [Gini Coefficient](#gini-coefficient)
     - [Decision Tree for Classification](#decision-tree-for-classification)
     - [Decision Tree for Regression](#decision-tree-for-regression)
+    - [Decision Trees Overfit](#decision-trees-overfit)
 22. [Ensemble Techniques](#ensemble-techniques)
+    - [Random Forest](#random-forest)
+    - [AdaBoost](#adaboost)
 
 ---
 
@@ -2827,6 +2830,81 @@ Choose the split with the LOWEST total MSE.
 [Go To Top](#content)
 
 ---
+# Decision Trees Overfit
+Decision Trees are one of the easiest models to overfit.
+
+### Why?
+
+A decision tree keeps splitting until:
+- every leaf becomes pure (all samples same output), or
+- each leaf contains only one sample.
+
+This creates a tree that is:
+- very deep
+- very specific
+- memorizes the training data
+- captures noise instead of patterns
+
+This is exactly what we call overfitting.
+
+### Simple Example
+Suppose your data has small variations:
+| Hours | Marks |
+| ----- | ----- |
+| 1     | 40    |
+| 2     | 45    |
+| 3     | 50    |
+| 6     | 80    |
+| 7     | 83    |
+| 8     | 81    |
+
+A deep tree might create splits like:
+```
+      ┌───────────────────────────────┐
+      │          Hours < 5 ?          │
+      └───────────────────────────────┘
+                /            \
+               / YES          \ NO
+              /                \
+Predict = (left branch)      ┌────────────────────────┐
+                             │      Hours < 6.5 ?     │
+                             └────────────────────────┘
+                               /             \
+                              / YES           \ NO
+                             /                 \
+                    Predict = 80         ┌─────────────────────┐
+                                         │     Hours < 7.5 ?   │
+                                         └─────────────────────┘
+                                           /            \
+                                          / YES          \ NO
+                                         /                \
+                               Predict = 83            Predict = 81
+```
+
+What the Tree Learned
+It memorized tiny differences:
+- 6 hrs → 80
+- 7 hrs → 83
+- 8 hrs → 81
+
+It assumes these exact boundaries are true forever.
+
+### Now predict
+
+New student studies 5.2 hours\
+Realistic marks should be around 60–70
+
+Tree says:
+- Hours < 5? → No\
+(because 5.2 > 5)
+- Hours < 6.5? → Yes\
+➡ Predict = 80
+
+This is huge error leading to overfitting
+
+[Go To Top](#content)
+
+---
 # Ensemble Techniques
 Ensemble techniques = using multiple models together to make a final prediction.
 
@@ -2852,6 +2930,8 @@ Final prediction = majority vote (classification) or average (regression)
 
 > you can combine multiple models (liner regression + KNN, etc) to make prediction each model will be trained on different subset
 
+**Most famous Bagging algorithm is Random Forest**
+
 ### 2. Boosting
 Idea: Train weak models one after another.
 Each new model focuses on errors made by previous models.
@@ -2864,6 +2944,13 @@ Each new model focuses on errors made by previous models.
 5. Repeat…
 
 Final prediction = weighted votes from all small trees.
+
+**Famous Boosting algorithms**
+- AdaBoost
+- Gradient Boosting
+- XGBoost (most used)
+- LightGBM
+- CatBoost
 
 ### 3. Stacking     
 Idea: Use different models together and let another model learn how to combine them.
@@ -2879,7 +2966,232 @@ Now you train a meta-model (e.g., Linear Regression) on those predictions to mak
 
 ## To understand visually
 
-<img src="./images/bagging-boosting-stacking.webp" style="width:600px">
+<img src="./images/bagging-boosting-stacking.webp" style="width:800px">
+
+[Go To Top](#content)
+
+---
+
+# Random Forest
+It is an ensemble of many Decision Trees where:
+- each tree is trained on a random subset of rows
+- each tree sees only a random subset of features
+- all trees predict
+- final answer = majority vote (for classification) or average (for regression)
+
+This randomness makes the model:
+- more accurate
+- more stable
+- less overfitted than a single tree
+
+### Why Random Forest works better than a single Decision Tree?
+One decision tree can become biased or overfit.
+
+But if you train 100 different trees:
+- each tree gives a slightly different prediction
+- combining them reduces mistakes
+- like taking an opinion from 100 people instead of 1
+
+### How it works
+Suppose your dataset is:
+| Age | Salary | Buy? |
+| --- | ------ | ---- |
+| 22  | 20k    | No   |
+| 25  | 30k    | No   |
+| 28  | 40k    | Yes  |
+| 30  | 45k    | Yes  |
+| 35  | 60k    | Yes  |
+
+Random Forest wants to build, say, 3 trees.
+
+#### Step 1 → Random samples for each tree (bootstrap sampling)
+Tree 1 gets rows: 1, 2, 4, 5\
+Tree 2 gets rows: 2, 3, 3, 4\
+Tree 3 gets rows: 1, 3, 5, 5
+
+> Repeating rows is allowed
+
+#### Step 2 → Random features
+Each split in a tree may choose from only 1 random feature:
+- Tree 1 might see only “Age”
+- Tree 2 might see only “Salary”
+- Tree 3 might see both but randomly selected at each split
+
+#### Step 3 → Build 3 different Decision Trees
+Each tree gives its own prediction for a new person.
+
+Example input:\
+Age = 27, Salary = 36k
+
+Tree 1 → "Yes"\
+Tree 2 → "No"\
+Tree 3 → "Yes"
+
+#### Step 4 → Final prediction
+Classification → Majority vote\
+Prediction: Yes (2 out of 3)
+
+Regression → Average
+
+### Key Concepts Inside Random Forest
+- Bootstrap sampling → random subset of rows for each tree
+- Feature randomness → random subset of features per split
+- Ensembling → multiple models combined
+- Voting/Averaging → final result
+
+### Random Forest advantages
+- handles missing values well
+- reduces overfitting
+- works well for both regression & classification
+- supports high-dimensional data
+
+### Disadvantages
+- slower than a single tree
+- not as interpretable
+- too many trees = more compute
+
+
+[Go To Top](#content)
+
+---
+# AdaBoost
+- AdaBoost = Adaptive Boosting
+- It builds many weak models (usually tiny decision trees) one after another.
+- Each new model tries to fix the mistakes made by the previous one.
+
+### Why “adaptive”?
+Because after each model:
+- the samples that were predicted WRONG 
+- the next model focuses more on those difficult samples
+
+So the algorithm adapts to errors.
+
+### stump
+A stump means:\
+A decision tree with only ONE split.
+
+Visual
+```
+         (X < 5 ?)
+         /     \
+       0        1
+```
+
+### Why AdaBoost uses stumps?
+Because AdaBoost wants weak models so it can boost them.
+- A stump is simple
+- Makes mistakes easily
+- AdaBoost can improve by adding more stumps
+
+Each stump focuses on fixing previous stump’s mistakes.
+
+### How AdaBoost Works
+| ID | X | Class   |
+| -- | - | ------- |
+| 1  | 1 | 0 (No)  |
+| 2  | 2 | 0 (No)  |
+| 3  | 8 | 1 (Yes) |
+| 4  | 9 | 1 (Yes) |
+
+We will train 2 stumps (tiny decision trees).
+
+#### STEP 1 — Initial Weights
+All data points get equal weight:
+```
+W = [0.25, 0.25, 0.25, 0.25]
+```
+> sum of their weight must be equal to 1
+
+#### STEP 2 — Train Stump 1
+Try a stump:
+```py
+if X < 9 → 0  
+else → 1
+```
+Predictions:
+| ID | X | True | Pred | Correct? |
+| -- | - | ---- | ---- | -------- |
+| 1  | 1 | 0    | 0    | ✔        |
+| 2  | 2 | 0    | 0    | ✔        |
+| 3  | 8 | 1    | 0    | ❌        |
+| 4  | 9 | 1    | 1    | ✔        |
+
+Only one mistake (ID 3)
+
+$\text{Total error (TE)} = 0.25$
+
+#### STEP 3 — Compute α₁ (importance of stump 1)
+
+$$\alpha_1 = \frac{1}{2}\ ln\left(\frac{1-TE}{TE} \right)$$
+
+$$ = \frac{1}{2} \ ln \left(\frac{0.75}{0.25} \right) ≈ 0.55$$
+
+#### STEP 4 — Update Weights
+Weight update rule:
+- If prediction is correct → weight × $e^{-\alpha}$
+- If prediction is wrong → weight × $e^{+\alpha}$
+
+Therefor:
+
+$$e^{0.55} ≈ 1.73$$
+$$e^{-0.55} ≈ 0.58$$
+
+New weights
+| ID | Correct? | Old W | New W                |
+| -- | -------- | ----- | -------------------- |
+| 1  | ✔        | 0.25  | 0.25 × 0.58 = 0.145  |
+| 2  | ✔        | 0.25  | 0.145                |
+| 3  | ❌        | 0.25  | 0.25 × 1.73 = 0.4325 |
+| 4  | ✔        | 0.25  | 0.145                |
+
+Total Weight = 0.8675 
+> Total weight must be equal to 1, therefor to make it equal to 1 we perform normalization
+
+Normalize:
+
+$$Formula = \frac{\text{Weight of each row}}{\text{Total Weight}}$$
+
+| ID | Final Weight                              |
+| -- | ----------------------------------------- |
+| 1  | 0.167                                     |
+| 2  | 0.167                                     |
+| 3  | 0.498 *(highest weight — most difficult)* |
+| 4  | 0.167                                     |
+
+#### STEP 5 — Train Stump 2 (focuses on mistake)
+Try stump:
+```py
+if X < 1.5 → 0  
+else → 1
+```
+Predictions:
+| ID | X | True | Pred | Weight | Correct? |
+| -- | - | ---- | ---- | ------ | -------- |
+| 1  | 1 | 0    | 0    | 0.167  | ✔        |
+| 2  | 2 | 0    | 1    | 0.167  | ❌        |
+| 3  | 8 | 1    | 1    | 0.498  | ✔        |
+| 4  | 9 | 1    | 1    | 0.167  | ✔        |
+
+
+$\text{Total error (TE)} = 0.167$
+
+#### STEP 6 — Compute α₂
+
+$$\alpha_2 = \frac{1}{2}\ ln\left(\frac{1-0.167}{0.167} \right) ≈ 0.80$$
+
+
+### Final prediction
+we use two methods to calculate the final output
+1. majority vote (classification) or average(regression)
+2. weighted voting
+
+$$\text{final prediction} = sign(\alpha_1 \times prediction_1 + \alpha_2 \times prediction_2 )$$
+
+> sign() just checks if the final score is:\
+> positive  → +1\
+> negative  → -1\
+> zero      → tie
+
 
 [Go To Top](#content)
 
