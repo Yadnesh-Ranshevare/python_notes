@@ -36,6 +36,8 @@
     - [Random Forest](#random-forest)
     - [AdaBoost](#adaboost)
 23. [K-Means Clustering](#k-means-clustering)
+24. [Hierarchal Clustering](#hierarchal-clustering)
+
 
 ---
 
@@ -3215,6 +3217,7 @@ These are like “centers” of your clusters.
 Distance is usually Euclidean distance.
     > Euclidean Distance = straight-line distance\
     > Mathematically:
+    >
     > $$Distance = \sqrt{(x_2 - x_1)^2 + (y_2-y_1)^2}$$
 - **Step 4: Recalculate centroids**\
 Each cluster’s centroid becomes the mean of all points inside it.
@@ -3325,6 +3328,96 @@ Now when you plot the graph you'll get something like:
 
 Elbow Point:\
 It is the place where improvement suddenly slows down and this is also the place where we get the best K value.
+
+[Go To Top](#content)
+
+---
+# Hierarchal Clustering
+Hierarchical Clustering is a clustering technique that builds clusters step-by-step in a tree-like structure called a dendrogram.
+> A dendrogram is simply a tree-like diagram that shows how clusters were formed step-by-step in hierarchical clustering.
+
+There are two ways to build the clusters:
+1. Agglomerative (Bottom-Up)
+2. Divisive (Top-Down)
+
+### Agglomerative (Bottom-Up)
+This is the most common one.
+
+Start with each data point as its own cluster, then merge the closest clusters until everything becomes one big cluster.
+
+#### Simple Illustration
+Imagine you have 5 points:
+```
+A  B  C  D  E
+```
+Step 1: Start with each point as a separate cluster
+```
+{A} {B} {C} {D} {E}
+```
+Step 2: Find the two closest points and merge\
+Suppose A & B are closest:
+```
+{AB} {C} {D} {E}
+```
+Step 3: Again merge closest clusters\
+Suppose C & D are closest:
+```
+{AB} {CD} {E}
+```
+Step 4: Continue merging\
+Suppose (AB) is closest to E:
+```
+{ABE} {CD}
+```
+Step 5: Finally
+```
+{ABCDE}
+```
+This entire merge history forms a tree structure → the dendrogram.
+
+### To understand visually
+
+How clustering happens
+
+<img src="./images/hierarichal-clustring.png" style="width:600px">
+
+how can we represent it using dendrogram
+
+<img src="./images/hierarichal-clustring-1.png" style="width:600px">
+
+
+### How to choose clusters
+in Hierarchal clustering we get multiple set of the cluster but we yet didn't know which cluster to take in consideration
+
+In Hierarchical Clustering, you decide the number of clusters by cutting the dendrogram at a certain height.
+
+Wherever your line cuts the branches, the number of cuts = number of clusters.
+
+<img src="./images/dendogams.png" style="width:600px">
+
+**H1 2(clusters)**
+- cluster 1: 5, 8, 2
+- cluster 2: 6, 4, 1
+
+**H2 (4 clusters)**
+- cluster 1: 5
+- cluster 2: 8, 2
+- cluster 3: 6
+- cluster 4: 4, 1
+
+
+#### How to pick the BEST cut?
+Look for a big vertical gap between merges.
+That gap means two groups are very far apart, which is a natural separation.
+
+<img src="./images/best-cut-1.png" style="width:600px">
+
+in above example we can see that on Y axis the biggest gap is from 1.5 to 7.8, therefor we make cut somewhere around this gap
+
+like this
+
+<img src="./images/best-cut-2.png" style="width:600px">
+
 
 [Go To Top](#content)
 
