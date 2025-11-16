@@ -37,6 +37,7 @@
     - [AdaBoost](#adaboost)
 23. [K-Means Clustering](#k-means-clustering)
 24. [Hierarchal Clustering](#hierarchal-clustering)
+25. [Silhouette Score](#silhouette-score)
 
 
 ---
@@ -3417,6 +3418,97 @@ in above example we can see that on Y axis the biggest gap is from 1.5 to 7.8, t
 like this
 
 <img src="./images/best-cut-2.png" style="width:600px">
+
+
+[Go To Top](#content)
+
+---
+# Silhouette Score
+it’s a measure used to evaluate how good your clusters are.
+
+For each point, it compares:
+- a(i) = how close the point is to its own cluster (intra-cluster distance)
+- b(i) = how far the point is from the next nearest cluster (nearest-cluster distance)
+
+<img src="./images/silhoutte.png" style="width:600px">
+
+Then it computes:
+
+$$s = \frac{b(i)-a(i)}{max(a(i),\ b(i))}$$
+
+- s ≈ +1 → well-clustered
+- s ≈ 0 → on the boundary
+- s ≈ −1 → probably in the wrong cluster
+
+### Example
+Imagine 2 clusters:
+```
+Cluster 1:  [1.0, 1.2, 0.9]
+Cluster 2:  [7.0, 7.1, 6.9]
+```
+Take a point in Cluster 1, say 1.0:
+- Average distance to Cluster 1 points = a ≈ 0.15
+- Average distance to Cluster 2 points = b ≈ 6.0
+
+Silhouette:
+
+$$s = \frac{6.0 - 0.15}{6.0} ≈ 0.97$$
+
+That’s almost perfect separation.
+
+### How Silhouette Actually Works
+For each point i, we measure two things:
+1. **a(i) → “How well do I fit inside my cluster?”**
+
+    - It’s the average distance to the other points in the same cluster.
+    - Small a(i) = “I’m close to my cluster mates → I belong here.”
+    - Large a(i) = “I’m far from my cluster mates → maybe I don’t belong.”
+
+2. **b(i) → “How far am I from other clusters?”**
+    - For each other cluster, compute the average distance from point i to that cluster.
+    - The smallest of those averages is b(i).
+    - So b(i) says: “What’s the closest alternative cluster I could join?”
+
+#### What Silhouette Does With a(i) and b(i)
+**Case 1: a(i) << b(i)**
+
+The point is much closer to its own cluster than to the nearest other cluster.
+
+- Numerator (b - a) is positive
+- s(i) is close to +1
+
+Great clustering:\
+“I am close to my friends and far from strangers.”
+
+<br/>
+
+**Case 2: a(i) ≈ b(i)**
+
+The point is on the border between its cluster and another.
+
+- Numerator is close to zero
+- s(i) ≈ 0
+
+Borderline:\
+“I could belong to either cluster.”
+
+<br/>
+
+**Case 3: a(i) >> b(i)**
+
+The point is closer to another cluster than its own.
+
+- Numerator becomes negative
+- s(i) approaches –1
+
+Bad clustering:\
+“I am closer to outsiders than my own group.”
+
+#### In short
+
+Silhouette checks whether a point is closer to its own cluster than to any other cluster.\
+If yes → good.\
+If no → bad.
 
 
 [Go To Top](#content)
