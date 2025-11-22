@@ -38,9 +38,11 @@
 23. [K-Means Clustering](#k-means-clustering)
 24. [Hierarchal Clustering](#hierarchal-clustering)
 25. [Silhouette Score](#silhouette-score)
-26. Dimensionality Reduction
+26. [Dimensionality Reduction](#dimensionality-reduction)
     - [Curse of Dimensionality](#curse-of-dimensionality)
     - [Feature selection, Covariance & Corelation](#feature-selection)
+    - [Feature Extraction](#feature-extraction)
+    - [PCA (Principal Component Analysis)](#pca-principal-component-analysis)
 
 ---
 
@@ -3516,6 +3518,52 @@ If no → bad.
 [Go To Top](#content)
 
 ---
+# Dimensionality reduction
+Dimensionality Reduction is a technique in machine learning used to reduce the number of input features while keeping as much important information as possible.
+
+Dimensionality reduction is a technique or algorithm that belongs to the unsupervised learning category, because:
+- it learns structure from data without labels
+- it transforms features but does not produce target outputs
+
+### Why do we need it?
+Datasets often have:
+- Too many features (high-dimensional data)
+- Redundant or noisy information
+- Features that are combinations of others
+
+This causes:
+- Slow training
+- Overfitting
+- Harder visualization
+
+Dimensionality reduction solves these by compressing data into fewer useful features.
+
+### What it does
+Transforms high-dimension data → low-dimension data:
+```yaml
+Original: 100 features → Reduced: 10 features
+```
+But those 10 new features still capture the major patterns.
+
+### Main goals
+| Purpose             | Example                     |
+| ------------------- | --------------------------- |
+| Remove noise        | Drop useless features       |
+| Reduce redundancy   | Combine correlated features |
+| Improve performance | Faster, less overfitting    |
+| Visualize data      | Convert 100D → 2D plot      |
+
+### Two main approaches
+| Approach               | Techniques                        | Idea                           |
+| ---------------------- | --------------------------------- | ------------------------------ |
+| **Feature Extraction** | PCA, Autoencoders, t-SNE, UMAP    | Create new compressed features |
+| **Feature Selection**  | Filter, Wrapper, Embedded methods | Choose best original features  |
+
+
+
+[Go To Top](#content)
+
+---
 # Curse of Dimensionality
 The Curse of Dimensionality refers to the set of problems that arise when the number of features (dimensions) in a dataset becomes very large.
 
@@ -3643,7 +3691,10 @@ Where:
 - $Y_i$ = each value in feature Y
 - $\bar{X}$ = mean of feature X
 - $\bar{Y}$ = mean of feature Y
-- $n-1$ is used for sample covariance
+- $n$ = how many data points you have for both $X$ and $Y$
+
+> The “n−1” is used when estimating covariance from a sample
+
 
 | Covariance Value    | Relationship                     |Meaning for Feature Selection|
 | ------------------- | ---------------------------------- | ---- |
@@ -3678,6 +3729,124 @@ So, correlation helps us compare relationships even when features have different
 
 
 
+
+[Go To Top](#content)
+
+---
+# Feature Extraction
+Feature Extraction = creating new useful features from the raw data.
+
+### Simple Example
+Suppose you have a dataset:
+| Name | Birth Year | Current Year |
+| ---- | ---------- | ------------ |
+| A    | 2000       | 2025         |
+| B    | 1998       | 2025         |
+
+These columns are raw features.
+
+Now we create a new feature:
+
+Age = Current Year – Birth Year
+
+| Name | Birth Year | Current Year | Age |
+| ---- | ---------- | ------------ | --- |
+| A    | 2000       | 2025         | 25  |
+| B    | 1998       | 2025         | 27  |
+
+This Age is an extracted feature — more useful for a model.
+
+### How Feature Extraction does Dimensionality Reduction?
+It combines multiple features into fewer new features.
+
+Instead of removing columns (like in Feature Selection), Feature Extraction creates new compressed features.
+
+#### Example
+let say we have two features like:
+| Feature1   | Feature2   |
+| ---------- | ---------- |
+| Height(cm) | Weight(kg) |
+
+These two are related — both measure body size.
+
+Instead, create 1 extracted feature:\
+`BodySize = (Height + Weight) / 2`
+
+Now:
+| Extracted Feature |
+| -------- |
+|BodySize     |
+
+We reduced 2 dimensions → 1 dimension\
+but still kept the information.
+
+
+[Go To Top](#content)
+
+---
+
+# PCA (Principal Component Analysis)
+PCA takes many related features and combines them into fewer useful ones.
+> its a type of Feature extraction
+
+PCA is a dimensionality reduction technique that:
+- finds the directions in data where the variance (spread) is highest
+- re-maps the data onto fewer new features called principal components
+- these components contain most of the important information
+
+### Example:
+let say you have data like:
+
+<img src="./images/PCA-1.png" style="width:600px">
+
+This is a 2 dimensional data, Therefor to make it 1 dimensional you project the datapoint on X axis
+
+<img src="./images/PCA-2.png" style="width:600px">
+
+now if you consider datapoint on x axis as a new feature you'll have a feature that is only depend on X axis i.e, 1D feature 
+
+### Loss of information
+when you directly project the datapoint on the X axis you lost huge amount of information from Y axis 
+
+<img src="./images/PCA-3.png" style="width:600px">
+
+as you can see on Y axis the datapoint are spread from 2 to 6
+- high spread -> high Variance -> high information
+    > Variance measures how far each value in a dataset is from the mean (on average). It shows the spread or variability of data.
+
+Although projecting datapoint directly onto the X axis change the dimensions from 2D to 1D we also loss some info from Y axis
+
+if this loss is very huge then our model might not perform well
+
+Therefor in PCA our goal is to minimize this information loss while making the data 1D 
+### Axis transformation
+you simply transform/rotate your axis to minimize the information the loss
+
+<img src="./images/PCA-4.png" style="width:600px">
+
+now if you project teh datapoint onto the new X axis you'll again convert the 2D data into 1D
+
+<img src="./images/PCA-5.png" style="width:600px">
+
+and now this time if you look at the information loss from new Y axis you'll get:
+
+<img src="./images/PCA-6.png" style="width:600px">
+
+as you can see the spread on new Y axis is very less compare to spread on original Y axis therefor we can say that:
+- low spread -> low Variance -> low information
+
+hence we can conclude that projecting the datapoint onto the new X axis not only convert it to 1D from 2D it will also have low information loss
+
+### Main aim in PCA
+Therefor from above example we can say that ou main aim in PCA is to find the new Axis 
+
+each new axis that captures the features is what we called principle component (PC)
+- new X axis -> PC1
+- new Y axis -> PC2
+- new Z axis -> PC3\
+    ... ect
+
+> larger variance will be captured by CP1 then CP2 then CP3 and so on 
 
 [Go To Top](#content)
 
