@@ -38,7 +38,9 @@
 23. [K-Means Clustering](#k-means-clustering)
 24. [Hierarchal Clustering](#hierarchal-clustering)
 25. [Silhouette Score](#silhouette-score)
-
+26. Dimensionality Reduction
+    - [Curse of Dimensionality](#curse-of-dimensionality)
+    - [Feature selection, Covariance & Corelation](#feature-selection)
 
 ---
 
@@ -3509,6 +3511,172 @@ Bad clustering:\
 Silhouette checks whether a point is closer to its own cluster than to any other cluster.\
 If yes → good.\
 If no → bad.
+
+
+[Go To Top](#content)
+
+---
+# Curse of Dimensionality
+The Curse of Dimensionality refers to the set of problems that arise when the number of features (dimensions) in a dataset becomes very large.
+
+As dimensions increase:
+- Data becomes sparse (scattered far apart)
+- Distance-based models struggle
+- Computation cost rises sharply
+- Model overfits easily because it finds noise instead of real patterns
+
+The Curse of Dimensionality describes how high-dimensional data becomes very spread out and difficult for many ML algorithms to learn from, leading to poor performance.
+
+### Simple Example to Understand
+
+Imagine spreading 10 data points:
+- On a 1D line → They are close to each other
+- On a 2D plane → More spread out
+- On a 3D cube → Even more spread
+- In 100 dimensions → They are extremely far apart
+- So the model cannot find meaningful similarity patterns.
+
+
+### Why is it a "curse"?
+
+Because increasing features doesn’t always help — instead, it can cause:
+| Problem           | Impact                            |
+| ----------------- | --------------------------------- |
+| Overfitting       | Model memorizes noise             |
+| Sparsity          | Hard to find neighbors / clusters |
+| More resources    | Time, memory, training cost       |
+| Hard to visualize | Humans can only see up to 3D      |
+
+
+### Different ways to remove curse of dimensionality
+1. **Feature Selection:** \
+Choose a subset of the original features (nothing new created)
+2. **Feature Extraction**\
+Create new features by transforming original ones
+
+
+[Go To Top](#content)
+
+---
+# Feature selection
+choosing only the most useful features (columns) from your dataset to train the model.
+
+### Why do we need Feature Selection?
+If a dataset has too many features:
+- Model becomes slower and more complex
+- Higher chance of overfitting
+- Some features may be irrelevant or duplicate
+- Harder to understand the model
+
+So, feature selection helps to:\
+✔ Improve accuracy\
+✔ Reduce training time\
+✔ Avoid overfitting\
+✔ Make model simpler and explainable
+
+### Simple Illustration
+Suppose your dataset is for predicting house price:
+| Feature                 | Useful? |
+| ----------------------- | ------- |
+| Area (sq ft)            | ✔       |
+| No. of Bedrooms         | ✔       |
+| Color of wall paint     | ✘       |
+| Distance to city center | ✔       |
+| Owner's favorite food   | ✘       |
+
+
+You select only useful features:
+- Area
+- Bedrooms
+- Distance to city
+
+And remove non-useful ones:
+- Color of wall paint
+- Owner’s favorite food
+
+### How to Select the Right Features
+When working with features, we check how they are related to each other:
+- If two features depend on each other (strong relationship) → Keep only one
+- If two features don’t depend on each other (weak or no relationship) → Keep both
+
+This helps remove unnecessary (duplicate-like) features and improves model performance.
+
+### How to Check the Relationship Between Features
+There are 3 types of relationships:
+
+#### 1. Positive relation
+If one feature increases and the other also increases\
+(Or one decreases and the other also decreases)
+
+Example:
+- More experience → higher salary
+- Less height → less weight
+    >Both move in the same direction
+
+#### 2. Negative Relation
+If one feature increases but the other decreases
+
+Example
+- More damage to a product → lower price
+    > Both move in opposite directions
+
+#### 3. No relation 
+Changing one feature does not affect the other
+
+Example:
+- A person’s weight does not decide their salary
+    > No effect on each other
+
+<img src="./images/correlation.png" style="width:600px">
+
+
+### covariance
+To check feature selection using covariance, we look at how strongly two features are related with each other.
+ 
+
+#### Formula
+
+$$Cov(X, Y) = \frac{1}{n-1}\sum(X_i - \bar{X})(Y_i - \bar{Y})$$
+
+Where:
+- $X_i$ = each value in feature X
+- $Y_i$ = each value in feature Y
+- $\bar{X}$ = mean of feature X
+- $\bar{Y}$ = mean of feature Y
+- $n-1$ is used for sample covariance
+
+| Covariance Value    | Relationship                     |Meaning for Feature Selection|
+| ------------------- | ---------------------------------- | ---- |
+| Positive            | positive relationship        |Both increase together → dependent → remove one| 
+| Negative            | negative relationship |One increases, other decreases → dependent → may remove one| 
+| Zero (or near zero) | No  relationship             |Independent → keep both|
+
+
+### Correlation
+Correlation tells how strongly two features are related and in what direction.
+
+> It is basically normalized covariance — so we get a value between -1 and +1.
+
+#### Formula
+
+$$Correlation(X,Y) = \frac{Cov(X,Y)​}{\sigma{x} . \sigma{y}}$$
+
+Where:
+- Cov(X, Y) → covariance of X and Y
+- σX → standard deviation of X
+- σY → standard deviation of Y
+
+#### Correlation Value Range
+| Correlation value | Relationship           | Meaning for Feature Selection                                   |
+| ----------------- | ---------------------- | --------------------------------------------------------------- |
+| **Close to +1**   | Strong positive        | Both increase together → **dependent** → remove one             |
+| **Close to -1**   | Strong negative        | One increases, other decreases → **dependent** → may remove one |
+| **Close to 0**    | No linear relationship | **Independent** → keep both                                     |
+
+
+So, correlation helps us compare relationships even when features have different scales.
+
+
 
 
 [Go To Top](#content)
