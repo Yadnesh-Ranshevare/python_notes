@@ -3820,7 +3820,7 @@ if this loss is very huge then our model might not perform well
 
 Therefor in PCA our goal is to minimize this information loss while making the data 1D 
 ### Axis transformation
-you simply transform/rotate your axis to minimize the information the loss
+you simply transform/rotate your axis to minimize the information loss
 
 <img src="./images/PCA-4.png" style="width:600px">
 
@@ -3838,7 +3838,7 @@ as you can see the spread on new Y axis is very less compare to spread on origin
 hence we can conclude that projecting the datapoint onto the new X axis not only convert it to 1D from 2D it will also have low information loss
 
 ### Main aim in PCA
-Therefor from above example we can say that ou main aim in PCA is to find the new Axis 
+Therefor from above example we can say that our main aim in PCA is to find the new Axis such that we can project the datapoint onto them to convert 2D data into 1D with minimum information loss
 
 each new axis that captures the features is what we called principle component (PC)
 - new X axis -> PC1
@@ -3847,6 +3847,287 @@ each new axis that captures the features is what we called principle component (
     ... ect
 
 > larger variance will be captured by CP1 then CP2 then CP3 and so on 
+
+to convert the 2D datapoint into 1D we have to find the best fit Principle component (PC)
+
+
+to find the best fit PC we just have to look for the the variance alone that axis
+- if variance is maximum -> capture most of the info -> best fit PC -> called PC1
+- line that capture 2nd maximum variance -> capture most the info after PC1 -> called PC2
+
+now our goal is to get the best PC which capture maximum variance
+
+### Example
+let say we have 3D datapoint:
+- for 3D datapoint we can have PC1, PC2, PC3
+- var(PC1) > var(PC2) > var(PC3)  
+
+for 3D -> 1D:\
+we project all of the datapoint on to the PC1
+
+for 3D -> 2D:\
+we project all of the datapoint on to the PC1 and PC2
+
+[Go To Top](#content)
+
+---
+# Math intuition behind the PAC Algorithm
+
+### 1. how to find projection
+to calculate the variance we need to find the projection of all datapoint on to that PC
+
+$$Proj_p\ u = p . u$$
+
+this formula says projection of point $p$ onto line $u$ is equal to dot product of $p$ and $u$ 
+
+here:
+- $p$ = multi dimensional datapoint
+- $u$ = Principle component (PC)
+
+#### why dot product?
+Dot product gives how much of one vector lies in the direction of another vector.
+
+**Geometric Explanation**\
+For any two vectors a and b:
+
+$$a . b = |a||b|cos\theta$$
+
+Here:
+- a = datapoint
+- b = PC
+
+<img src="./images/dot-product.jpg" style="width:600px">
+
+in PCA we ALWAYS make each Principal Component a unit vector (length = 1).
+
+Because Principal Components are used as new axes, and axes should have:
+- Length = 1 → unit vector
+- Be perpendicular to each other (orthogonal)
+- Represent direction only, not scale
+
+Therefor:
+- as $|b| = 1$
+- output of dot product is $|a|cos\theta$
+
+as dot product gives scalar value:\
+once we find the projection of point $P_i$ onto the PC we get $P'_i$ which is our new lower dimensional datapoint
+
+### 2. Compute variance
+as we know how to calculate the projection we first calculate the projection of all datapoint then we calculate variance using formula:
+
+$$Variance = \frac{1}{n}\sum(X_i - \bar{X})^2$$
+
+where:
+- $X_i$ = datapoint i
+- $\bar{X}$ = mean of all datapoint
+- $n$ = total datapoint
+
+> our goal is to find the best unit vector (PC) that capture ths maximum variance
+
+#### Variance as a cost function
+PCA uses variance as the cost function because more variance = more information, and PCA wants to keep the most information while reducing dimensions.
+
+### 3. Eigen Value and Eigen Vector
+how to use eigen value and eigen vector:
+1. find covariance matrix between feature
+2. eigen value and eigen vector will be found out from this covariance matrix
+3. find the largest eigen value so that its respective eigen vector will capture maximum variance
+    > eigen value = magnitude of eigen vector 
+
+#### How to find the covariance matrix
+we know the fromula for covariance
+
+
+$$Cov(X, Y) = \frac{1}{n-1}\sum(X_i - \bar{X})(Y_i - \bar{Y})$$
+
+Where:
+- $X_i$ = each value in feature X
+- $Y_i$ = each value in feature Y
+- $\bar{X}$ = mean of feature X
+- $\bar{Y}$ = mean of feature Y
+- $n$ = how many data points you have for both $X$ and $Y$
+
+> The “n−1” is used when estimating covariance from a sample
+
+Now to compute the covariance matix:
+
+$$
+\text{Cov Matrix}(X,Y) = 
+\begin{bmatrix}
+\text{Cov}(X,X) & \text{Cov}(X,Y) \\
+\text{Cov}(Y,X) & \text{Cov}(Y,Y)
+\end{bmatrix}
+$$
+
+> this is for 2 feature for 3 features will be having 3X3 matrix
+
+For easy understanding:
+|   | X | y |
+| -- | -- | -- | 
+| **X** | var(X) | cov(X, Y)|
+| **Y** | cov(Y, X) | var(Y) | 
+
+**Note: cov(X, X) = var(X)**
+
+### 4. Eigen-Decomposition
+We solve:
+
+$$Cv = \lambda v$$
+
+Where:
+- $v$ = eigenvector
+- $\lambda$ = eigenvalue
+- $C$ = convariance matrix
+
+> no. of eigen value = no. features in covariance matrix
+
+#### Example on how to solve eigen decomposition
+
+Example Matrix:
+$$
+A = 
+\begin{bmatrix}
+4 & 2\\
+2 & 4
+\end{bmatrix}
+$$
+
+**1. Find Eigenvalues**
+
+Solve:
+
+$$|A - \lambda I| = 0$$
+
+$$
+\begin{bmatrix}
+4 - \lambda & 2\\
+2 & 4 - \lambda
+\end{bmatrix} = 0
+$$
+
+Determinant:
+
+$$(4−λ)(4−λ)−2⋅2=0$$
+
+$$(4−λ)^2−4=0$$
+
+$$(4−λ)^2=4$$
+
+$$4−λ=±2$$
+
+So:
+
+$$λ_1​=6, \ \ \ λ_2​=2$$
+
+**2. Find Eigenvectors**
+
+Use each eigenvalue in:
+
+$$(A−λI)v=0$$
+
+for $\lambda_1$ = 6
+
+$$
+\begin{bmatrix}
+4 - 6 & 2\\
+2 & 4 - 6
+\end{bmatrix} 
+=
+\begin{bmatrix}
+-2 & 2\\
+2 & -2
+\end{bmatrix} 
+$$
+
+let eigen vector $v$ be as follow:
+
+$$
+v = 
+\begin{bmatrix}
+X\\
+Y
+\end{bmatrix}
+$$
+
+Therefor,
+
+$$
+\begin{bmatrix}
+-2 & 2\\
+2 & -2
+\end{bmatrix}
+
+\begin{bmatrix}
+X\\
+Y
+\end{bmatrix}
+
+= 
+\begin{bmatrix}
+0\\
+0
+\end{bmatrix}
+$$
+
+Solve:
+
+$$−2X​+2Y​=0_{--------(i)}$$
+
+$$2X​-2Y​=0_{--------(ii)}$$
+
+by solving (i) and (ii) we get:
+
+$$X = Y$$
+
+Choose simplest numbers:
+
+$$
+v_1 
+= 
+\begin{bmatrix}
+1\\
+1
+\end{bmatrix}
+$$
+
+> perform same steps for $\lambda_2$
+
+### 5. Normalization
+
+- Eigenvectors are used as Principal Components (PCs) — they are directions in space.
+- A direction should only tell where to go, not how far to go.
+- So we scale every eigenvector to unit length (magnitude = 1).
+
+#### What happens if we don’t normalize?
+Then projection value:
+
+$$Projection=x⋅eigenvector$$
+
+would change wrongly depending on the eigenvector length.
+
+#### How to normalization 
+
+Example vector:
+
+$$v=[1, 1]$$
+
+Its magnitude (length) is:
+
+$$||v|| = \sqrt{1^2 + 1^2} = \sqrt{2}$$
+
+To normalize, we divide each value by the magnitude:
+
+$$v_{normalize} = \left[\frac{1}{\sqrt{2}},\ \ \frac{1}{\sqrt{2}}\right]$$
+
+$$v_{normalize} = \frac{1}{\sqrt{2}}[1, 1]$$
+
+Now check length:
+
+$$\sqrt{\left(\frac{1}{\sqrt{2}} \right)^2 + \left(\frac{1}{\sqrt{2}} \right)^2} = \sqrt{\frac{1}{2} + \frac{1}{2}} = \sqrt{1} = 1$$
+
+#### We use normalization to ensure:
+- Vector length = 1
+- Direction remains same
 
 [Go To Top](#content)
 
