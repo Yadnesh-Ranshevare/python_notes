@@ -43,6 +43,7 @@
     - [Feature selection, Covariance & Corelation](#feature-selection)
     - [Feature Extraction](#feature-extraction)
     - [PCA (Principal Component Analysis)](#pca-principal-component-analysis)
+    - [Math intuition behind the PAC Algorithm](#math-intuition-behind-the-pac-algorithm)
 
 ---
 
@@ -3984,13 +3985,11 @@ Where:
 #### Example on how to solve eigen decomposition
 
 Example Matrix:
-$$
-A = 
+$$A = 
 \begin{bmatrix}
 4 & 2\\
 2 & 4
-\end{bmatrix}
-$$
+\end{bmatrix}$$
 
 **1. Find Eigenvalues**
 
@@ -4027,8 +4026,7 @@ $$(A−λI)v=0$$
 
 for $\lambda_1$ = 6
 
-$$
-\begin{bmatrix}
+$$\begin{bmatrix}
 4 - 6 & 2\\
 2 & 4 - 6
 \end{bmatrix} 
@@ -4036,8 +4034,7 @@ $$
 \begin{bmatrix}
 -2 & 2\\
 2 & -2
-\end{bmatrix} 
-$$
+\end{bmatrix}$$
 
 let eigen vector $v$ be as follow:
 
@@ -4051,23 +4048,19 @@ $$
 
 Therefor,
 
-$$
-\begin{bmatrix}
+$$\begin{bmatrix}
 -2 & 2\\
 2 & -2
 \end{bmatrix}
-
 \begin{bmatrix}
 X\\
 Y
 \end{bmatrix}
-
 = 
 \begin{bmatrix}
 0\\
 0
-\end{bmatrix}
-$$
+\end{bmatrix}$$
 
 Solve:
 
@@ -4081,14 +4074,12 @@ $$X = Y$$
 
 Choose simplest numbers:
 
-$$
-v_1 
+$$v_1 
 = 
 \begin{bmatrix}
 1\\
 1
-\end{bmatrix}
-$$
+\end{bmatrix}$$
 
 > perform same steps for $\lambda_2$
 
