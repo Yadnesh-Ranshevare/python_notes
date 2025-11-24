@@ -4280,17 +4280,7 @@ $$(A−λI)v=0$$
 
 for $\lambda_1$ = 6
 
-$$
-\begin{bmatrix}
-4 - 6 & 2\\
-2 & 4 - 6
-\end{bmatrix}
-=
-\begin{bmatrix}
--2 & 2\\
-2 & -2
-\end{bmatrix}
-$$
+$$\begin{bmatrix} 4 - 6 & 2\\2 & 4 - 6\end{bmatrix}=\begin{bmatrix}-2 & 2\\2 & -2\end{bmatrix}$$
 
 let eigen vector $v$ be as follow:
 
@@ -4304,18 +4294,7 @@ $$
 
 Therefor,
 
-$$
-\begin{bmatrix}
--2 & 2\\
-2 & -2
-\end{bmatrix}
-\begin{bmatrix}
-X\\
-Y
-\end{bmatrix}
-=
-\begin{bmatrix}0\\0\end{bmatrix}
-$$
+$$\begin{bmatrix}-2 & 2\\2 & -2\end{bmatrix}\begin{bmatrix}X\\Y\end{bmatrix}=\begin{bmatrix}0\\0\end{bmatrix}$$
 
 Solve:
 
@@ -4329,14 +4308,7 @@ $$X = Y$$
 
 Choose simplest numbers:
 
-$$
-v_1
-=
-\begin{bmatrix}
-1\\
-1
-\end{bmatrix}
-$$
+$$v_1=\begin{bmatrix}1\\1\end{bmatrix}$$
 
 > perform same steps for $\lambda_2$
 
