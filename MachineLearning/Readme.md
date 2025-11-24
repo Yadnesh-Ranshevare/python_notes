@@ -4326,7 +4326,10 @@ $$X = Y$$
 
 Choose simplest numbers:
 
-$$v_1=\begin{bmatrix}1\\1\end{bmatrix}$$
+$$v_1=\begin{bmatrix}
+1\\
+1
+\end{bmatrix}$$
 
 > perform same steps for $\lambda_2$
 
