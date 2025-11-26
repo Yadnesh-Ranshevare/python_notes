@@ -20,6 +20,8 @@
         - [Practical part](https://youtu.be/fHFOANOHwh8?si=dm8NoDXnD5lOZVT8)
 6. Machine Leaning
     - [Direct Note](./MachineLearning/Readme.md)
+7. sklearn
+    - [Direct Note](./sklearn/readme.md)
 
 
 # Other topics
