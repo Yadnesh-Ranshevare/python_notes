@@ -12,7 +12,8 @@
     - [StratifiedShuffleSplit](#stratifiedshufflesplit)
 6. [Preprocessing](#preprocessing)
 7. [Classifier](#classifier)
-
+8. [Regressor](#regressor)
+9. [Performance Matrix](#performance-matrix)
 
 ---
 
@@ -830,7 +831,7 @@ from sklearn.model_selection import train_test_split
 x,y = load_breast_cancer(return_X_y=True)
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
 ```
-3. scale it to equal scale (preprocessing)
+3. scale it to equal scale (preprocessing) if needed
 ```py
 from sklearn.datasets import load_breast_cancer
 from sklearn.model_selection import train_test_split
@@ -899,6 +900,140 @@ input = x_test[2]
 print(cls.predict([input]))
 ```
 
+
+[Go To Top](#content)
+
+---
+
+# Regressor
+Regressor is a supervised ML model that predict numerical/continuous values rather than categories.
+
+to build the Regressor:
+> you can use any Regressor the following steps remains the same
+
+### step 1: prepare a dataset
+1. import dataset
+```py
+from sklearn.datasets import fetch_california_housing
+
+x,y = fetch_california_housing(return_X_y=True)
+```
+2. perform train test split
+```py
+from sklearn.datasets import fetch_california_housing
+from sklearn.model_selection import train_test_split
+
+x,y = fetch_california_housing(return_X_y=True)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+```
+3. scale it to equal scale (preprocessing) if needed
+```py
+from sklearn.datasets import fetch_california_housing
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+x,y = fetch_california_housing(return_X_y=True)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+
+scalar = StandardScaler()
+
+x_train_scale = scalar.fit_transform(x_train)
+x_test_scale = scalar.transform(x_test)
+```
+### Step 2: import Regressor and create a instance
+```py
+from sklearn.linear_model import LinearRegression
+
+reg = LinearRegression()
+```
+> here instead of `LinearRegression` you can use any Regressor you want it will not affect the rest of the code
+
+### step 3: train the model on prepared dataset
+```py
+reg.fit(x_train_scale, y_train)
+```
+> use fit method to train the model
+
+
+### Step 4: check the performance
+```py
+reg.score(x_test_scale, y_test) # output = 0.5943588923592271
+```
+> it uses R^2 score to calculate performance
+
+### Step 5: make prediction
+```py
+input = x_test[0]   # making prediction for first test values
+reg.predict([input]) # output = [1.6672634]
+```
+
+### Complete code
+```py
+from sklearn.datasets import fetch_california_housing
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression
+
+scalar = StandardScaler()
+reg = LinearRegression()
+
+x,y = fetch_california_housing(return_X_y=True)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+
+x_train_scale = scalar.fit_transform(x_train)
+x_test_scale = scalar.transform(x_test)
+
+reg.fit(x_train_scale, y_train)
+
+print(reg.score(x_test_scale, y_test)) 
+
+input = x_test_scale[0]
+print(reg.predict([input]))
+```
+
+[Go To Top](#content)
+
+---
+# Performance Matrix
+performance matrix is the matrix that tells the performance of you ML model
+
+### 1. for classifier
+```py
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+y_pre = cls.predict(x_test_scale)   # output predicted by model
+
+print(accuracy_score(y_test, y_pre))    # 0.9473684210526315
+
+print(precision_score(y_test, y_pre))   # 0.9142857142857143
+
+print(recall_score(y_test, y_pre))  # 1.0
+
+print(f1_score(y_test, y_pre))  # 0.9552238805970149
+```
+By default it uses `accuracy_score`
+```py
+cls.score(x_test_scale, y_test) #returns accuracy_score
+```
+
+### 2. for regressor
+```py
+from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error, root_mean_squared_error
+
+y_pred = reg.predict(x_test_scale)
+
+print(r2_score(y_test, y_pred)) # 0.6022962097474529
+
+print(mean_absolute_error(y_test, y_pred))  # 0.5324069014662417
+
+print(mean_squared_error(y_test, y_pred))   # 0.5372297696480762
+
+print(root_mean_squared_error(y_test, y_pred))  # 0.7329595961907288
+```
+By default it uses `r2_score`
+```py
+reg.score(x_test_scale, y_test) #returns r2_score
+```
 
 [Go To Top](#content)
 
