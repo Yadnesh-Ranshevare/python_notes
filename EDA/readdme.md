@@ -13,6 +13,7 @@
 6. [Feature Engineering](#feature-engineering)
     - [Derived Matrix](#derived-matrix)
     - [Feature Binning](#feature-binning)
+    - [Feature Encoding](#feature-encoding)
     - [Feature Scaling](#feature-scaling)
     - [Feature Transformation](#feature-transformation)
     - [Datetime Extraction](#datetime-extraction)
