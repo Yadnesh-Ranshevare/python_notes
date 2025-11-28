@@ -11,6 +11,8 @@
     - [unbalanced Split](#unbalanced-split)
     - [StratifiedShuffleSplit](#stratifiedshufflesplit)
 6. [Preprocessing](#preprocessing)
+7. [Classifier](#classifier)
+
 
 ---
 
@@ -802,6 +804,101 @@ after encoding
 array([0., 1., 2.])
 array([0., 1., 2.])
 ```
+
+
+
+[Go To Top](#content)
+
+---
+# Classifier
+classifier is a supervised Ml model that classify the data between various classes
+
+to build the classifier:
+> you can use any classifier the following steps remains the same
+### step 1: prepare a dataset
+1. import dataset
+```py
+from sklearn.datasets import load_breast_cancer
+
+x,y = load_breast_cancer(return_X_y=True)
+```
+2. perform train test split
+```py
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+
+x,y = load_breast_cancer(return_X_y=True)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+```
+3. scale it to equal scale (preprocessing)
+```py
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+x,y = load_breast_cancer(return_X_y=True)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+
+scalar = StandardScaler()
+
+x_train_scale = scalar.fit_transform(x_train)
+x_test_scale = scalar.transform(x_test)
+```
+### Step 2: import classifier and create a instance
+```py
+from sklearn.neighbors import KNeighborsClassifier
+
+cls = KNeighborsClassifier()
+```
+> here instead of `KNeighborsClassifier` you can use any classifier you want it will not affect the rest of the code
+### step 3: train the model on prepared dataset
+```py
+cls.fit(x_train_scale, y_train)
+```
+> use fit method to train the model
+
+### Step 4: check the performance
+```py
+cls.score(x_test_scale, y_test) # output = 0.9736842105263158
+```
+
+### Step 5: make prediction
+```py
+input = x_test[0]   # making prediction for first test values
+cls.predict([input]) # output = 0 -> class 0
+```
+You can also predict the probability
+```py
+cls.predict_proba([input]) # output = [[1., 0.]] 
+```
+`1.` -> 100% potability for class 0 (index at which `1.` is present)
+`0.` -> 0% potability for class 1 (index at which `0.` is present)
+> some classifier might not be able to predict the probability, therefor for those classifier `predict_proba()` will throw an error
+
+### Complete code
+```py
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+
+x,y = load_breast_cancer(return_X_y=True)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+
+scalar = StandardScaler()
+cls = KNeighborsClassifier()
+
+x_train_scale = scalar.fit_transform(x_train)
+x_test_scale = scalar.transform(x_test)
+
+cls.fit(x_train_scale, y_train)
+
+print(cls.score(x_test_scale, y_test))
+
+input = x_test[2]
+print(cls.predict([input]))
+```
+
 
 [Go To Top](#content)
 
