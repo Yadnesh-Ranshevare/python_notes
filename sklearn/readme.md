@@ -709,11 +709,11 @@ Without preprocessing, models become:
 - impossible to train
 
 ### Common tool for preprocessing in sklearn
-- [StandardScaler](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html#sklearn.preprocessing.StandardScaler):\
+- StandardScaler:\
  Standardize features by removing the mean and scaling to unit variance.
-- [MinMaxScaler](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MinMaxScaler.html#sklearn.preprocessing.MinMaxScaler):\
+- MinMaxScaler:\
 Transform features by scaling each feature to a given range.
-- [OneHotEncoder](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder):\
+- OneHotEncoder:\
 Encode categorical features as a one-hot numeric array.
 - LabelEncoder
 - SimpleImputer
@@ -723,7 +723,7 @@ Encode categorical features as a one-hot numeric array.
 
 > to learn more about how each function work visit the [official documentation of sklearn](https://scikit-learn.org/stable/api/sklearn.preprocessing.html)
 
-### Example:
+### Example for scaling:
 ```py
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
@@ -763,6 +763,45 @@ You use this on:
 - new incoming data
 
 Because you should never learn (fit) from test data.
+
+### Example for encoding
+```py
+from sklearn.datasets import fetch_openml
+from sklearn.preprocessing import OrdinalEncoder
+
+data = fetch_openml('car', as_frame=True).frame
+
+print("before encoding")
+print(data['lug_boot'].unique())
+print(data['safety'].unique())
+
+col_to_encode = ["lug_boot", "safety"]
+
+encoder = OrdinalEncoder(
+    categories=[
+        ['small', 'med', 'big'],
+        ['low', 'med', 'high']
+    ]
+)
+
+data[col_to_encode] = encoder.fit_transform(data[col_to_encode])
+
+print("after encoding")
+print(data['lug_boot'].unique())
+print(data['safety'].unique())
+```
+Output:
+```
+before encoding
+['small', 'med', 'big']
+Categories (3, object): ['big', 'med', 'small']
+['low', 'med', 'high']
+Categories (3, object): ['high', 'low', 'med']
+
+after encoding
+array([0., 1., 2.])
+array([0., 1., 2.])
+```
 
 [Go To Top](#content)
 
