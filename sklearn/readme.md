@@ -10,6 +10,7 @@
 5. [Data Splitting](#data-splitting)
     - [unbalanced Split](#unbalanced-split)
     - [StratifiedShuffleSplit](#stratifiedshufflesplit)
+6. [Preprocessing](#preprocessing)
 
 ---
 
@@ -717,6 +718,10 @@ Encode categorical features as a one-hot numeric array.
 - LabelEncoder
 - SimpleImputer
 - RobustScaler
+
+> this are the operation that we mostly perform at the time of [feature engineering](https://github.com/Yadnesh-Ranshevare/python_notes/blob/main/EDA/readdme.md#feature-engineering)
+
+> to learn more about how each function work visit the [official documentation of sklearn](https://scikit-learn.org/stable/api/sklearn.preprocessing.html)
 
 ### Example:
 ```py
