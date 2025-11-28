@@ -7,6 +7,9 @@
     - [Use return_X_y](#use-return_x_y)
     - [Import dataset as pandas frame](#import-dataset-as-pandas-frame)
     - [Custom dataset using make_](#custom-dataset-using-make_)
+5. [Data Splitting](#data-splitting)
+    - [unbalanced Split](#unbalanced-split)
+    - [StratifiedShuffleSplit](#stratifiedshufflesplit)
 
 ---
 
@@ -481,6 +484,280 @@ random_state = 42
 Shuffled → [4,2,1,3,5]
 ```
 All values are allowed → just different patterns.
+
+[Go To Top](#content)
+
+---
+# Data Splitting
+Data splitting means dividing your dataset into separate parts so your ML model can learn properly and be tested fairly.
+
+### Why do we split data?
+
+To avoid a model that remembers the data instead of learning patterns.
+Splitting helps check whether the model performs well on new unseen data.
+
+it also:
+- Helps check if the model generalizes to new data
+- Prevents the model from memorizing (overfitting)
+- Provides unseen data to evaluate performance
+- Allows fair comparison between different models
+- Lets you tune hyperparameters safely using a validation set
+- Mimics real-world scenarios, where new data arrives after training
+
+### Typical Splits
+| Set            | Purpose                                 | Example % |
+| -------------- | --------------------------------------- | --------- |
+| **Training**   | Model learns patterns                   | 70–80%    |
+| **Validation** | Tune hyperparameters, avoid overfitting | 10–15%    |
+| **Test**       | Final evaluation                        | 10–15%    |
+
+
+### Function Used
+```py
+train_test_split()
+```
+from:
+```py
+from sklearn.model_selection import train_test_split
+```
+#### `train_test_split()` gives 4 outputs (most common case)
+
+When you pass features (X) and labels (y):
+```py
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+```
+Here’s what each part means:
+| Return Value | Meaning           | What it Contains                               |
+| ------------ | ----------------- | ---------------------------------------------- |
+| **X_train**  | Training features | Part of your dataset used to *train* the model |
+| **X_test**   | Testing features  | Used to *test/evaluate* the trained model      |
+| **y_train**  | Training labels   | Target values for X_train                      |
+| **y_test**   | Testing labels    | Target values for X_test                       |
+
+#### order matters a LOT in `train_test_split()`
+
+| Input Order                 | Output Order                                        |
+| --------------------------- | --------------------------------------------------- |
+| `train_test_split(X, y)`    | `X_train, X_test, y_train, y_test`                  |
+| `train_test_split(A, B, C)` | `A_train, A_test, B_train, B_test, C_train, C_test` |
+| ❌ Wrong capture order       | Results in incorrect assignments                    |
+
+
+
+### Example
+```py
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+
+x,y = load_iris(return_X_y=True)
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)    # 20% data for testing
+
+print(len(x))   # total 150 
+print(len(x_train)) # 80% of 150 = 120
+print(len(x_test))  # 20% of 150 = 30
+```
+
+Output:
+```
+150
+120
+30
+```
+
+### Important Parameters
+| Parameter      | Meaning                                          |
+| -------------- | ------------------------------------------------ |
+| `test_size`    | How much data goes into testing (0.2 = 20%)      |
+| `train_size`   | Optional (if you want to manually say 80%, etc.) |
+| `random_state` | Ensures same split every run                     |
+| `shuffle=True` | Data gets shuffled before splitting (default)    |
+
+
+### unbalanced Split
+A split is unbalanced when:\
+The number of samples of each class in train/test does NOT match the original data’s ratio.
+
+#### Example
+Original data:
+- Class 0 → 8 samples
+- Class 1 → 2 samples\
+(so ratio = 80% : 20%)
+
+After splitting (unbalanced case):
+
+Train:\
+7 samples of class 0, 1 sample of class 1 (87.5% : 12.5%)
+
+Test:\
+1 sample of class 0, 1 sample of class 1 (50% : 50%)
+
+The ratios changed → unbalanced.
+
+#### Balanced split means
+Train and test should have the same ratio as the original dataset (80% : 20%).
+
+
+### StratifiedShuffleSplit
+
+`train_test_split()` does NOT guarantee balanced splitting by default.
+
+By default:
+- It randomly splits the data
+- It tries to preserve the pairing (X with y)
+- But it does NOT balance the class distribution
+
+#### How to make a balanced split?
+
+We use stratification:
+```py
+train_test_split(X, y, test_size=0.2, stratify=y)
+```
+It ensures train and test have the same class ratio as the original dataset.
+
+#### Another way of doing balanced split is to use `StratifiedShuffleSplit`
+StratifiedShuffleSplit creates shuffled train-test splits while keeping class proportions exactly the same as the original data, and can generate many such splits.
+
+| Feature          | train_test_split(stratify=y) | StratifiedShuffleSplit            |
+| ---------------- | ---------------------------- | --------------------------------- |
+| Number of splits | Only 1                       | Can make many                     |
+| Shuffling        | Automatic                    | You can control it                |
+| Output style     | Direct arrays                | Gives train and test **indexes**  |
+| Use cases        | Simple split                 | CV, multiple splits, more control |
+
+
+#### How to use it?
+```py
+from sklearn.model_selection import StratifiedShuffleSplit
+
+split = StratifiedShuffleSplit(n_splits=1, test_size=0.2) # n_splits = number of split
+```
+Now we can use this split object to make our balanced train test split
+
+```py
+split.split(X, y)
+```
+`split.split(X, y)`  does NOT return the actual data.
+
+It returns a generator that gives you:
+```
+(train_index, test_index)
+```
+> A generator is something that gives you values one at a time, instead of giving everything at once.
+
+Both are arrays of indexes
+- train_index = positions of samples that go into training
+- test_index = positions of samples that go into testing
+
+
+#### Simple Illustration
+Suppose:\
+`X has 10 samples`
+
+`split.split(X, y)` will give something like:
+```
+train_index = [0, 3, 4, 6, 8, 9]
+test_index  = [1, 2, 5, 7]
+```
+Now you use them like:
+```
+X_train = X[train_index]
+X_test  = X[test_index]
+```
+
+### Example:
+```py
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+
+x,y = load_iris(return_X_y=True)
+
+split = StratifiedShuffleSplit(n_splits=1, test_size=0.2)
+
+for train_idx, test_idx in split.split(x, y):
+    x_train = x[train_idx]
+    x_test = x[test_id]
+    y_train = y[train_idx]
+    y_test = y[test_id]
+```
+
+
+
+[Go To Top](#content)
+
+---
+# Preprocessing
+Preprocessing means preparing raw data so that a machine learning model can understand it.
+
+ML models can’t work directly on messy, text, missing-value, or uneven data —
+so preprocessing makes the data clean, numeric, scaled, and model-ready.
+
+### Why do we need preprocessing?
+Because raw data usually has:
+- Missing values
+- Different scales
+- Irrelevant columns
+- Text instead of numbers
+- Noise and outliers
+- Categorical values (labels)
+
+Without preprocessing, models become:
+- inaccurate
+- slow
+- unstable
+- impossible to train
+
+### Common tool for preprocessing in sklearn
+- [StandardScaler](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html#sklearn.preprocessing.StandardScaler):\
+ Standardize features by removing the mean and scaling to unit variance.
+- [MinMaxScaler](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MinMaxScaler.html#sklearn.preprocessing.MinMaxScaler):\
+Transform features by scaling each feature to a given range.
+- [OneHotEncoder](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OneHotEncoder.html#sklearn.preprocessing.OneHotEncoder):\
+Encode categorical features as a one-hot numeric array.
+- LabelEncoder
+- SimpleImputer
+- RobustScaler
+
+### Example:
+```py
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+x,y = load_iris(return_X_y=True)
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
+
+scalar = StandardScaler()
+
+x_train_scale = scalar.fit_transform(x_train)
+x_test_scale = scalar.transform(x_test)
+```
+
+### difference between fit_transform() and transform()
+
+#### 1. fit_transform() → Learn + Apply
+It does two things:
+
+fit → learns the scaling values
+- mean
+- standard deviation
+- min/max (for MinMaxScaler)
+
+transform → applies the scaling using those learned values
+
+#### 2. transform() → Only Apply
+It does NOT learn anything.
+
+It only uses the values learned earlier from training data.
+
+You use this on:
+
+- test data
+- validation data
+- new incoming data
+
+Because you should never learn (fit) from test data.
 
 [Go To Top](#content)
 
