@@ -22,6 +22,7 @@
     - [Direct Note](./MachineLearning/Readme.md)
 7. sklearn
     - [Direct Note](./sklearn/readme.md)
+8. [eXplainable AI (XAI)](./XAI/readme.md)
 
 
 # Other topics
