@@ -4,6 +4,7 @@
 3. [XAI Methods](#xai-methods)
 4. [XAI technique](#xai-technique)
 5. [LIME: Local Interpretable Model-agnostic Explanations](#lime-local-interpretable-model-agnostic-explanations-1)
+6. [SHAP: SHapely Additive exPlanation ](#shap-shapely-additive-explanation)
 
 
 [Acknowledgment](#acknowledgment)
@@ -366,7 +367,202 @@ Because:
 
 📌 So BMI & HeartDisease are important for this point.
 
+### Mathematical Representation
+$$\zeta (X) = argmin_{\text{g ∈ G}}\ L(f, g, \pi_x) + \Omega(g)$$
 
+here:
+- X -> local instance of model
+- g -> local interpretable model that belongs to `G`
+- G ->  class of potentially interpretable models, such
+as linear models, decision trees. 
+- f -> complex model that is being explained
+- $\pi_x$ -> proximity measure of `x`
+- $\Omega(g)$ -> measure of complexity of `g`
+- L -> fidelity functions
+
+In LIME we must minimize $L(f, g, \pi_x)$ while having $\Omega(g)$  be
+low enough to be interpretable by humans
+
+
+$$L(f, g, \pi_x) = \sum \pi_x(z)(f(z) - g(z^l))^2$$
+
+Here
+- z -> a perturbed sample / original feature space (real values)
+- $f(z)$ -> prediction of black-box model for sample z
+- $g(z^l)$ -> prediction of interpretable local model `g`
+- $z^l$ -> interpretable representation of `z` 
+
+
+### Limitations of LIME
+
+1. **Sensitive to neighborhood size**
+    - Lime is dependent on $\pi_x$ 
+    - Small $\pi_x$ → too local → noisy
+    - Large $\pi_x$ → too global → inaccurate
+    - There is no universal best $\pi_x$.
+
+2. **Linear assumption may be wrong locally**
+    - LIME assumes: The model is approximately linear near the point
+    - But sharp decision boundaries, Feature interaction, Discontinuities break this assumption.
+
+3. **Perturbed samples may be unrealistic**
+    - LIME creates synthetic data without checking validity.
+    - Example:
+
+    ```
+    Age = 5
+    HeartDisease = Yes
+    BMI = 60
+    ```
+    - These points:
+        - Never exist in real life
+        - But still influence the explanation
+4. **Computationally expensive**
+    - For each explanation:
+        - Generate hundreds / thousands of samples
+        - Query the black-box model many times
+    - Impact
+        - Slow for large models
+        - Not ideal for real-time systems
+    
+5. **Instability**
+    - If you run LIME twice on the same data point → you may get different explanations.
+    - Why
+        - Random sampling of perturbed points
+        - Different local neighborhoods
+        - Different surrogate fits
+
+
+    
+[Go To Top](#content)
+
+---
+# SHAP: SHapely Additive exPlanation 
+- SHAP uses game theory's Shapley values to fairly attribute a model's output to its input features, treating features as "players" in a coalition that contributes to the prediction payoff
+- SHAP works by breaking down a machine learning model's prediction into simple contributions from each input feature, like dividing credit among team players for a win.
+- Imagine the model's output as a "pot of gold." SHAP fairly splits this value by testing every possible group of features, seeing how much each one adds or subtracts when joining the group.
+- It averages these impacts so no feature gets unfair credit.
+
+> It helps to understand "what is the fair contribution of each individual feature?"
+
+- To calculate the true individual contribution, we need to consider different subsets of features
+- calculate the individual contribution for each subset, and then do an average of those contribution to find the marginal contribution of each feature
+
+while building the subset we cannot change the no. of dimensions, as model accept input in fixed dimensions
+
+So we can put some random values for the features that need to be removed.
+
+<img src='./Images/shap-subset.png' style="width:700px"/>
+
+now when we iterate this subset large no. of time then the affect of this random value will be ignored
+
+
+### Example
+We have a model with 2 features:
+```
+x1 = Age
+x2 = Income
+```
+With 2 features, subsets are:
+| Subset S      | Active features |
+| ------------- | --------------- |
+| {}            | none            |
+| {Age}         | Age only        |
+| {Income}      | Income only     |
+| {Age, Income} | both            |
+
+Step 4: Model outputs for each subset
+| Input            | Meaning                   | Model output |
+| ---------------- | ------------------------- | ------------ |
+| f({})            | both random          | 50           |
+| f({Age})         | Age real, Income random | 60           |
+| f({Income})      | Income real, Age random | 70           |
+| f({Age, Income}) | both real                 | 80           |
+
+#### Compute SHAP value
+For a feature, SHAP asks:\
+“How much does the prediction change when I ADD this feature?”
+```
+(with feature) − (without feature)
+```
+
+**Computing SHAP for Age**
+> We must compare situations that differ only by Age.
+- Case 1: Age added to empty set
+
+    ```
+    Before: {}          → f({}) = 50
+    After:  {Age}       → f({Age}) = 60
+    ```
+    Contribution of Age
+
+    ```
+    60 − 50 = 10
+    ```
+    Why this subtraction?\
+    Because Income is random in both cases — the only change is Age.
+
+- Case 2: Age added when Income is already present
+
+    ```
+    Before: {Income}        → f({Income}) = 70
+    After:  {Age, Income}   → f({Age, Income}) = 80
+    ```
+    Contribution of Age
+
+    ```
+    80 − 70 = 10
+    ```
+    Again:\
+    Same Income value, only Age changes.
+
+- Average the contribution 
+    ```
+    φ_Age = (10 + 10) / 2 = 10
+    ```
+
+**Compute SHAP for income**
+
+similar to age logic valid pairs for Income:
+- {} → {Income}
+- {Age} → {Age, Income}
+- Subtractions:
+
+    ```
+    70 − 50 = 20
+    80 − 60 = 20
+    ```
+- Average:
+    ```
+    φ_Income = (20 + 20) / 2 = 20
+    ``` 
+
+**conclusion**
+
+- From the SHAP values we computed:
+    ```
+    φ_Age    = 10
+    φ_Income = 20
+    ```
+- Income contributes more than Age to this prediction
+- Because adding Income increases the prediction more than adding Age, on average, across all contexts (subsets)
+<!-- ### Step-by-Step Process
+- Pick a baseline (average prediction across many examples).
+- For one prediction, mask features one by one in random combos and see model changes.
+- Weigh and average each feature's "push up or down" effect across thousands of tests.
+- Add them up: baseline + feature effects = exact prediction.
+
+<img src="./Images/SHAP.png" style="width:800px"/> -->
+
+
+### Mathematical Representation
+
+<img src="./Images/shap-math.png" style="width:500px"/>
+
+$f_x(z^l) - f_x(z \text{\textbackslash} i) = 60\% - 15\%$ says that by adding `age` into subset [`Diabetic parents`, `caloric intake`] the number of prediction for particular class goes up to 60% from 15%
+
+Therefor we can say that feature `age` has high influence 
+    
 [Go To Top](#content)
 
 ---
@@ -374,7 +570,11 @@ Because:
 # Acknowledgment
 1. [Information Fusion (Research Paper)](https://www.sciencedirect.com/science/article/pii/S1566253523001148): XAI concepts
 2. [vizuara](https://www.youtube.com/@vizuara): Core XAI Technique and Algorithm
-3. [Why Should I Trust You? (Research Paper)](https://arxiv.org/pdf/1602.04938): LIME 
+3. [lime github](https://github.com/marcotcr/lime)
+4. [Why Should I Trust You? (Research Paper)](https://arxiv.org/pdf/1602.04938): LIME 
+5. [SHAP doc](https://shap.readthedocs.io/en/latest/)
+6. [shap github](https://github.com/shap/shap)
+7. [A Unified Approach to Interpreting Model Predictions (Research Paper)](https://arxiv.org/pdf/1705.07874): SHAP
 
 [Go To Top](#content)
 
