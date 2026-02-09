@@ -4,10 +4,13 @@
 3. [XAI Methods](#xai-methods)
 4. [XAI technique](#xai-technique)
 5. [LIME: Local Interpretable Model-agnostic Explanations](#lime-local-interpretable-model-agnostic-explanations-1)
+    - [Coding implementation 1](./src/lime1.ipynb)
+    - [Coding implementation 2](./src/lime2.ipynb)
 6. [SHAP: SHapely Additive exPlanation ](#shap-shapely-additive-explanation)
+    - [Coding implementation](./src/shap.ipynb)
 
 
-[Acknowledgment](#acknowledgment)
+[Acknowledgment and Reference](#acknowledgment-and-reference)
 
 ---
 
@@ -567,7 +570,7 @@ Therefor we can say that feature `age` has high influence
 
 ---
 
-# Acknowledgment
+# Acknowledgment and Reference
 1. [Information Fusion (Research Paper)](https://www.sciencedirect.com/science/article/pii/S1566253523001148): XAI concepts
 2. [vizuara](https://www.youtube.com/@vizuara): Core XAI Technique and Algorithm
 3. [lime github](https://github.com/marcotcr/lime)
