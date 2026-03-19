@@ -45,6 +45,7 @@
     - [Feature Extraction](#feature-extraction)
     - [PCA (Principal Component Analysis)](#pca-principal-component-analysis)
     - [Math intuition behind the PAC Algorithm](#math-intuition-behind-the-pac-algorithm)
+27. [Cross Validation](#cross-validation)
 
 ---
 
