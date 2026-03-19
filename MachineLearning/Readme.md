@@ -4375,3 +4375,128 @@ $$\sqrt{\left(\frac{1}{\sqrt{2}} \right)^2 + \left(\frac{1}{\sqrt{2}} \right)^2}
 [Go To Top](#content)
 
 ---
+# Cross Validation
+Cross-validation is a technique used in machine learning to check how well your model will perform on unseen data.
+
+Instead of splitting data just once into train/test, you split it multiple times and test the model repeatedly. This gives a much more reliable performance estimate.
+
+in general ML pipeline we divide our dataset into two parts i.e, traning and testing but in cross validation we divide it into three parts i.e, traning, testinng and validation
+
+## Leave-One-Out Cross Validation (LOOCV)
+- In LOOCV, from entier traing dataset one observation is used as the validation set while the rest form the training set.
+- This process is repeated for each data point in the dataset, resulting in n training-testing cycles, where n is the number of observations.
+- example:
+
+    <img src="./images/LOOCV.png" style="width:700px">
+
+#### Advantages of LOOCV
+- **Uses Maximum Data for Training**: Each time you train on N − 1 samples (Almost the entire dataset)
+- **No randomness**: There is only one possible way to split the dataset
+- **low bias estimate**: model trains on almost full data
+
+> Bias = how far your model’s estimated performance is from true value
+
+#### Disadvantages of LOOCV
+- **Very Slow**: You train model N times (If N = 10,000 → 10,000 trainings)
+- **High Variance**: If that 1 test point is noisy → accuracy drops sharply
+- **Overfitting Risk**: Training data is almost identical in every iteration
+
+## Hold Out Cross Validation
+Hold-Out Cross Validation (usually just called train/validation split) is the simplest way to evaluate a machine learning model.
+
+You split your traning dataset once into two parts:
+- Training set → used to train model
+- validation set → used to validate model
+
+> Data is split ramdomly
+
+#### Example:
+
+you have dataset with 1300 entries:
+- First you perform tranin-test split:
+    - 1000 → traning
+    - 300 → testing
+- then you perform train-validation split on traning dataset
+    - 700 → model traning
+    - 300 → model validation
+
+ finally our dataset is divided as:
+- 700 → model traning
+- 300 → model validation
+- 300 → testing
+
+#### Common Split ratio:
+- 80% → Train dataset
+    - 80% / 70% → Model traning
+    - 20% / 30% → Model validation
+- 20% → Test dataset
+
+> Traning data > validation data & testing Data
+
+#### Advantages of Hold-Out Cross Validation
+- **Very Fast**: Model is trained only once
+- **Simple to Implement**: No complex logic, easy to debug
+- **Works Well for Large Datasets**: One split is usually enough
+
+#### Disadvantages of Hold-Out Cross Validation
+- **Unstable Results**: Result depends on how data is split
+- **Risk of Bad Split**: Suppose dataset has 90% class A, 10% class B. Bad split → test set has only class A
+- **Data Wastage**: Test data is not used in training
+
+
+
+## K-Fold Cross Validation
+K-Fold Cross Validation is a technique where you split your dataset into K equal parts (folds) and evaluate your model K times to get a reliable performance.
+
+1. Divide data into K folds
+2. Repeat K times:
+    - Use 1 fold → validation
+    - Use remaining K-1 folds → Train
+3. Average all results
+
+#### Example (K = 5)
+Dataset → `[D1, D2, D3, D4, D5]`
+| Iteration | Train Data  | Validation Data |
+| --------- | ----------- | --------- |
+| 1         | D2 D3 D4 D5 | D1        |
+| 2         | D1 D3 D4 D5 | D2        |
+| 3         | D1 D2 D4 D5 | D3        |
+| 4         | D1 D2 D3 D5 | D4        |
+| 5         | D1 D2 D3 D4 | D5        |
+
+Final Accuracy = average of all 5 runs
+
+#### Advantages of K-Fold Cross Validation
+- **More Reliable**: Uses multiple splits which reduces chance of lucky/unlucky split
+- **Better Use of Data**: Every data point is Used for training as well as testing (once)
+
+#### Disadvantages of K-Fold Cross Validation
+- **Not work with imbalance dataset**: Majoity of the data in validation set many contain minor class data
+
+## Stratified K-Fold Cross Validation
+Stratified K-Fold is an improved version of K-Fold where:\
+Each fold has the same class distribution as the original dataset
+
+In normal K-Fold:
+- Data is split randomly
+- Some folds may get imbalanced classes
+
+    | Fold | Class A | Class B |
+    | ---- | ------- | ------- |
+    | 1    | 100%    | 0% ❌    |
+    | 2    | 80%     | 20%     |
+    | 3    | 95%     | 5%      |
+
+    Model gets biased evaluation
+- Solution: Stratified K-Fold (Each fold maintains same ratio)
+
+    | Fold | Class A | Class B |
+    | ---- | ------- | ------- |
+    | 1    | 90%     | 10% ✅   |
+    | 2    | 90%     | 10% ✅   |
+    | 3    | 90%     | 10% ✅   |
+    
+
+[Go To Top](#content)
+
+---
