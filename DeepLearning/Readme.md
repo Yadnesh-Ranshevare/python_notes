@@ -49,3 +49,31 @@ For example, in image processing lower layers may identify edges, while higher l
 [Go To Top](#content)
 
 ---
+# Perceptron
+Perceptron is an algorithm used for supervised ML and is one of the simplest types of artificial neural networks
+
+<img src="./Images/perceptron.png" style="width:500px">
+
+Here
+1. **Inputs**: 
+    - These are the features/data points coming into the model.
+    - Each input represents some information
+    
+2. **Weights**: 
+    - Each input is connected with a weight.
+    - These control how important each input is
+    - Larger weight → more influence
+    - Smaller weight → less influence
+3. **Summation Block**: 
+    - All weighted inputs are added together here.
+    - This computes the linear combination
+    - $z = w_1x_1 + w_2x_2 + ... + w_nx_n + b$
+4. **Bias**: 
+    - The bias is added to the sum
+    - It shifts the decision boundary (like adjusting a threshold)
+5. **Activation Function**: 
+    - Takes the summed value and decides output (like keeping the output in a particular range)
+
+[Go To Top](#content)
+
+---
