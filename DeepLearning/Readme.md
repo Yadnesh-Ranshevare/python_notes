@@ -1,7 +1,9 @@
 # Content
 1. [Introduction](#introduction)
 2. [Perceptron](#perceptron)
-3. [Perceptron Trick](#perceptron-trick)
+    - [Perceptron Trick](#perceptron-trick)
+    - [Loss Function In Perceptron](#loss-function-in-perceptron)
+    - [Flexibility with Perceptron](#flexibility-with-perceptron)
 
 
 # Introduction
@@ -261,6 +263,96 @@ $C_{new} = C_{old} - 0.01 \times c = 5 - 0.01 = 4.99$
 Therefor new equation of line:
 
 $$1.96x+2.95y + 4.99 = 0$$
+
+### Problem With Perceptron trick
+
+- In the perceptron trick, we randomly pick one misclassified point and adjust the decision boundary so it moves toward correctly classifying that point.
+- Since the misclassified point is chosen randomly, the final decision boundary we get can also vary each time.
+- If the two classes are clearly separable, there can be multiple valid decision boundaries that correctly divide them.
+- Because of this randomness, the perceptron may end up finding any one of these possible separating lines.
+- Also, the perceptron does not provide a way to determine which of these separating lines is better than the others.
+- As a result we cannot specify whether the decision boundary we get in the end is the optimal one or any other optimal one still exist
+
+**Because of this we avoid using this perceptron trick algorithm and instead use more reliable approach where we use [gradient decent](../MachineLearning/Readme.md#gradient-descent) along with [loss function](#loss-function-in-perceptron)**
+
+[Go To Top](#content)
+
+---
+# Loss Function In Perceptron
+> Loss function is function that return a numerical value, we use this numerical value to calculate the error done by our model, higher the output of the loss function poor the model accuracy 
+
+For perceptron the simplest way to find the error is to check the no. of misclassified point 
+
+<img src="./Images/loss-fun-1.png" style="width:500px">
+
+In above example the output of loss function is `5` as there are `5` misclassified points
+
+- the problem with this method is that it give same penalty to each point, irrespective to how far the point is from decision boundary
+- Even though this work but in case of multiple decision boundaries we didn't know which line cause the lowest error as penalty for each data point is same
+
+Therefor we try to find the error by finding the distance between the decision boundary and the misclassified points
+
+To do that we can use distance formula and find the perpendicular distance of a point from the line, but using the method is little hard
+
+hence we just put the value of misclassified in the equation of decision boundary
+
+<img src="./Images/loss-fun-2.png" style="width:500px">
+
+- for `(5.5, 5.5)`
+
+    $x = 5.5 \ ;\  y = 5.5$ 
+
+    $|x + y - 10| = |5.5 + 5.5 - 10| = |11 - 10| = 1$
+
+- for `(4, 4)`
+
+    $x = 4 \ ;\  y = 4$ 
+
+    $|x + y - 10| = |4 + 4 - 10| = |8 - 10| = 2$
+
+- Output of loss function = 1 + 2 = 3
+
+Fom above example we see that the point which is closest to decision boundary (`5.5, 5.5`) get the less penalty (`1`), that than to the point which is far away (`(4, 4) penalty = 2`)
+
+
+
+[Go To Top](#content)
+
+---
+# Flexibility with Perceptron
+
+- Perceptron is a mathematical model used in machine learning
+- It first calculates a value using a formula like a weighted sum of inputs. After that, the activation function decides what kind of output to produce, such as a class label, a probability, or a number.
+- By changing the activation function and loss function, you can make the same model behave like a binary classifier, a multi class classifier, or a regression model.
+
+### How it happen
+- The model always starts by computing a single value using the inputs and weights. Think of this value as a raw score. On its own, this score doesn’t mean anything yet.
+
+- What makes it useful is how we interpret that score, and that is controlled by the activation function.
+    - If we use a step or sigmoid activation, we treat the score as a decision between two classes, so the model behaves like a binary classifier.
+    - If we use softmax on multiple scores, we interpret them as probabilities of different classes, so it becomes a multi class classifier.
+    - If we don’t apply any activation, we treat the score directly as a number, so it becomes a regression model.
+
+- Now comes the role of the loss function. 
+    - The loss function tells the model what kind of mistake to care about. 
+    - For classification, it penalizes wrong class predictions. 
+    - For regression, it penalizes how far the predicted number is from the actual value. 
+    - So during training, the model adjusts its weights differently depending on the loss.
+
+- So the process is:\
+The model produces a raw score → the activation converts it into a specific type of output → the loss function checks how wrong that output is → the model updates itself based on that.
+- That’s why just changing activation and loss function makes the same model behave differently, even though the underlying computation stays the same.
+
+### Some basic combination
+
+| Problem Type              | Activation Function | Loss Function             | Output Meaning          |
+| ------------------------- | ------------------------- | ------------------------- | ----------------------- |
+| Binary Classification     | Step Function             | Perceptron Loss           | Class (0 or 1 directly) |
+| Binary Classification / Logistic Regression    | Sigmoid                   | Binary Cross Entropy      | Probability (0 to 1)    |
+| Multiclass Classification | Softmax                   | Categorical Cross Entropy | Probabilities (sum = 1) |
+| Regression                | Linear (no activation)    | Mean Squared Error (MSE)  | Continuous number       |
+
+
 
 [Go To Top](#content)
 
