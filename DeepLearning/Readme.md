@@ -4,6 +4,7 @@
     - [Perceptron Trick](#perceptron-trick)
     - [Loss Function In Perceptron](#loss-function-in-perceptron)
     - [Flexibility with Perceptron](#flexibility-with-perceptron)
+3. [Multi Layer Perceptron (MLP)](#multi-layer-perceptron-mlp)
 
 
 # Introduction
