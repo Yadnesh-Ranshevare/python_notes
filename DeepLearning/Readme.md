@@ -357,3 +357,79 @@ The model produces a raw score → the activation converts it into a specific ty
 [Go To Top](#content)
 
 ---
+# Multi Layer Perceptron (MLP)
+A single perceptron is basically a straight-line decision maker. It works only when the problem can be separated with a line (or a flat plane in higher dimensions). That’s a big limitation
+
+<img src="./Images/MLP-1.png" style="width:500px">
+
+To solve this issue we train multiple perceptron, and those multiple perceptron when combine can classify non liner data
+
+### Example:
+
+<img src="./Images/MLP-2.png" style="width:500px">
+
+Now we just superimpose (combine) those multiple perceptron to get the final decision boundary
+
+<img src="./Images/MLP-3.png" style="width:500px">
+
+now after soothing those boundary we'll get
+
+<img src="./Images/MLP-4.png" style="width:500px">
+
+**This is how by using multiple perceptron we can classify between two non liner classes**
+
+### Mathematically
+
+- Each perceptron first calculates a weighted sum of inputs and passes it through a sigmoid function to produce a value between 0 and 1 representing how strongly a feature is present.
+- These outputs (activations) are then passed to the next layer, where they are combined using new weights and again passed through a sigmoid function.
+- As this process continues across layers, the network learns to combine simple features into more complex patterns, and the final layer produces the overall prediction.
+
+<img src="./Images/MLP-5.png" style="width:500px">
+
+in above example:
+- $\sigma (z)$ = sigmoid function
+- weight for both both input [ $p(y)_1$ and $p(y)_2$ ] = 1
+- bias = 0
+
+> Weights determine how important each input or feature is by controlling how much it influences the neuron’s output.
+
+### Final structure of MLP 
+
+<img src="./Images/MLP-6.jpg" style="width:500px">
+
+### Type of Layers In MLP
+There are three type of layers in MLP:
+- **Input layer:** 
+
+    The input layer receives the raw data (features) and passes it to the network without any processing.
+
+    Example:\
+    `X1` and `X2`    
+- **Hidden layer:** 
+
+    Hidden layers take inputs, apply weights and activation functions, and learn patterns or relationships in the data.
+
+    Example:\
+    `H1` and `H2`
+- **Output layer**: 
+
+    The output layer takes the final processed information and produces the prediction or result.
+
+    Example:\
+    `Y`
+
+> you can have multiple node at each layer and can have more than one layer of same type
+
+you can make the decision boundary more flexible just by changing the no. of nodes and no. and layers
+#### Example 1: Adding nodes in hidden layers
+
+<img src="./Images/MLP-7.png" style="width:500px">
+
+#### Example 2: Adding multiple hidden layer
+
+<img src="./Images/MLP-8.png" style="width:500px">
+
+
+[Go To Top](#content)
+
+---
