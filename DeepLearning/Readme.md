@@ -5,6 +5,11 @@
     - [Loss Function In Perceptron](#loss-function-in-perceptron)
     - [Flexibility with Perceptron](#flexibility-with-perceptron)
 3. [Multi Layer Perceptron (MLP)](#multi-layer-perceptron-mlp)
+4. [Notation And Dot Product](#notation-and-dot-product)
+5. [Forward propagation](#forward-propagation)
+
+
+---
 
 
 # Introduction
@@ -429,6 +434,154 @@ you can make the decision boundary more flexible just by changing the no. of nod
 #### Example 2: Adding multiple hidden layer
 
 <img src="./Images/MLP-8.png" style="width:500px">
+
+
+[Go To Top](#content)
+
+---
+# Notation And Dot Product
+
+## Notation
+
+In MLP we use different notation to represent/denote each layer, weight and bias
+
+
+
+#### 1. Feature values
+consider you have a dataset like:
+
+feature 1 | feature 2 | feature 3 | feature 4
+--- | --- | --- | ---
+$X_{11}$ | $X_{12}$ | $X_{13}$ | $X_{14}$
+$X_{21}$ | $X_{22}$ | $X_{23}$ | $X_{24}$
+$X_{31}$ | $X_{32}$ | $X_{33}$ | $X_{34}$
+
+Then:\
+$X_{ij}$ represent the feature $j$ present in row $i$
+
+#### 2. Layer and Node 
+
+<img src="./Images/notation.png" style="width:500px">
+
+in above image we can see:
+- L0 = input layer
+- L1 = first input layer with node 1, 2, 3
+- L2 = second input layer with node 1, 2
+- L3 = third Output layer with node 1
+
+
+
+#### 3. Bias and Output
+
+Bias = $B_{ij}$\
+output = $O_{ij}$
+
+where:
+- $i$ = layer number
+- $j$ = Node number in that layer
+
+#### 4. Weight
+$W_{ij}^k$
+
+where:
+- $k$ = next layer number 
+- $i$ = current node number
+- $j$ = next node number
+
+## Dot Product
+
+fist consider the mathematical equation of the perceptron:
+
+$$z = w_1x_1 + w_2x_2 + b$$
+
+We can also write this equation in matrix format:
+
+$$z = \begin{bmatrix} w_1 & w_2 \end{bmatrix}
+\begin{bmatrix} x_1 \\ x_2 \end{bmatrix} + b$$
+
+
+now if you look closely:
+
+$\begin{bmatrix} w_1 & w_2 \end{bmatrix}
+\begin{bmatrix} x_1 \\ x_2 \end{bmatrix}$ this term here is just a dot product of $x$ and $w$
+
+Therefor you can also write the equation as:
+
+$$z = W \cdot X + b$$
+
+[Go To Top](#content)
+
+---
+# Forward propagation
+
+Forward propagation in a Multi-Layer Perceptron (MLP) is the process of passing input data through the network layer by layer to produce an output (prediction).
+
+> You start with input → apply weights + bias → apply activation → pass to next layer → repeat → get final output.
+
+Consider following MLP:
+
+<img src="./Images/FP-1.png" style="width:500px">
+
+### Computing the output of Layer 1
+Formula:
+
+$$z = W^T \cdot X + b$$
+
+
+<img src="./Images/FP-2.png" style="width:500px">
+
+After solving we get:
+
+<img src="./Images/FP-3.png" style="width:500px">
+
+**Now this output matrix will go as input for layer two**
+
+### Computing the output of Layer 2
+
+<img src="./Images/FP-4.png" style="width:500px">
+
+<img src="./Images/FP-5.png" style="width:500px">
+
+**Similarly ths output matrix will go as input for third layer**
+
+### Computing the output of Layer 3
+
+<img src="./Images/FP-6.png" style="width:500px">
+
+
+
+## Generalize Mathematical Representation
+
+let the each output matrix be $a^{[i]}$ where $i$ is layer
+
+example:
+- $a^{[1]}$ = output matrix of layer 1
+- $a^{[2]}$ = output matrix of layer 2
+- $a^{[0]}$ = input layer matrix
+
+> $a^{[i]}$ also known as activation f layer i
+
+now if we compute:
+
+$$\sigma (a^{[0]} \cdot w^{[1]} + b^{[1]})$$
+
+we get output matrix of layer one i.e, $a^{[1]}$
+
+> here $w^{[1]}$ is $W_{ij}^k$ with $k = 1$
+
+Similarly for  $a^{[2]}$ and  $a^{[3]}$
+
+$$a^{[2]} = \sigma (a^{[1]} \cdot w^{[2]} + b^{[2]})$$
+
+$$a^{[3]} = \sigma (a^{[2]} \cdot w^{[3]} + b^{[3]})$$
+
+Therefor we can generalize this as:
+
+$$a^{[i]} = \sigma (a^{[i-1]} \cdot w^{[i]} + b^{[i]})$$
+
+<img src="./Images/FP-7.png" style="width:500px">
+
+
 
 
 [Go To Top](#content)
