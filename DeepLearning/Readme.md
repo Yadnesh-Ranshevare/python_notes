@@ -609,13 +609,13 @@ The loss function acts like a feedback signal.
 
 
 ### Example of loss Function
-| Loss Function             | Formula                                      | Used For                   | Example                             | Key Idea                             |                            |                           |
-| ------------------------- | -------------------------------------------- | -------------------------- | ----------------------------------- | ------------------------------------ | -------------------------- | ------------------------- |
-| Mean Squared Error (MSE)  | $\frac{1}{n} \sum (y_{true} - y_{pred})^2$ | Regression                 | Actual=10, Pred=8 → Loss=4          | Penalizes large errors more          |                            |                           |
+| Loss Function             | Formula                                      | Used For                   | Example                             | Key Idea                             | 
+| ------------------------- | -------------------------------------------- | -------------------------- | ----------------------------------- | ------------------------------------ |  
+| Mean Squared Error (MSE)  | $\frac{1}{n} \sum (y_{true} - y_{pred})^2$ | Regression                 | Actual=10, Pred=8 → Loss=4          | Penalizes large errors more          |                                                      
 | Mean Absolute Error (MAE) | $\frac{1}{n} \sum  y_{true} - y_{pred}$                                     | Regression                           | Actual=10, Pred=8 → Loss=2 | Treats all errors equally |
-| Binary Cross-Entropy      | $-[y\log(p) + (1-y)\log(1-p)]$            | Binary Classification      | Actual=1, Pred=0.8 → Low loss       | Punishes confident wrong predictions |                            |                           |
-| Categorical Cross-Entropy | $-\sum y \log(p)$                         | Multi-class Classification | Correct class prob = 0.7 → Low loss | Works with probability distributions |                            |                           |
-| Hinge Loss                | $\max(0, 1 - y \cdot f(x))$                | SVM / Classification       | Correct → 0 loss                    | Focuses on margin between classes    |                            |                           |
+| Binary Cross-Entropy      | $-[y\log(p) + (1-y)\log(1-p)]$            | Binary Classification      | Actual=1, Pred=0.8 → Low loss       | Punishes confident wrong predictions |                                                     
+| Categorical Cross-Entropy | $-\sum y \log(p)$                         | Multi-class Classification | Correct class prob = 0.7 → Low loss | Works with probability distributions |                                                     
+| Hinge Loss                | $\max(0, 1 - y \cdot f(x))$                | SVM / Classification       | Correct → 0 loss                    | Focuses on margin between classes    |                                                      
 
 > **You can create your own loss function to customize how errors are measured based on the specific needs of your problem.**
 
