@@ -7,6 +7,8 @@
 3. [Multi Layer Perceptron (MLP)](#multi-layer-perceptron-mlp)
 4. [Notation And Dot Product](#notation-and-dot-product)
 5. [Forward propagation](#forward-propagation)
+6. [Loss Function In DL](#loss-function-in-dl)
+7. [Backward Propagation](#backward-propagation)
 
 
 ---
@@ -582,6 +584,60 @@ $$a^{[i]} = \sigma (a^{[i-1]} \cdot w^{[i]} + b^{[i]})$$
 <img src="./Images/FP-7.png" style="width:500px">
 
 
+
+
+[Go To Top](#content)
+
+---
+# Loss Function In DL
+
+Loss function is a method of evaluating how well your algorithm is modeling your dataset
+
+It is a mathematical function that quantifies the difference between the predicted output of a model and the actual target value. 
+ 
+it is a way to measure how wrong a model’s prediction is compared to the actual correct answer.
+
+> high loss = high error = poor model\
+> low loss = less error = good model
+
+### Use of loss function
+We use a loss function because it gives the model a clear way to understand how wrong it is and how to improve.
+
+Without a loss function, a model would make predictions… but wouldn’t know if they are good or bad.
+
+The loss function acts like a feedback signal.
+
+
+### Example of loss Function
+| Loss Function             | Formula                                      | Used For                   | Example                             | Key Idea                             |                            |                           |
+| ------------------------- | -------------------------------------------- | -------------------------- | ----------------------------------- | ------------------------------------ | -------------------------- | ------------------------- |
+| Mean Squared Error (MSE)  | $\frac{1}{n} \sum (y_{true} - y_{pred})^2$ | Regression                 | Actual=10, Pred=8 → Loss=4          | Penalizes large errors more          |                            |                           |
+| Mean Absolute Error (MAE) | $\frac{1}{n} \sum  y_{true} - y_{pred}$                                     | Regression                           | Actual=10, Pred=8 → Loss=2 | Treats all errors equally |
+| Binary Cross-Entropy      | $-[y\log(p) + (1-y)\log(1-p)]$            | Binary Classification      | Actual=1, Pred=0.8 → Low loss       | Punishes confident wrong predictions |                            |                           |
+| Categorical Cross-Entropy | $-\sum y \log(p)$                         | Multi-class Classification | Correct class prob = 0.7 → Low loss | Works with probability distributions |                            |                           |
+| Hinge Loss                | $\max(0, 1 - y \cdot f(x))$                | SVM / Classification       | Correct → 0 loss                    | Focuses on margin between classes    |                            |                           |
+
+> **You can create your own loss function to customize how errors are measured based on the specific needs of your problem.**
+
+### Loss Function vs Cost Function
+
+| Aspect     | Loss Function                              | Cost Function                                  |
+| ---------- | ------------------------------------------ | ---------------------------------------------- |
+| Definition | Measures error for **a single data point** | Measures error over the **entire dataset**     |
+| Scope      | Individual prediction                      | Overall model performance                      |
+| Purpose    | Shows how wrong one prediction is          | Shows how well the model is performing overall |
+| Example    | Error for one house price prediction       | Average error of all house predictions         |
+| Relation   | Building block                             | Usually **average (or sum) of loss functions** |
+
+> Loss function → per example error\
+> Cost function → total/average error
+
+
+[Go To Top](#content)
+
+---
+
+# Backward Propagation
 
 
 [Go To Top](#content)
