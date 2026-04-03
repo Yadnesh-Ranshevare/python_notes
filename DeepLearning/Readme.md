@@ -638,6 +638,101 @@ The loss function acts like a feedback signal.
 ---
 
 # Backward Propagation
+Backpropagation (short for backward propagation of errors) is a core algorithm used to train neural networks in deep learning
+
+### How it works (High-level flow)
+A neural network has:
+
+- Inputs → Hidden layers → Output
+- Each connection has weights and biases
+
+#### Step 1: choose a random weight and biases
+- for your entire neural network we assume any random weight and biases
+
+#### Step 2: Forward Pass
+- Once the weight and biases are assumed the input goes through the network
+- Output is produced
+
+#### Step 3: Compute Error
+- Compare predicted output vs actual output using a [loss function](#loss-function-in-dl)
+- Calculate how much each weight contributed to the error
+- Use derivatives (calculus) to compute gradients
+
+#### Step 4: Update Weights
+- Adjust weights to reduce error using optimization methods like Gradient Descent
+- formula for weight:
+
+$$\boxed{W_{new} = W_{old} - \alpha \frac{\partial L}{\partial W_{old}}}$$
+
+- formula for bias:
+
+
+$$\boxed{b_{new} = b_{old} - \alpha \frac{\partial L}{\partial b_{old}}}$$
+
+- Here:\
+    $\alpha$ = learning rate\
+    $L$ = loss
+
+> We use this formulas to compute all optimal weight and biases such that our loss will be minimum
+
+### How to solve that gradient (Partial derivative)
+
+$$\boxed{W_{new} = W_{old} - \alpha \frac{\partial L}{\partial W_{old}}}$$
+
+lets assume our loss function will be `Mean squared error`
+
+$$L = (y - \hat{y})^2$$
+
+where:
+
+- $\hat{y}$ = predicted value
+- $y$ = actual value
+
+Therefor we need to compute:
+
+$$W_{new} = W_{old} - \alpha \frac{\partial (y - \hat{y})^2}{\partial W_{old}}$$
+
+consider only derivative (gradient)
+
+$$\frac{\partial (y - \hat{y})^2}{\partial W_{old}}$$
+
+for now assume $W_{old}$ is $W_1$
+
+$$\frac{\partial (y - \hat{y})^2}{\partial W_{1}}$$
+
+To solve this derivative we break it and apply chain rule:
+
+$$\frac{\partial (y - \hat{y})^2}{\partial W_1} = \frac{\partial (y - \hat{y})^2}{\partial \hat{y} } \times \frac{\partial \hat{y}}{\partial W_1}$$
+
+
+
+According to perceptron equation:
+
+$$\hat{y} = W_1 \cdot O_1 + W_2 \cdot O_2 + .... + W_n \cdot O_n + b$$
+
+Therefor:
+
+$$\boxed{\frac{\partial \hat{y}}{\partial W_1} = \frac{\partial ( W_1 \cdot O_1 + W_2 \cdot O_2 + .... + W_n \cdot O_n + b )}{\partial W_1} = O_1}$$
+
+Also
+
+$$\boxed{\frac{\partial (y - \hat{y})^2}{\partial \hat{y} } = -2(y - \hat{y})}$$
+
+by combining this two
+
+$$\frac{\partial (y - \hat{y})^2}{\partial \hat{y} } \times \frac{\partial \hat{y}}{\partial W_1} = -2(y - \hat{y}) \times  O_1$$
+
+
+Therefor
+
+$$\boxed{\frac{\partial L}{\partial W_{1}} = -2(y - \hat{y}) \times  O_1}$$
+
+- $y$ = actual value
+- $\hat{y}$ = predicted value
+- $O_1$ = input value
+
+
+
 
 
 [Go To Top](#content)
