@@ -673,7 +673,9 @@ $$\boxed{b_{new} = b_{old} - \alpha \frac{\partial L}{\partial b_{old}}}$$
     $\alpha$ = learning rate\
     $L$ = loss
 
-> We use this formulas to compute all optimal weight and biases such that our loss will be minimum
+> We repeat this steps multiple times until we hit convergence (a point where the loss is minimum)
+>
+>Each iteration can also be called as epoch i.e, 100 epoch = 100 iteration
 
 ### How to solve that gradient (Partial derivative)
 
@@ -732,6 +734,7 @@ $$\boxed{\frac{\partial L}{\partial W_{1}} = -2(y - \hat{y}) \times  O_1}$$
 - $O_1$ = input value
 
 
+> We use this formulas to compute all optimal weight and biases such that our loss will be minimum
 
 
 
