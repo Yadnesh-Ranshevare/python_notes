@@ -795,7 +795,8 @@ In worst case it may completely stop the neural network from further training
 1. **Reduce the model complexity**:\
 if you reduce the no. of nodes in the model the no. of multiplication being performed will also reduce, which will prevent vanishing gradient from happing
 
-2. **Use RelU Activation function**
+2. **Use RelU Activation function**\
+As it doesn't squash gradients like sigmoid
 
 [Go To Top](#content)
 
