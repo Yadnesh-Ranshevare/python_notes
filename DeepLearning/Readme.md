@@ -9,6 +9,7 @@
 5. [Forward propagation](#forward-propagation)
 6. [Loss Function In DL](#loss-function-in-dl)
 7. [Backward Propagation](#backward-propagation)
+8. [Vanishing Gradient Problem](#vanishing-gradient-problem)
 
 
 ---
@@ -737,6 +738,64 @@ $$\boxed{\frac{\partial L}{\partial W_{1}} = -2(y - \hat{y}) \times  O_1}$$
 > We use this formulas to compute all optimal weight and biases such that our loss will be minimum
 
 
+
+[Go To Top](#content)
+
+---
+# Vanishing Gradient Problem
+
+
+In Backpropagation we learn that we use following gradient decent to find the updated weight and bias
+
+$$W_{new} = W_{old} - \alpha \frac{\partial L}{\partial W_{old}}$$
+
+and to solve this gradient decent we do
+
+$$L = (y - \hat{y})^2$$
+
+$$\frac{\partial (y - \hat{y})^2}{\partial W_1} = \frac{\partial (y - \hat{y})^2}{\partial \hat{y} } \times \frac{\partial \hat{y}}{\partial W_1}$$
+
+lets suppose 
+
+$$\frac{\partial (y - \hat{y})^2}{\partial \hat{y} } ≈ 0.01\ \ \ ;\ \ \ \  \frac{\partial \hat{y}}{\partial W_1} ≈ 0.01 $$
+
+Then
+
+$$\frac{\partial (y - \hat{y})^2}{\partial \hat{y} } \times \frac{\partial \hat{y}}{\partial W_1} ≈ 0.0001$$
+
+That means
+
+$$\frac{\partial L}{\partial W_{old}} ≈ 0.0001 $$
+
+Now, if compute the new weight and bias:
+
+$$W_{new} = W_{old} - (\alpha \times 0.0001)$$
+
+After solving this equation for $\alpha = 1$ we get
+
+
+$$W_{new} = W_{old} - 0.0001$$
+
+$$W_{new} ≈ W_{old}$$
+
+
+As you can see, in training, neural networks use backpropagation to update weights. This works by passing gradients (derivatives of the loss) backward from the output layer to earlier layers.
+
+In deep networks, those gradients get multiplied repeatedly as they move backward through layers.
+
+If those gradients are small (less than 1), repeated multiplication makes them shrink exponentially
+
+In worst case it may completely stop the neural network from further training
+
+### How to check for Vanishing gradient
+1. check the loss value for each epoch, if it not changing vanishing gradient has occur
+2. weighted graph plot: a plot that can display the changes in weight
+
+### How to handle Vanishing gradient
+1. **Reduce the model complexity**:\
+if you reduce the no. of nodes in the model the no. of multiplication being performed will also reduce, which will prevent vanishing gradient from happing
+
+2. **Use RelU Activation function**
 
 [Go To Top](#content)
 
