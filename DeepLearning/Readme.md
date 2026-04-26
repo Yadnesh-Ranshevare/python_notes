@@ -10,7 +10,7 @@
 6. [Loss Function In DL](#loss-function-in-dl)
 7. [Backward Propagation](#backward-propagation)
 8. [Vanishing Gradient Problem](#vanishing-gradient-problem)
-
+9. [Type of Gradient Decent](#type-of-gradient-decent)
 
 ---
 
@@ -796,7 +796,51 @@ In worst case it may completely stop the neural network from further training
 if you reduce the no. of nodes in the model the no. of multiplication being performed will also reduce, which will prevent vanishing gradient from happing
 
 2. **Use RelU Activation function**\
-As it doesn't squash gradients like sigmoid
+As it doesn't squash gradients like sigmoid, so it can keep the output in higher range. Whereas sigmoid squash be between 0 to 1
+
+[Go To Top](#content)
+
+---
+# Type of Gradient Decent
+There are three variants of gradient decent, which differ in how much data we use to compute the gradient of the objective function. 
+
+Depending on the amount of data, we make a trade if between the accuracy of the parameter update and the time it takes to perform an update
+### 1. Stochastic Gradient Descent (SGD) 
+here we take one point at a time and for that one point we calculate the loss and update the parameters  
+
+we perform this step for each point during each epoch, i.e, for 5 parameter with 10 epoch we repeat the gradient decent 50 (5 X 10) times
+
+- frequency of rate of update is higher
+- execution slower as we have to compute gradient multiple time for single epoch
+- Although the execution is slow, it get converge faster (less epoch) as we perform update frequently (multiple time in each epoch)
+
+### 2. Batch Gradient Descent (Vanilla GD)
+> This is the “pure” version.
+
+here for single epoch we first compute the loss of the all of the data points first, and then we summarize all of those loss.
+
+On the basis of that summarize loss we perform the gradient decent one single time for single epoch
+
+- frequency of rate of update is low compare to SGD
+- it is much faster to execution compare to SGD for same number of epoch, as we compute the gradient single time for single epoch
+- Although the execution is fast, it get converge slow (more epoch) as we perform update slowly (single time for single epoch)
+
+### 3. Mini-Batch Gradient Descent
+> Middle ground between batch and SGD.
+
+here for each epoch we we divide the dataset into the small batches, and compute the loss for each batch and perform the gradient decent 
+
+eg., \
+lets save we have 300 record, with batch size of 30. Therefor number of batch is 10 (300 / 30).\
+if epoch is 5 then total number of time we perform the gradient decent is 50 (5 X 10)\
+i.e, for each epoch perform gradient decent for all available batch
+
+
+### Recommended batch size for optimization is multiple of 2
+For most optimize performance we must provide the batch size in the multiple of 2, as for this batch size we can effectively use RAM
+
+Therefor we must provide batch size in the multiple of 2 i.e,\
+`2, 4, 8, 32, 64, 128, 256, ....`
 
 [Go To Top](#content)
 
