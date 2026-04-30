@@ -11,6 +11,7 @@
 7. [Backward Propagation](#backward-propagation)
 8. [Vanishing Gradient Problem](#vanishing-gradient-problem)
 9. [Type of Gradient Decent](#type-of-gradient-decent)
+10. [Dropout Layer](#dropout-layer)
 
 ---
 
@@ -841,6 +842,76 @@ For most optimize performance we must provide the batch size in the multiple of 
 
 Therefor we must provide batch size in the multiple of 2 i.e,\
 `2, 4, 8, 32, 64, 128, 256, ....`
+
+[Go To Top](#content)
+
+---
+# Dropout Layer
+A dropout layer is a regularization technique used in neural networks to reduce overfitting.
+
+During training, a dropout layer randomly turns off (sets to zero) a fraction of neurons in a layer for each epoch.
+
+<img src="./Images/DropOutLayer.png" style="width:500px">
+
+So instead of this:
+```
+All neurons active → model can rely heavily on specific paths
+```
+You get:
+
+```
+Random neurons dropped → model forced to learn more robust patterns
+```
+
+> Dropout is only active during training, not during inference (testing/prediction).\
+> At inference time, all neurons are used, but their outputs are scaled appropriately.
+
+### How it works
+- You define a dropout rate, say `0.5`
+- That means 50% of neurons are randomly ignored during each training step (epoch)
+- During each epoch we choose different nodes for dropout
+- As a result every batch sees a slightly different network
+
+This prevents:
+- Co-adaptation (neurons depending too much on each other)
+- Memorization of training data
+
+### Comparison with random forest (Ensemble Method)
+Both dropout and Random Forest try to solve the same core problem:\
+reduce overfitting by introducing randomness and diversity
+
+
+
+#### In Random Forest
+- You train many decision trees
+- Each tree sees:
+    - different data samples (bagging)
+    - different feature subsets
+- Final prediction = average / majority vote
+
+#### In dropout (deep learning)
+- When you use dropout, you are not training one fixed network.
+- At every training step:
+    - some neurons are randomly dropped
+    - so the network structure changes
+- If you have N neurons, the number of possible trained networks is enormous (exponential). Each dropout mask creates a different sub-network.
+- Therefor instead of training many separate models like in Random Forest, dropout randomly creates different smaller networks during training by turning off some neurons, while all these networks share the same weights.
+- So effectively:
+    - You are training many smaller networks
+    - But they all share parameters
+
+#### Why this behaves like an ensemble
+In a real ensemble:
+- you train multiple models
+- then average their predictions
+
+With dropout:
+- during training → you train many sub-networks (randomly sampled)
+- during inference → you use the full network with scaled weights
+
+
+This approximates averaging predictions of all those sub-networks.
+
 
 [Go To Top](#content)
 
