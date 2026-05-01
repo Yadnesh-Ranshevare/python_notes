@@ -876,6 +876,14 @@ This prevents:
 - Co-adaptation (neurons depending too much on each other)
 - Memorization of training data
 
+### Weights in testing phase
+- If we pick any random node with  dropout rate of `0.25`then there is `25%` chance of that node not being included in any random subnetwork 
+- Therefor whenever you drop any particular node the weight assign to it didn't get updated
+- As this behavior only been seen in training phase, if we consider the final value of weight for testing it will not show the proper result
+- This is because in training you train on subnetwork (with dropout nodes) whereas in testing / prediction you predict on whole network (without any dropout node) 
+- Therefor whatever weight you get at the end of the training is approximately equal to `0.75 (as your dropout rate is 0.25)` times of actual weight
+    > if dropout is 0.25 then each node is included 0.75 times\
+    > Mathematically $W_{actual} = W_{train}(1 - p)$ where p is dropout rate
 ### Comparison with random forest (Ensemble Method)
 Both dropout and Random Forest try to solve the same core problem:\
 reduce overfitting by introducing randomness and diversity
