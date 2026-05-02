@@ -11,7 +11,8 @@
 7. [Backward Propagation](#backward-propagation)
 8. [Vanishing Gradient Problem](#vanishing-gradient-problem)
 9. [Type of Gradient Decent](#type-of-gradient-decent)
-10. [Dropout Layer](#dropout-layer)
+10. [Overfitting](#overfitting)
+    - [Dropout Layer](#dropout-layer)
 
 ---
 
@@ -842,6 +843,43 @@ For most optimize performance we must provide the batch size in the multiple of 
 
 Therefor we must provide batch size in the multiple of 2 i.e,\
 `2, 4, 8, 32, 64, 128, 256, ....`
+
+[Go To Top](#content)
+
+---
+# Overfitting
+Overfitting is when a model learns the training data too well—including the noise and random quirks—so it performs great on training data but fails badly on new, unseen data.
+> your model isn’t “smart” in this case—it’s basically memorizing instead of learning patterns.
+
+### Simple example
+
+Imagine you’re preparing for an exam:
+
+- Good learning → you understand concepts and can solve new questions
+- Overfitting → you memorize past questions word-for-word
+
+When the exam changes slightly, you’re stuck.
+
+### Signs of overfitting
+- Very high training accuracy
+- Much lower validation/test accuracy
+- Model performs inconsistently on new inputs
+
+### Why it happens
+- Model is too complex (too many parameters)
+- Too little data
+- Training for too long
+- Data contains noise or irrelevant features
+
+### How to prevent overfitting
+there are two possible ways to reduce the overfitting of any model i.e, 
+1. **Adding more data:**
+    - Add more row: just increase the amount of raw data you feed into the model
+    - Data augmentation: if data is limited create the new synthetic data 
+2. **Reducing the complexity of the model:**
+    - [Dropout](#dropout-layer): Randomly drop some nodes to reduce the complexity
+    - Regularization: add plenty to a loss function to reduce overfitting
+    - Early stopping: monitor the model in training phase and stop the training if overfitting is detected
 
 [Go To Top](#content)
 
