@@ -878,7 +878,7 @@ there are two possible ways to reduce the overfitting of any model i.e,
     - Data augmentation: if data is limited create the new synthetic data 
 2. **Reducing the complexity of the model:**
     - [Dropout](#dropout-layer): Randomly drop some nodes to reduce the complexity
-    - Regularization: add plenty to a loss function to reduce overfitting
+    - Regularization: Regularization adds a penalty for complexity, encouraging simpler models that generalize better to new data.
     - Early stopping: monitor the model in training phase and stop the training if overfitting is detected
 
 [Go To Top](#content)
@@ -957,6 +957,36 @@ With dropout:
 
 
 This approximates averaging predictions of all those sub-networks.
+
+
+[Go To Top](#content)
+
+---
+# Regularization
+Regularization is a technique used in machine learning to prevent a model from overfitting—that is, memorizing the training data instead of learning general patterns.
+
+When a model is too complex, it can fit noise in the data instead of the real signal. Regularization adds a penalty for complexity, encouraging simpler models that generalize better to new data.
+
+In many models (like linear regression), regularization modifies the loss function:
+
+$$Loss = Error + \lambda \times Penalty$$
+
+- Error: how wrong the model is on training data
+- Penalty: discourages large or complex parameters
+- λ (lambda): controls how strong the regularization is
+
+### Common types
+1. L1 Regularization (Lasso)
+    - Adds the absolute values of weights
+    - Can shrink some weights to zero → feature selection
+
+    $$Loss = Error + \frac{\lambda}{2n}\sum||W_i||$$
+
+2. L2 Regularization (Ridge)
+    - Adds the squared values of weights
+    - Keeps all features but makes weights smaller
+
+     $$Loss = Error + \frac{\lambda}{2n}\sum||W_i||^2$$
 
 
 [Go To Top](#content)
