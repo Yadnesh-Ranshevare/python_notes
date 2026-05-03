@@ -1043,9 +1043,17 @@ the only extra pat is: $(1 - \alpha \lambda)$
 
 in all of the cases your $\lambda$ will be positive, therefor $\alpha \lambda$ will always be a positive value, as result $(1 - \alpha \lambda)$ will be less than 1
 
+
+
 if $(1 - \alpha \lambda)$ will be less than 1 then the values of $(1 - \alpha \lambda)W_1$ will always we less than that of $W_1$, as a result value of $W_1^l$ will be less than that of $W_1$
 
+As this decreases in weight is because of $(1 - \alpha \lambda)$ it is also known as weight decay factor 
+
 > subtracting the gradient from the $(1 - \alpha \lambda)W_1$ will cause the $W_1^l$ value to decreases even more
+
+**As we perform this same operation in multiple iteration (epoch), each iteration causes the value to decreases even more, moving it towards the zero**
+
+> it only move the value towards the zero but in case of L2 regularization value can never become zero
 
 [Go To Top](#content)
 
