@@ -971,7 +971,7 @@ In many models (like linear regression), regularization modifies the loss functi
 
 $$Loss = Error + \lambda \times Penalty$$
 
-- Error: how wrong the model is on training data
+- Error: how wrong the model is on training data (calculated using loss function)
 - Penalty: discourages large or complex parameters
 - λ (lambda): controls how strong the regularization is
 
@@ -988,6 +988,63 @@ $$Loss = Error + \lambda \times Penalty$$
 
      $$Loss = Error + \frac{\lambda}{2n}\sum||W_i||^2$$
 
+### what does Regularization do?
+In regularization we just add a penalty which cause the weight to go in the direction of zero
+
+According tp gradient decent:
+
+$$W_{1}^l = W_{1} - \alpha \frac{\partial L^l}{\partial W_{1}}$$
+
+were $L^l$ is regularized loss function which in case of regularization is as follows:
+
+$$L^l = L + \frac{\lambda}{2}\sum||W_i||^2$$
+
+> as we are calculating loss for single instance (iteration) we are not dividing the penalty by $n$
+
+Therefor
+
+$$W_{1}^l = W_{1} - \alpha \frac{\partial}{\partial W_{1}}\left[L + \frac{\lambda}{2}\sum||W_i||^2\right]$$
+
+$$W_{1}^l = W_{1} - \alpha \left[\frac{\partial L}{\partial W_{1}}+ \frac{\lambda}{2}\left(\frac{\partial}{\partial W_{1}}\sum||W_i||^2\right)\right]$$
+
+here
+
+$$
+\begin{aligned}
+\frac{\partial}{\partial W_{1}}\sum \|W_i\|^2 
+&= \frac{\partial}{\partial W_{1}} (W_1^2 + W_2^2 + \dots + W_n^2) \\
+&= \frac{\partial W_1^2}{\partial W_{1}} + \frac{\partial W_2^2}{\partial W_{1}} + \dots + \frac{\partial W_n^2}{\partial W_{1}} \\
+&= 2W_1
+\end{aligned}
+$$
+
+Hence we get
+
+$$
+\begin{aligned}
+W_{1}^l 
+&= W_{1} - \alpha \left[\frac{\partial L}{\partial W_{1}}+ \frac{\lambda}{2}(2W_1)\right]\\
+&= W_{1} - \alpha \left[\frac{\partial L}{\partial W_{1}}+ \lambda W_1\right]\\
+&= W_{1} - \alpha \frac{\partial L}{\partial W_{1}}+ \alpha \lambda W_1\\
+&= (1 - \alpha \lambda)W_1  - \alpha \frac{\partial L}{\partial W_{1}}
+\end{aligned}
+$$
+
+Therefor at the end we get 
+
+$$\boxed{W_{1}^l = (1 - \alpha \lambda)W_1  - \alpha \frac{\partial L}{\partial W_{1}}}$$
+
+Now if you compare it with that of original equation (without regularization)
+
+$$W_{1}^l = W_{1} - \alpha \frac{\partial L^l}{\partial W_{1}}$$
+
+the only extra pat is: $(1 - \alpha \lambda)$
+
+in all of the cases your $\lambda$ will be positive, therefor $\alpha \lambda$ will always be a positive value, as result $(1 - \alpha \lambda)$ will be less than 1
+
+if $(1 - \alpha \lambda)$ will be less than 1 then the values of $(1 - \alpha \lambda)W_1$ will always we less than that of $W_1$, as a result value of $W_1^l$ will be less than that of $W_1$
+
+> subtracting the gradient from the $(1 - \alpha \lambda)W_1$ will cause the $W_1^l$ value to decreases even more
 
 [Go To Top](#content)
 
