@@ -14,6 +14,7 @@
 10. [Overfitting](#overfitting)
     - [Dropout Layer](#dropout-layer)
     - [Regularization](#regularization)
+11. [Activation Function](#activation-function)
 
 ---
 
@@ -1054,6 +1055,38 @@ As this decreases in weight is because of $(1 - \alpha \lambda)$ it is also know
 **As we perform this same operation in multiple iteration (epoch), each iteration causes the value to decreases even more, moving it towards the zero**
 
 > it only move the value towards the zero but in case of L2 regularization value can never become zero
+
+[Go To Top](#content)
+
+---
+# Activation Function
+An activation function in Deep Learning (DL) is a mathematical function applied to the output of a neuron in a neural network.
+
+It decides whether a neuron should be activated (fire) or not by transforming the weighted sum of inputs into another value.
+
+### Why Do We Need Activation Functions?
+Without activation functions:
+- A neural network becomes just a linear model
+- No matter how many layers you add, it behaves like a single linear equation
+
+Activation functions introduce non-linearity, allowing the network to:
+- Learn complex patterns
+- Solve problems like image recognition, NLP, speech recognition, etc.
+
+
+### Condition for ideal activation function:
+1. **Non Linear**:\
+if we use the liner activation function then then neural network itself become liner
+2. **Differentiable**:  
+to tain the neural network we need to apply backpropagation algorithm we need to use gradient decent to which we need to calculate the derivatives
+3. **Computationally inexpensive**: \
+whatever calculation will be performed at the time of training must be simple else the training will be slow
+4. **Zero centered**:\
+whatever output your activation function generate it must be normalized / zero centred (mean $\approx$ 0)
+5. **Non Saturating**:\
+saturating function is a function that squeeze the output (eg, sigmoid) and keep the value within a range,\
+in case of saturating function chances of encountering the vanishing gradient problem is high
+
 
 [Go To Top](#content)
 
