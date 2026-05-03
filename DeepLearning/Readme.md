@@ -13,6 +13,7 @@
 9. [Type of Gradient Decent](#type-of-gradient-decent)
 10. [Overfitting](#overfitting)
     - [Dropout Layer](#dropout-layer)
+    - [Regularization](#regularization)
 
 ---
 
@@ -878,7 +879,7 @@ there are two possible ways to reduce the overfitting of any model i.e,
     - Data augmentation: if data is limited create the new synthetic data 
 2. **Reducing the complexity of the model:**
     - [Dropout](#dropout-layer): Randomly drop some nodes to reduce the complexity
-    - Regularization: Regularization adds a penalty for complexity, encouraging simpler models that generalize better to new data.
+    - [Regularization](#regularization): Regularization adds a penalty for complexity, encouraging simpler models that generalize better to new data.
     - Early stopping: monitor the model in training phase and stop the training if overfitting is detected
 
 [Go To Top](#content)
