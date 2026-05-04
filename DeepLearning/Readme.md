@@ -15,6 +15,9 @@
     - [Dropout Layer](#dropout-layer)
     - [Regularization](#regularization)
 11. [Activation Function](#activation-function)
+    - [Sigmoid Activation Function](#sigmoid-activation-function)
+    - [Tanh Activation Function](#tanh-activation-function)
+    - [ReLU Activation function](#relu-activation-function)
 
 ---
 
@@ -1086,6 +1089,107 @@ whatever output your activation function generate it must be normalized / zero c
 5. **Non Saturating**:\
 saturating function is a function that squeeze the output (eg, sigmoid) and keep the value within a range,\
 in case of saturating function chances of encountering the vanishing gradient problem is high
+
+
+[Go To Top](#content)
+
+---
+# Sigmoid Activation Function
+The sigmoid activation function is a mathematical function that maps any real-valued input to a value between 0 and 1
+
+Mathematically
+
+$$\phi (z) = \frac{1}{1+e^{-z}}$$
+
+<img src="./Images/sigmoid.png" style="width:500px">
+
+> for higher value of $z$ we return output nearer to 1, whereas for lower value os $z$ it return value nearer to 0
+
+### Advantages
+1. **output is between 1 and 0:**\
+as sigmoid gives output between 0 to 1we can treat it as a probability for binary classification in output layered
+2. **Non linear:**\
+As this function is non liner we can use on non linear data
+3. **Differentiable:**\
+As this function is differentiable we can apply gradient decent in backpropagation
+
+### Disadvantage
+1. **Saturated Function:**\
+saturating function is a function that squeeze the output and keep the value within a range (sigmoid keeps the output between 0 to 1),
+
+    in case of saturating function chances of encountering the vanishing gradient problem is high
+    
+    because if this reason sigmoid is rarely used in the hidden layer of any neural network and in only useful in output layer for binary classification
+2. **Non Zero Centric:**\
+AS sigmoid give output between 0 to 1, the mean of all outputs can never be 0, which increases the overall training time
+3. **Computationally Expensive:**\
+because of the exponent in denominator solving the gradient is complex
+
+**because of this disadvantage we generally avoid using sigmoid activation function in hidden layer, and is only used in output layer in case of binary classification**
+
+
+[Go To Top](#content)
+
+---
+# Tanh Activation Function
+The tanh (hyperbolic tangent) activation function is a mathematical function that maps any real-valued input to a value between −1 and 1
+
+Mathematically
+
+$$f(x) = \frac{e^x - e^{-x}}{e^x+e^{-x}}$$
+
+$$f^l(x) = 1 -  tanh^2(x)$$
+
+<img src="./Images/tanh.png" style="width:500px">
+
+### Advantages
+1. **Non linear:**\
+As this function is non liner we can use on non linear data
+2. **Differentiable:**\
+As this function is differentiable we can apply gradient decent in backpropagation
+3. **Zero centered:**\
+mean of outputs will be zero, which improve the training speed
+
+
+### Disadvantage
+1. **Saturated Function:**\
+saturating function is a function that squeeze the output and keep the value within a range (sigmoid keeps the output between 0 to 1),
+
+    in case of saturating function chances of encountering the vanishing gradient problem is high
+    
+    because if this reason sigmoid is rarely used in the hidden layer of any neural network and in only useful in output layer for binary classification
+2. **Computationally Expensive:**\
+because of the exponent in denominator solving the gradient is complex
+
+
+[Go To Top](#content)
+
+---
+# ReLU Activation function
+The ReLU (Rectified Linear Unit) is an activation function that outputs the input directly if it is positive, and returns 0 if the input is negative
+
+Mathematically:
+
+$$f(x) = max(0, x)$$
+
+<img src="./Images/reLU.png" style="width:500px">
+
+### Advantages
+1. **Non linear:**\
+As this function is non liner we can use on non linear data
+2. **Non saturated in positive region:**\
+for x > 0 ReLU behave as that of non saturated function
+3. **Computationally inexpensive:**\
+finding the gradient and performing the calculations is easy
+
+### Disadvantage
+1. **Non Differentiable:**\
+we can not find the derivative for x = 0, therefor we need to assume:
+
+    for x >= 0 differentiation -> 1\
+    for x < 0 differentiation -> 0
+2. **Non zero centered:**\
+mean of outputs can not be zero, which increases the training time
 
 
 [Go To Top](#content)
