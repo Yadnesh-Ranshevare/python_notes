@@ -1250,7 +1250,32 @@ $$W_{i}^l = W_{i} \ ;\ W_{j}^l = W_{j}$$
 
 As no weight changes for this node the output of this node does not changes i.e, $z_i$ will always be less than 0 which cause the output to be always 0 for this particular node
 
+### Why if a node is dead then it can't recover?
+Whenever the weighted sum of any node becomes negative, then after applying the reLU it will always give 0 as a output, in this case this node is consider as dead as it cant recover from it
 
+There are 2 main reason behind why weighted sum becomes negative:
+1. **High learning rate:**
+
+    $$W_{i}^l = W_{i} - \alpha \frac{\partial L}{\partial W_{i}}$$
+
+    here if $\alpha$ is high then $\alpha \frac{\partial L}{\partial W_{i}}$ becomes higher than that of $W_i$ causing the overall sum to be negative
+
+    As a result new weight will be negative, and if both weight becomes negative, the weighted sum itself will be negative (as input will be normalized i.e, between 0 to 1) causing dying reLU problem
+
+    And as learning rate $\alpha$ is constant for whole training, we cannot change it mid training. Causing the output to always be negative
+
+    Because of this our dead node cannot be recovered once it dead
+2. **High negative bias:**
+
+    $$z_i = W_iX_i + W_jX_j + b_i$$
+
+    if $b_i$ becomes highly negative compare to $W_i$ and $W_j$ then it effluence the overall weighted sum as out input $X_i$ and $X_j$ will be normalize (between 0 to 1)
+
+    once the weighted sum becomes negative our reLU output becomes 0, causing its derivative to be 0 as well
+
+    we need this reLU derivative to calculated gradient and update the bias value, as this derivative becomes 0, gradient also becomes 0 as a result no updated happen and bias remains high negative for whole trining 
+
+    Therefor our node will always give out 0 as a output causing it to be dead forever
 
 
 [Go To Top](#content)
