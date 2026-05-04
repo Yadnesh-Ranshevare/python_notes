@@ -1191,6 +1191,67 @@ we can not find the derivative for x = 0, therefor we need to assume:
 2. **Non zero centered:**\
 mean of outputs can not be zero, which increases the training time
 
+> for hidden layers reLU provided high performance compare t =o other activation function
+
+### Dying ReLU problem
+The dying ReLU problem is a situation where a neuron using the ReLU activation function stops learning because it outputs 0 for all inputs.
+
+This happens when the neuron’s weights cause its input to be always negative, so ReLU keeps giving 0. Since the gradient is also 0 in this region, the weights don’t update during training, and the neuron effectively “dies” and becomes useless.
+
+<img src="./Images/single-node.png" style="width:500px">
+
+According to ReLU:
+
+$$y_i = max(0, z_i)$$
+
+where;
+
+$$z_i = W_iX_i + W_jX_j + b_i$$
+
+if somehow $z_i$ becomes less than 0 then $y_i$ becomes 0, therefor ;
+
+$$\frac{\partial y_i}{\partial z_{i}} = 0 ------ (i)$$
+
+According to gradient decent:
+
+
+$$W_{i}^l = W_{i} - \alpha \frac{\partial L}{\partial W_{i}}$$
+
+
+here;\
+$L$ is $f(y)$, $y$ is $f(z)$ and $z$ is $f(W)$
+
+Therefor
+
+$$\frac{\partial L}{\partial W_{i}} = \frac{\partial L}{\partial y_{i}} \times \frac{\partial y_i}{\partial z_{i}} \times \frac{\partial z_i}{\partial W_{i}}$$
+
+from $i$
+
+$$\frac{\partial L}{\partial W_{i}} = \frac{\partial L}{\partial y_{i}} \times 0 \times \frac{\partial z_i}{\partial W_{i}} = 0$$
+
+
+
+similarly for $W_j$
+
+$$
+\begin{aligned}
+\frac{\partial L}{\partial W_{j}}
+&= \frac{\partial L}{\partial y_{i}} \times \frac{\partial y_i}{\partial z_{i}} \times \frac{\partial z_i}{\partial W_{j}}\\
+&= \frac{\partial L}{\partial y_{i}} \times 0 \times \frac{\partial z_i}{\partial W_{i}}\\
+&= 0
+\end{aligned}
+$$
+
+Therefor 
+
+$$W_{i}^l = W_{i} - 0 \ ;\ W_{j}^l = W_{j} - 0$$
+
+$$W_{i}^l = W_{i} \ ;\ W_{j}^l = W_{j}$$
+
+As no weight changes for this node the output of this node does not changes i.e, $z_i$ will always be less than 0 which cause the output to be always 0 for this particular node
+
+
+
 
 [Go To Top](#content)
 
