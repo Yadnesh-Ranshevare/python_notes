@@ -18,6 +18,7 @@
     - [Sigmoid Activation Function](#sigmoid-activation-function)
     - [Tanh Activation Function](#tanh-activation-function)
     - [ReLU Activation function](#relu-activation-function)
+    - [variants of ReLU](#variants-of-relu)
 
 ---
 
@@ -1277,7 +1278,143 @@ There are 2 main reason behind why weighted sum becomes negative:
 
     Therefor our node will always give out 0 as a output causing it to be dead forever
 
+### Solution
+1. use low learning rate
+2. use a positive values (0.01) to initialize a bias 
+3. Instead of typical reLU use its variants
+    - linear Variants
+        1. Leaky reLU
+        2. Parametric reLU
+    - Non Linear Variants
+        1. Exponential Liner uint (ELU)
+        2. Scaled exponential Linear uint (SeLU)
+
+
 
 [Go To Top](#content)
 
 ---
+# variants of ReLU
+
+
+the main reason behind the dying reLU problem is the saturated nature of reLU for negative input value
+
+> saturated function are the function that give a specific output for any input e.g, reLU gives 0 for every negative input
+
+therefor to solve the problem we change this saturated nature of reLU and make it continuous even for the negative input value
+
+after implementing this approach the new variants of ReLU are as follow:
+- linear Variants
+    1. Leaky reLU
+    2. Parametric reLU
+- Non Linear Variants
+    1. Exponential Liner uint (ELU)
+    2. Scaled exponential Linear uint (SeLU)
+
+### 1. Leaky ReLU
+
+for positive value it return that positive value, but for negative value instead of 0 it return a fraction of that value
+
+- for x >= 0 -> return x
+- for x < 0 -> return 0.01x
+
+Mathematically:
+
+$$f(x) = max(\alpha x, x)$$
+
+where;\
+$\alpha$ is a fraction (0.01)
+
+> if $\alpha$ is set to 0 then it become normal ReLU 
+
+<img src="./Images/leaky-rerlu.webp" style="width:500px">
+
+- for x < 0 the derivative is equal to $\alpha$, therefor as long as $\alpha$ is not equal to 0 small change in gradient occur even for the negative value of x 
+- because of this it can help solve the dying ReLU problem
+
+### 2. Parametric ReLU
+
+it is same as Leaky ReLU, but instead of providing hardcoded value of $\alpha$ the $\alpha$ is treated as trainable parameter and its values if been computed at the time of training
+
+Mathematically:
+
+$$f(x) = max(\alpha x, x)$$
+
+where;\
+$\alpha$ is a trainable parameter 
+
+<img src="./Images/leaky-rerlu.webp" style="width:500px">
+
+- because of $\alpha$ being trainable parameter we get high flexibility over Leaky ReLU, as a result in some cases it perform better that that of leaky ReLU
+
+### 3. ELU (Exponential Linear Unit)
+ELU (Exponential Linear Unit) is an activation function that outputs the input for positive values and a smooth exponential curve for negative values to improve neural network learning.
+
+Mathematically
+
+$$
+\mathrm{ELU}(x) =
+\begin{cases}
+x & \text{if } x > 0 \\
+\alpha (e^x - 1) & \text{if } x \leq 0
+\end{cases}
+$$
+
+$$
+\mathrm{ELU}^l(x) =
+\begin{cases}
+x & \text{if } x > 0 \\
+ELU(x) + \alpha & \text{if } x \leq 0
+\end{cases}
+$$
+
+> $\alpha$ is a hyper parameter 
+
+<img src="./Images/elu.png" style="width:500px">
+
+- ELU is close to zero centred as a result it get converge faster
+- it provide better generalization compare to ReLU
+- always continuous and always differentiable
+
+The only downside of ELU is it is computationally expensive as we need to calculate $e^x$, bur because it is zero catered it get balanced out 
+
+### 4. SeLU (Scaled Exponential Linear Unit)
+SeLU (Scaled Exponential Linear Unit) is an activation function that scales ELU to keep neural network activations self-normalized, improving training stability.
+
+Mathematically
+
+$$
+\mathrm{SELU}(x) =
+\begin{cases}
+\lambda x & \text{if } x > 0 \\
+\lambda \alpha (e^x - 1) & \text{if } x \leq 0
+\end{cases}
+$$
+
+
+$$
+\mathrm{SELU^l}(x) =
+\begin{cases}
+\lambda & \text{if } x > 0 \\
+\lambda \alpha e^x & \text{if } x \leq 0
+\end{cases}
+$$
+
+Where typically:
+
+- $λ$ ≈ 1.0507
+- $α$ ≈ 1.6733
+
+> $\alpha$ and $\lambda$ is not a trainable parameter, in post of the cases their value is fix which is experimentally proven 
+
+<img src="./Images/selu.png" style="width:500px">
+
+- Self normalizing Nature\
+if you apply SeLU to any layer then the output of that layer will be normalized (mean = 0, SD = 1), as a result the neural network converges faster
+
+
+
+[Go To Top](#content)
+
+---
+
