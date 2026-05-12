@@ -19,6 +19,7 @@
     - [Tanh Activation Function](#tanh-activation-function)
     - [ReLU Activation function](#relu-activation-function)
     - [variants of ReLU](#variants-of-relu)
+12. [Weight Initialization](#weight-initialization)
 
 ---
 
@@ -1413,6 +1414,64 @@ Where typically:
 if you apply SeLU to any layer then the output of that layer will be normalized (mean = 0, SD = 1), as a result the neural network converges faster
 
 
+
+[Go To Top](#content)
+
+---
+# Weight Initialization
+Weight initialization in Deep Learning (DL) is the process of setting the initial values of the neural network’s weights before training starts.
+
+Those weights are the parameters the model learns during training. If you initialize them badly, training becomes slow, unstable, or completely fails.
+
+### Why Weight Initialization Matters
+A neural network learns using gradient descent + backpropagation.
+
+If the starting weights are wrong:
+- gradients can become too small → vanishing gradients
+- gradients can become too large → exploding gradients
+- neurons can all learn the same thing
+- training can stall completely
+
+
+Good initialization helps:
+
+- faster convergence
+- stable gradients
+- better accuracy
+- deeper networks train properly
+
+### The Core Problem - Zero initialization
+Suppose every weight starts as:
+
+$$W = 0$$
+
+Then every neuron in a layer produces the same output (assuming all bias are also same) as.
+
+$$z = \sum W X + b$$
+
+as $W = 0$
+
+$$s = b$$
+
+During backpropagation, they also receive identical gradients.
+
+Result:
+
+- all neurons become identical
+- network loses its ability to learn different features
+
+This is called the symmetry problem.
+
+in worst case our backpropagation algorithm depends on our activation function for updating the weight, if weight are zero then gradient became zero 
+
+Result
+- No updated will occur on the weight
+- at the end of the training weight remains zero
+
+So:
+
+- weights should not be initialized to zero
+- biases often can be zero
 
 [Go To Top](#content)
 
