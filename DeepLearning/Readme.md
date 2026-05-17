@@ -21,6 +21,9 @@
     - [variants of ReLU](#variants-of-relu)
 12. [Weight Initialization](#weight-initialization)
 
+
+[Acknowledgment](#acknowledgment)
+
 ---
 
 
@@ -1524,4 +1527,9 @@ I.e, all the neurons in each hidden layer becomes identical to each other produc
 [Go To Top](#content)
 
 ---
+# Acknowledgment
+
+
+[CampusX](https://www.youtube.com/@campusx-official): 100 days of Deep learning playlist
+
 
