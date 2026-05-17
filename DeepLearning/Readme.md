@@ -1462,7 +1462,7 @@ Result:
 
 This is called the symmetry problem.
 
-in worst case our backpropagation algorithm depends on our activation function for updating the weight, if weight are zero then gradient became zero 
+In the worst case, initializing all weights to zero causes the activations to become zero. Since backpropagation depends on the activations to compute gradients and update the weights, zero activations can lead to zero gradients, preventing the network from learning.
 
 Result
 - No updated will occur on the weight
@@ -1472,6 +1472,54 @@ So:
 
 - weights should not be initialized to zero
 - biases often can be zero
+
+### Problem 2 - Non zero constant
+
+Suppose every weight and basie starts as:
+
+$$W = 0.5 \ \ ; \ \  b = 0.5$$
+
+Also lets assume we have 2 hidden nodes with ReLU activation then:
+
+**Output of first node**
+
+$$z_1 = W_{11} X_1 + W_{12}X_2 + b_1$$
+
+As $W = 0.5$ and $b = 0.5$ for all nodes
+
+$$z_1 = 0.5 X_1 + 0.5X_2 + 0.5-------(i)$$
+
+if $X_1 > 0$ and $X_2 > 0$ then $Z$ will be greater then 0 (positive)
+
+$$a_1 = max(0, z_1) = z_1--------(ii)$$
+
+**similarly Output of Second node**
+
+$$z_2 = W_{21} X_1 + W_{22}X_2 + b_2$$
+
+As $W = 0.5$ and $b = 0.5$ for all nodes
+
+$$z_2 = 0.5 X_1 + 0.5X_2 + 0.5-------(iii)$$
+
+if $X_1 > 0$ and $X_2 > 0$ then $Z$ will be greater then 0 (positive)
+
+$$a_2 = max(0, z_2) = z_2------(iv)$$
+
+From $(i)$ and $(iii)$
+
+$$z_1 = z_2$$
+
+from $(ii)$ put $z_1 = a_1$ and from $(iv)$ put $z_2 = a_2$
+
+$$a_1 = a_2$$
+
+As both activation are same there gradient (derivation) will also be same as a result whatever update will happen will happen same on all the parameter
+
+i.e, if $W_1$ update by 0.2 then $b_1$, $W_2$ and $b_2$ will update by 0.2 as well
+
+As a result, will always get $a_1 = a_2$ because of which the output of all hidden nodes in a same layer will be same
+
+I.e, all the neurons in each hidden layer becomes identical to each other producing same output
 
 [Go To Top](#content)
 
