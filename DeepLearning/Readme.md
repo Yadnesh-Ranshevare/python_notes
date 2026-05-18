@@ -19,7 +19,8 @@
     - [Tanh Activation Function](#tanh-activation-function)
     - [ReLU Activation function](#relu-activation-function)
     - [variants of ReLU](#variants-of-relu)
-12. [Weight Initialization](#weight-initialization)
+12. [Weight Initialization Problem](#weight-initialization-problem)
+13. [Xavier / Glorat and He Weight Initialization](#xavier--glorat-and-he-weight-initialization)
 
 
 [Acknowledgment](#acknowledgment)
@@ -1421,7 +1422,7 @@ if you apply SeLU to any layer then the output of that layer will be normalized 
 [Go To Top](#content)
 
 ---
-# Weight Initialization
+# Weight Initialization Problem
 Weight initialization in Deep Learning (DL) is the process of setting the initial values of the neural network’s weights before training starts.
 
 Those weights are the parameters the model learns during training. If you initialize them badly, training becomes slow, unstable, or completely fails.
@@ -1443,7 +1444,7 @@ Good initialization helps:
 - better accuracy
 - deeper networks train properly
 
-### The Core Problem - Zero initialization
+### Problem 1 - Zero initialization
 Suppose every weight starts as:
 
 $$W = 0$$
@@ -1523,6 +1524,153 @@ i.e, if $W_1$ update by 0.2 then $b_1$, $W_2$ and $b_2$ will update by 0.2 as we
 As a result, will always get $a_1 = a_2$ because of which the output of all hidden nodes in a same layer will be same
 
 I.e, all the neurons in each hidden layer becomes identical to each other producing same output
+
+### Problem 3 - Random initialization with small values
+random initialization with very small values sounds safe, but it creates a serious learning problem — especially in deep networks.
+
+During forward propagation If weights are tiny:
+- outputs become tiny
+- next layer receives tiny inputs
+- this repeats across layers
+
+Eventually:
+
+- activations approach zero
+- gradients also approach zero during backpropagation
+
+This leads to a [Vanishing Gradient Problem](#vanishing-gradient-problem)
+
+### Problem 4 - Random initialization with big values
+Initializing weights with very large random values creates the opposite problem of tiny initialization.
+
+During forward propagation:
+
+$$z = \sum WX + b$$
+
+- z becomes extremely large
+- Activation returns extreme values
+- As a result next layer will always get those extreme values
+
+### Solution 
+We need to find a way to initialize the non-zero random weight with a good range, which is not too small and not too big
+
+[Go To Top](#content)
+
+---
+# Xavier / Glorat and He Weight Initialization
+AS  we need to find a way to initialize the non-zero random weight with a good range, which is not too small and not too big
+
+### Understand how to initialize random weight with small and big value
+
+To do that we first need to initialize the weight with a random value
+
+$$W = random \ value$$
+
+now;
+- for small weight initialization multiply this random value with a small number
+
+$$W = random \ value * 0.01$$
+
+- for big weight initialization multiply this random value with a big number
+
+$$W = random \ value * 1$$
+
+Therefore we use a constant value to manage how big or small ou weight will be
+
+Therefore we just have to pick a proper value of this constant so that we get weight in a proper range i.e, not too high not too low  
+
+### How to pick a right constants
+we pick a constant value such that there variance will be equal to $1 / n$
+
+were:
+- n = no. of input
+
+
+And if you want the variance of initialized constant to be:
+
+$$Var(W) = \frac{1}{n}$$
+
+then the actual magnitude (standard deviation) of the constant must be:
+
+$$\sigma = \sqrt{\frac{1}{n}}$$
+
+since:
+
+$$Var(W) = \sigma^2$$
+
+Therefore our weight can be:
+
+$$W = random \ value * \sqrt{\frac{1}{n}}$$
+
+### Intuition
+As per equation:
+
+$$z = \sum WX + b$$
+
+Our overall output depends on:
+
+$$\sum WX$$
+
+as $X$ is constant (input value) we can only change the $W$ to change the overall output
+
+Therefore for large number of input (n) we don't what that sum to be high so we try to keep weight small
+
+Similarly for small number of input (n) we don't want the sum to be too less, so we try to keep weight big 
+
+Therefore we get relation like:
+
+$$W \ \alpha \ \frac{1}{n}$$
+
+### Xavier Normal Initiation
+
+> work well with tanh
+
+Formula:
+
+$$\sqrt{\frac{1}{\text{n}}}$$
+
+Where
+- n = number of input coming to node
+
+Example:
+
+$$W = random \ value * \sqrt{\frac{1}{\text{n}}}$$
+
+### He Normal Initiation
+> Work well with ReLU
+
+Formula:
+
+$$\sqrt{\frac{2}{\text{n}}}$$
+
+Where
+- n = number of input coming to node
+
+Example:
+
+$$W = random \ value * \sqrt{\frac{2}{\text{n}}}$$
+
+
+### Xavier uniform
+
+you generate weight between:
+
+$$[-limit,\ limit]$$
+
+Where:
+- $limit =\sqrt{6/(n + o)}$  
+- n = number of input coming to node
+- o = number of output coming out of the node
+
+### He uniform
+
+you generate weight between:
+
+$$[-limit,\ limit]$$
+
+Where:
+- $limit =\sqrt{6/n}$  
+- n = number of input coming to node
 
 [Go To Top](#content)
 
