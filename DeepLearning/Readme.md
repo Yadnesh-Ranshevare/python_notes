@@ -1675,6 +1675,131 @@ Where:
 [Go To Top](#content)
 
 ---
+# Batch Normalization
+Batch normalization (often called BatchNorm) is a technique used in deep learning to make neural networks train faster and more reliably.
+
+The core idea is:\
+Normalize the activations of a layer so they have a stable distribution during training.
+
+### What do you mean by  Normalization?
+Normalization mean rescaling values into a standard range/distribution so they behave more predictably.
+
+In BatchNorm specifically, normalization means:
+- shifting values so the mean becomes 0
+- scaling values so the variance becomes 1 (standard deviation becomes 1)
+
+Suppose a layer outputs:
+$$[2,4,6,8]$$
+
+These numbers have:
+
+- mean = 5
+- large spread
+
+Batch normalization converts them into something like:
+
+$$[−1.34,−0.45,0.45,1.34]$$
+
+Now:
+
+- mean ≈ 0
+- variance ≈ 1
+
+That transformation is called normalization.
+
+<img src="./Images/normalizing-data.png" style="width:500px">
+
+### How normalization help?
+
+Check out the following image that explaining why input normalization helps gradient descent train faster and more stably in Deep Learning.
+
+<img src="./Images/normalizing-data-1.png" style="width:500px">
+
+These contours represent the loss function.
+- Outer red = high loss (bad)
+- Inner green = low loss (good)
+- Center = minimum loss (best weights)
+
+Axes:
+
+- w = one weight
+- b = another parameter (bias / second weight)
+
+
+
+
+The blue arrows show how gradient descent moves during training.
+
+#### 3D Representation
+in 3D space:
+- x-axis = w
+- y-axis = b
+- z-axis = loss (high to low)
+
+ You get a bowl-shaped surface.
+
+ Contours are just: slices of equal height
+
+ <img src="./Images/normalize-vs-unnormalize.png" style="width:500px">
+
+#### Left Side: Unnormalized Data
+
+The contours are stretched like a long ellipse.
+
+That shape happens because:
+
+- One feature has much larger scale than another.
+- Example:
+    | Feature | Range       |
+    | ------- | ----------- |
+    | Age     | 0–100       |
+    | Salary  | 0–1,000,000 |
+
+    Salary dominates because its values are huge.
+
+Because the loss surface is steep in one direction and shallow in another, Gradient descent becomes unstable. Instead of moving directly toward the minimum, it zig-zags.
+
+So:
+
+- Large updates happen along one axis
+- Tiny updates happen along another
+
+Result:
+
+- Oscillation
+- Slow convergence
+- Harder optimization
+
+> To solve this problem we can put the small learning rate as small learning rate resolve the oscitation, but it will make training slower
+
+#### Right Side: Normalized Data
+
+After normalization:
+
+- features have similar scale
+- usually mean ≈ 0
+- variance ≈ 1
+
+Now both features contribute more evenly.
+
+The contours become circular.
+
+Circular contours mean:
+
+- curvature is similar in all directions
+- gradients are balanced
+
+Now gradient descent can move almost directly to the minimum.
+
+So training becomes:
+
+- faster
+- smoother
+- more stable
+
+[Go To Top](#content)
+
+---
 # Acknowledgment
 
 
