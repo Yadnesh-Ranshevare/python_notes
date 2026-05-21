@@ -2057,6 +2057,42 @@ $$Z_{nb} = (\sigma + E) \left( \frac{Z - \mu}{\sigma + E} \right)+ \mu$$
 $$Z_{nb} =  \left( Z - \mu \right)+ \mu$$
 $$Z_{nb} =   Z $$
 
+### How to predict / test
+To perform normalization on activation we need mean and standard deviation which we calculate with the help of mini batch gradient decent, as we pass the whole batch instead of single instance of data
+
+But at the time of prediction or testing we are not passing a batch anymore we are only providing a single instance of data, therefore we are no more able to calculate the mean and standard deviation like we used to do at the time of training
+
+To solve this problem we used exponential moving average, you can think of it as using the last value of mean and standard deviation at the time of prediction or testing 
+
+#### Mathematical representation of exponential moving average
+
+$$v_t = \beta v_{t-1} + (1-\beta)x_t$$
+
+Where:
+- $v_t$ = new moving average
+- $v_{t-1}$ = previous average
+- $x_t$ = current value
+- $\beta$ = smoothing factor
+
+#### Intuition
+
+Suppose:
+- $β=0.9$
+
+Then:
+
+- 90% weight comes from history
+- 10% from current batch
+
+Large β:
+
+- smoother
+- slower updates
+
+Small β:
+
+- reacts faster
+- noisier
 
 [Go To Top](#content)
 
