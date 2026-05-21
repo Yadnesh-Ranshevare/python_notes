@@ -21,6 +21,8 @@
     - [variants of ReLU](#variants-of-relu)
 12. [Weight Initialization Problem](#weight-initialization-problem)
 13. [Xavier / Glorat and He Weight Initialization](#xavier--glorat-and-he-weight-initialization)
+14. [Normalization](#normalization)
+15. [Batch Normalization](#batch-normalization)
 
 
 [Acknowledgment](#acknowledgment)
@@ -1675,13 +1677,8 @@ Where:
 [Go To Top](#content)
 
 ---
-# Batch Normalization
-Batch normalization (often called BatchNorm) is a technique used in deep learning to make neural networks train faster and more reliably.
+# Normalization
 
-The core idea is:\
-Normalize the activations of a layer so they have a stable distribution during training.
-
-### What do you mean by  Normalization?
 Normalization mean rescaling values into a standard range/distribution so they behave more predictably.
 
 In BatchNorm specifically, normalization means:
@@ -1740,6 +1737,12 @@ in 3D space:
 
  Contours are just: slices of equal height
 
+>Its a same graph as that of gradient decent but in 3D space
+>
+>- for one trainable parameter (x) vs loss (Y) we get a 2D curve
+>- for two trainable parameter (X, Y) vs loss (Z) we get a 3D bowl like shape
+
+
  <img src="./Images/normalize-vs-unnormalize.png" style="width:500px">
 
 #### Left Side: Unnormalized Data
@@ -1796,6 +1799,264 @@ So training becomes:
 - faster
 - smoother
 - more stable
+
+### Covariate Shift
+Covariate shift happens when:
+
+- the input data distribution changes
+- but the relationship between input and output remains the same.
+
+### Example:
+
+<img src="./Images/shift.png" style="width:500px">
+
+In above image we have train an CNN to differentiate between rose and other flowers
+
+#### Top Section (Training Data) 
+The model is trained on:
+
+- Red roses → labeled as Rose (y=1)
+- Purple/other flowers → labeled as Not Rose (y=0)
+
+So the network learns a shortcut:
+
+- “Red color strongly indicates rose.”
+
+On the right-side graph:
+
+- Red X = roses
+- Green O = non-roses
+- The curve = decision boundary learned by model
+
+Since training data is biased:
+
+- roses mostly appear red
+- non-roses mostly are not red
+
+the model separates classes mainly using color.
+
+#### bottom section (Testing data)
+
+Now during testing/inference:
+
+- roses are no longer always red
+- roses can be yellow, pink, white
+- non-roses may also contain red/pink colors
+
+So the input distribution changed.
+
+Although The learned boundary still separates classes correctly there are chances of model getting confused.
+
+The model becomes confused because:
+
+- the features it relied on during training are no longer distributed the same way.
+
+This is covariate shift.
+
+### Internal Covariate Shift
+Just like in covariate shift where the model get confused because its distribution changes, in internal covariate shift our neural network gets confused daring training because the distribution of a input of a nodes keeps on changing
+
+This happens because:\
+During neural network training, the distribution of activations inside hidden layers keeps changing because earlier layers continuously update their weights.
+
+Suppose you have a deep network:
+
+```
+Layer1 ​→ Layer2 ​→ Layer3​
+```
+Now:
+
+- Layer_2 learns using outputs from Layer_1
+- Layer_3 learns using outputs from Layer_2
+
+But during training:
+
+- weights of Layer_1 keep changing every iteration
+
+So outputs produced by Layer_1 also keep changing.
+
+That means:
+
+- the input distribution seen by Layer_2 is constantly shifting.
+
+This shifting distribution is called internal Covariate Shift
+
+### Solution = Normalization
+with the help of normalization we can normalize the activation of each hidden layer so that there distribution will remains same throughout the training
+
+Suppose you have a deep network:
+
+```
+Layer1 ​→ Layer2 ​→ Layer3​
+```
+Now:
+
+- Layer_2 learns using normalized outputs from Layer_1
+- Layer_3 learns using normalized outputs from Layer_2
+
+during training:
+
+- weights of Layer_1 keep changing every iteration
+
+So outputs produced by Layer_1 also keep changing but since we are using normalization its distribution remains same.
+
+That means:
+
+- the input distribution seen by Layer_2 is same as previous one.
+
+As a result the learning becomes stable and our neural network does not confused during training
+
+
+[Go To Top](#content)
+
+---
+# Batch Normalization
+Batch normalization (often called BatchNorm) is a technique used in deep learning to make neural networks train faster and more reliably.
+
+The core idea is:\
+Normalize the activations of each layer so they have a stable distribution during training.
+
+must remember:
+- we apply batch normalization with [mini batch gradient decent](#3-mini-batch-gradient-descent)
+- we apply it layer by layer (it is not compulsory to apply batch norm to every layer)
+
+
+in normal neural network
+```
+input ​→ ​z ​→  a ​→ next layer
+```
+- z = output of a node i.e $Z = \sum WX + b$
+- a = activation function output
+
+with batch Normalization
+
+```
+input ​→ ​z ​→ z_n ​→ a ​→ next layer
+```
+- z_n = normalized z
+
+you can also implement 
+
+```
+input ​→ ​z ​→ a ​→ a_n ​→ next layer
+```
+- a_n = normalized a
+
+### Now to normalize:
+
+formula
+
+$$Z_n = \frac{Z - \mu}{\sigma}$$
+
+here:
+- $\mu$ = mean
+- $\sigma$ = standard deviation
+
+since we are using [mini batch gradient decent](#3-mini-batch-gradient-descent) will be dividing our dataset into multiple mini batches, we pass one batch at a time and compute the activation for each datapoint and then use all those activation to compute mean
+
+### Example:
+
+- consider a neural network
+<img src="./Images/simple-network.png" style="width:500px">
+
+- let say we have 100 datapoints
+    ```
+    [(1, 1), (2, 2), (3, 3), ....., (100, 100)]
+    ```
+- batch size is 3, then our mini batches become
+    ```
+    [(1, 1), (2, 2), (3, 3)],
+    [(4, 4), (5, 5), (6, 6)],
+    :
+    :
+    [(98, 98), (99, 99), (100, 100)]
+    ```
+- now we pass the first batch into the neural network and find the activations of node `h1` and `h2` for this batch 
+
+    ```
+    h1 = [1.1, 4.2, 3.3],
+    h2 = [4.4, 7.5, 6.6],
+    ```
+
+    >Note:\
+    >instead of passing each datapoint one by one and directly getting the final output we first calculate the activation of a layer for each node in a batch 
+- now we use this activation to compute the mean
+    ```
+    mean_h1 = 1.1 + 4.2 + 3.3 / 3 = 2.8
+    mean_h2 = 4.4 + 7.5 + 6.6 / 3 = 6.1
+    ```
+- similarly calculate standard deviation:
+
+    formula:
+
+    $$\sigma = \sqrt{\frac{\sum Z - \mu}{n}}$$
+
+    Here
+    - $Z$ = activation
+    - $\mu$ = mean
+    - $n$ = no. of datapoints
+
+    ```
+    std_h1 = 0.44
+    std_h2 = 0.44
+    ```
+- since we now have mean and standard deviation we can easily calculate normalized activation
+
+    formula
+
+    $$H_n = \frac{H - \mu}{\sigma}$$
+
+    here:
+    - $\mu$ = mean
+    - $\sigma$ = standard deviation
+
+    ```
+    # for first datapoint H1 = 1.1
+    H1_n = 1.1 - 2.8 / 0.44 = -3.86
+    
+    # for second datapoint H1 = 4.2
+    H1_n = 4.2 - 2.8 / 0.44 = 3.18
+    
+    # for third datapoint H1 = 3.3
+    H1_n = 3.3 - 2.8 / 0.44 = 1.13
+    ```
+
+### Error handling
+there is a chances of standard deviation becoming zero, and if that happen then according to formula:
+
+$$Z_n = \frac{Z - \mu}{\sigma}$$
+
+denominator becomes zero and will throw and error.
+
+Therefore to prevent this from happing we update the formula as:
+
+$$Z_n = \frac{Z - \mu}{\sigma + E}$$
+
+- $E$ = error term to prevent zero in denominator
+
+### Scale and Shift
+in most od the cases some of the nodes does't what the normalized input in that case we want the flexibility so that our model can decide whether to apply normalization or not
+
+to do that we simply update our output as follow:
+
+$$Z_{nb} = \lambda Z_n + \beta$$
+
+where:
+- $Z_{nb}$ = actual normalized output of any node
+- $Z_n$ = normalized value of activation
+- $\lambda , \beta$ = tradable parameter
+
+if our model doesn't want normalized parameter it will set the value of $\lambda = \sigma + E$ and $\beta = \mu$ which will cancel out the normalization
+
+Example:
+
+$$Z_{nb} = \lambda Z_n + \beta$$
+
+$$Z_{nb} = (\sigma + E) \left( \frac{Z - \mu}{\sigma + E} \right)+ \mu$$
+
+$$Z_{nb} =  \left( Z - \mu \right)+ \mu$$
+$$Z_{nb} =   Z $$
+
 
 [Go To Top](#content)
 
