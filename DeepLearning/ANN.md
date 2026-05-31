@@ -2344,9 +2344,9 @@ here
 
 As you can see in $V_t$ we have $\beta V_{t-1}$, i.e, we are using previous velocity to calculate new velocity 
 
-> this method uses [Exponentially weighted moving average](#exponentially-weighted-moving-average-ewma) technique to keep the previous velocity for computing the updated velocity
+this method uses [Exponentially weighted moving average](#exponentially-weighted-moving-average-ewma) technique to keep the previous velocity for computing the updated velocity
 
-if $\beta$ became 0 then $\beta V_{t-1}$ became 0
+if $\beta$ became 0 then $\beta V_{t-1}$ became 0 as a result:
 
 $$V_t = \left[ 0 \times V_{t-1} \right] - η \frac{\partial W_{t-1}}{\partial L}$$
 
@@ -2368,7 +2368,7 @@ this is our simple gradient decent
 
 $\beta$ is a decaying factor that decide how pervious velocity affect the new velocity
 
-Example:
+#### Example:
 
 suppose you have 
 ```
@@ -2376,14 +2376,14 @@ v1, v2, v3, v4, ....,v8, v9
 ```
 now to compute `v10` the affect of `v9` and `v8` will be high compare to `v1` and `v2`
 
-how much will they affect will be decide by $\beta$
+and how much will they affect will be decide by $\beta$
 
-Generally new value is average of pervious $1/(1-\beta)$ velocity
+Generally new velocity is average of pervious $1/(1-\beta)$ velocities
 
 So:
-- β = 0.9⇒ average of 10 pervious velocity
-- β = 0.99⇒ average of 100 pervious velocity
-- β = 0.999⇒ average of 1000 pervious velocity
+- β = 0.9 ⇒ average of 10 pervious velocities
+- β = 0.99 ⇒ average of 100 pervious velocities
+- β = 0.999 ⇒ average of 1000 pervious velocities
 
 ### Affect of momentum on learning
 
