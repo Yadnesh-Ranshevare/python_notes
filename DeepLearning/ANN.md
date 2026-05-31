@@ -25,6 +25,7 @@
 15. [Batch Normalization](#batch-normalization)
 16. [Exponentially Weighted Moving Average (EWMA)](#exponentially-weighted-moving-average-ewma)
 17. [Optimizers](#optimizers)
+    - [Momentum Optimizer](#momentum-optimizer)
 
 ---
 # Introduction
@@ -2296,6 +2297,99 @@ Because of all this problem we face problems like:
 - less accuracy / less optimal network
 
 therefore we need more / new optimizer to solve this kind of problems
+
+[Go To Top](#content)
+
+---
+# Momentum Optimizer
+Momentum is an improvement over basic Gradient Descent that helps the optimizer move faster in the correct direction and reduce useless zig-zagging.
+
+### Idea of Momentum
+
+Instead of using only the current gradient, Momentum also remembers previous updates.
+
+Think of pushing a shopping cart:
+- First push → slow movement.
+- Keep pushing in the same direction → speed increases.
+- The cart gains momentum.
+
+Similarly, if gradients keep pointing in roughly the same direction, Momentum accumulates speed and moves faster.
+
+- Without momentum:
+
+    ```
+    step step step step
+    ```
+- With momentum:
+    ```
+    step → bigger step → bigger step
+    ```
+
+### Mathematically
+
+$$W_{t} = W_{t-1} + V_t$$
+
+where
+- $W_t$ = new weight
+- $W_{t-1}$ = old weight
+- v = velocity (accumulated momentum)
+
+$$V_t = \beta V_{t-1} - η \frac{\partial W_{t-1}}{\partial L}$$
+
+here
+- η = learning rate
+- L = loss
+- β = momentum coefficient (usually 0.9)
+- $\frac{\partial W_{t-1}}{\partial L}$ = gradient
+
+As you can see in $V_t$ we have $\beta V_{t-1}$, i.e, we are using previous velocity to calculate new velocity 
+
+> this method uses [Exponentially weighted moving average](#exponentially-weighted-moving-average-ewma) technique to keep the previous velocity for computing the updated velocity
+
+if $\beta$ became 0 then $\beta V_{t-1}$ became 0
+
+$$V_t = \left[ 0 \times V_{t-1} \right] - η \frac{\partial W_{t-1}}{\partial L}$$
+
+$$V_t = 0 - η \frac{\partial W_{t-1}}{\partial L}$$
+
+$$V_t = - η \frac{\partial W_{t-1}}{\partial L}$$
+
+As 
+
+$$W_{t} = W_{t-1} + V_t$$
+
+$$W_{t} = W_{t-1} - η \frac{\partial W_{t-1}}{\partial L}$$
+
+this is our simple gradient decent
+
+### Effect of $\beta$
+
+> you can refer [Exponentially weighted moving average](#exponentially-weighted-moving-average-ewma) to understand how $\beta$ affect the new velocity
+
+$\beta$ is a decaying factor that decide how pervious velocity affect the new velocity
+
+Example:
+
+suppose you have 
+```
+v1, v2, v3, v4, ....,v8, v9
+```
+now to compute `v10` the affect of `v9` and `v8` will be high compare to `v1` and `v2`
+
+how much will they affect will be decide by $\beta$
+
+Generally new value is average of pervious $1/(1-\beta)$ velocity
+
+So:
+- β = 0.9⇒ average of 10 pervious velocity
+- β = 0.99⇒ average of 100 pervious velocity
+- β = 0.999⇒ average of 1000 pervious velocity
+
+### Affect of momentum on learning
+
+<img src="./Images/Momentum.png" style="width:500px">
+
+as you can see in above image in case of momentum we are moving with high velocity towards minima in horizontal direction, as SGD (siple gradient decent) constantly suggest to move in that direction
 
 [Go To Top](#content)
 
