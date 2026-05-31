@@ -2344,27 +2344,12 @@ here
 
 As you can see in $V_t$ we have $\beta V_{t-1}$, i.e, we are using previous velocity to calculate new velocity 
 
-this method uses [Exponentially weighted moving average](#exponentially-weighted-moving-average-ewma) technique to keep the previous velocity for computing the updated velocity
+this method uses [Exponentially weighted moving average](#exponentially-weighted-moving-average-ewma) technique to use the previous velocity for computing the updated velocity
 
-if $\beta$ became 0 then $\beta V_{t-1}$ became 0 as a result:
-
-$$V_t = \left[ 0 \times V_{t-1} \right] - η \frac{\partial W_{t-1}}{\partial L}$$
-
-$$V_t = 0 - η \frac{\partial W_{t-1}}{\partial L}$$
-
-$$V_t = - η \frac{\partial W_{t-1}}{\partial L}$$
-
-As 
-
-$$W_{t} = W_{t-1} + V_t$$
-
-$$W_{t} = W_{t-1} - η \frac{\partial W_{t-1}}{\partial L}$$
-
-this is our simple gradient decent
 
 ### Effect of $\beta$
 
-> you can refer [Exponentially weighted moving average](#exponentially-weighted-moving-average-ewma) to understand how $\beta$ affect the new velocity
+> you can refer [Exponentially weighted moving average](#exponentially-weighted-moving-average-ewma) to understand how $\beta$ will affect the new velocity
 
 $\beta$ is a decaying factor that decide how pervious velocity affect the new velocity
 
@@ -2384,6 +2369,23 @@ So:
 - β = 0.9 ⇒ average of 10 pervious velocities
 - β = 0.99 ⇒ average of 100 pervious velocities
 - β = 0.999 ⇒ average of 1000 pervious velocities
+
+
+if $\beta$ became 0 then $\beta V_{t-1}$ became 0 as a result:
+
+$$V_t = \left[ 0 \times V_{t-1} \right] - η \frac{\partial W_{t-1}}{\partial L}$$
+
+$$V_t = 0 - η \frac{\partial W_{t-1}}{\partial L}$$
+
+$$V_t = - η \frac{\partial W_{t-1}}{\partial L}$$
+
+As 
+
+$$W_{t} = W_{t-1} + V_t$$
+
+$$W_{t} = W_{t-1} - η \frac{\partial W_{t-1}}{\partial L}$$
+
+this is our simple gradient decent
 
 ### Affect of momentum on learning
 
