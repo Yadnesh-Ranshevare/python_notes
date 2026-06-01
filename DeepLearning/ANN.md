@@ -2415,6 +2415,10 @@ Although momentum helps us to reach the minima faster but in most of the cases b
 
 <img src="./Images/mum-3.png" style="width:500px">
 
+> value of $\beta$ is responsibly for amount of oscitation occurring during thorning, as $\beta$ decide how much previous velocity to accumulate
+> - high $\beta$ = high oscitation
+> - low $\beta$ = low oscitation
+
 [Go To Top](#content)
 
 ---
