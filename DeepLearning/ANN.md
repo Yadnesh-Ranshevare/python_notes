@@ -2393,6 +2393,28 @@ this is our simple gradient decent
 
 as you can see in above image in case of momentum we are moving with high velocity towards minima in horizontal direction, as SGD (siple gradient decent) constantly suggest to move in that direction
 
+#### momentum help in escaping:
+- Shallow minima
+- Small bumps in the loss landscape
+- Noisy local traps
+- Saddle points
+- Narrow valleys where plain gradient descent moves very slowly
+
+Momentum accumulates velocity from earlier updates, allowing it to pass through these regions more quickly.
+
+<img src="./Images/mum.png" style="width:500px">
+
+If you're in a deep, wide local minimum and the gradients around it point inward
+
+Momentum eventually decreases because gradients become near zero and the optimizer settles there.
+
+<img src="./Images/mum-2.png" style="width:500px">
+
+#### Extra computation
+Although momentum helps us to reach the minima faster but in most of the cases because of accumulated velocity we miss the minima and oscillate before settling in
+
+<img src="./Images/mum-3.png" style="width:500px">
+
 [Go To Top](#content)
 
 ---
