@@ -26,6 +26,7 @@
 16. [Exponentially Weighted Moving Average (EWMA)](#exponentially-weighted-moving-average-ewma)
 17. [Optimizers](#optimizers)
     - [Momentum Optimizer](#momentum-optimizer)
+    - [NAG - Nesterov Accelerated Gradient](#nag---nesterov-accelerated-gradient)
 
 ---
 # Introduction
@@ -2334,13 +2335,13 @@ where
 - $W_{t-1}$ = old weight
 - v = velocity (accumulated momentum)
 
-$$V_t = \beta V_{t-1} - η \frac{\partial W_{t-1}}{\partial L}$$
+$$V_t = \beta V_{t-1} - η \frac{\partial L}{\partial W_{t-1}}$$
 
 here
 - η = learning rate
 - L = loss
 - β = momentum coefficient (usually 0.9)
-- $\frac{\partial W_{t-1}}{\partial L}$ = gradient
+- $\frac{\partial L}{\partial W_{t-1}}$ = gradient
 
 As you can see in $V_t$ we have $\beta V_{t-1}$, i.e, we are using previous velocity to calculate new velocity 
 
@@ -2373,17 +2374,17 @@ So:
 
 if $\beta$ became 0 then $\beta V_{t-1}$ became 0 as a result:
 
-$$V_t = \left[ 0 \times V_{t-1} \right] - η \frac{\partial W_{t-1}}{\partial L}$$
+$$V_t = \left[ 0 \times V_{t-1} \right] - η \frac{\partial L}{\partial W_{t-1}}$$
 
-$$V_t = 0 - η \frac{\partial W_{t-1}}{\partial L}$$
+$$V_t = 0 - η \frac{\partial L}{\partial W_{t-1}}$$
 
-$$V_t = - η \frac{\partial W_{t-1}}{\partial L}$$
+$$V_t = - η \frac{\partial L}{\partial W_{t-1}}$$
 
 As 
 
 $$W_{t} = W_{t-1} + V_t$$
 
-$$W_{t} = W_{t-1} - η \frac{\partial W_{t-1}}{\partial L}$$
+$$W_{t} = W_{t-1} - η \frac{\partial L}{\partial W_{t-1}}$$
 
 this is our simple gradient decent
 
@@ -2410,14 +2411,88 @@ Momentum eventually decreases because gradients become near zero and the optimiz
 
 <img src="./Images/mum-2.png" style="width:500px">
 
-#### Extra computation
+#### Extra computation / Oscillation PRoblem
 Although momentum helps us to reach the minima faster but in most of the cases because of accumulated velocity we miss the minima and oscillate before settling in
 
 <img src="./Images/mum-3.png" style="width:500px">
 
-> value of $\beta$ is responsibly for amount of oscitation occurring during thorning, as $\beta$ decide how much previous velocity to accumulate
+> value of $\beta$ is responsibly for amount of oscitation occurring during training, as $\beta$ decide how much previous velocity to accumulate
 > - high $\beta$ = high oscitation
 > - low $\beta$ = low oscitation
+
+[Go To Top](#content)
+
+---
+# NAG - Nesterov Accelerated Gradient
+Nesterov Accelerated Gradient (NAG) is an optimization algorithm used to train machine learning and deep learning models.
+
+It is an improvement over Momentum Gradient Descent, designed to reduce oscillations and speed up convergence.
+
+### The Problem with Momentum
+momentum helps us to reach the minima faster but in most of the cases because of accumulated velocity we miss the minima and oscillate before settling in
+
+Imagine you're rolling a ball downhill. Because of momentum, the ball may already be moving fast toward a region where the gradient changes direction. Momentum doesn't "see" this upcoming change and may overshoot.
+
+### How NAG solve this?
+in momentum:
+- next jump = previous velocity + gradient at that point
+- because of this we take one single jump
+
+In NAG:
+- we first find out what is the next jump with current velocity
+- then from that point we calculate the gradient at that next point
+- now with previous velocity and the gradient at that next point we make our jump
+
+<img src="./Images/nag-vs-mum.png" style="width:500px">
+
+### Momentum mathematically
+$$W_{t} = W_{t-1} + V_t$$
+
+where
+- $W_t$ = updated weight
+- $W_{t-1}$ = current weight
+- v = velocity (accumulated momentum)
+
+$$V_t = \beta V_{t-1} - η \frac{\partial L}{\partial W_{t-1}}$$
+
+here
+- η = learning rate
+- L = loss
+- β = momentum coefficient (usually 0.9)
+- $\frac{\partial L}{\partial W_{t-1}}$ = gradient at current weight
+
+### NAG Mathematically
+
+find Look-Ahead Position
+
+$$w_{la} = w_t -\beta v_{t-1}$$
+
+where:
+- $w_t$ = current weights
+- $v_{t-1}$ = previous velocity (momentum)
+- $\beta$ = momentum coefficient (e.g. 0.9)
+- $w_{la}$ = look-ahead weight / point.
+
+Computing Gradient at the Look-Ahead Point
+
+$$η\frac{\partial L}{\partial w_{la}}$$
+
+>Note: The gradient is not evaluated at $w_t$, instead at $w_{la}$ 
+
+Final velocity
+
+$$v_t = \beta v_{t - 1} + η \frac{\partial L}{\partial w_{la}}$$
+
+
+Update the Weights
+
+
+$$w_{t+1} = w_{t} + v_t$$
+
+<!-- $$v_t = (w_{t} - w_{la}) + η \frac{\partial w_{la}}{\partial L}$$ -->
+
+
+
 
 [Go To Top](#content)
 
