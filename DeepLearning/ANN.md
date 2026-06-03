@@ -27,6 +27,7 @@
 17. [Optimizers](#optimizers)
     - [Momentum Optimizer](#momentum-optimizer)
     - [NAG - Nesterov Accelerated Gradient](#nag---nesterov-accelerated-gradient)
+    - [AdaGrad (Adaptive Gradient Algorithm)](#adagrad-adaptive-gradient-algorithm)
 
 ---
 # Introduction
@@ -2506,6 +2507,129 @@ $$w_{t+1} = w_{t} + v_t$$
 <!-- $$v_t = (w_{t} - w_{la}) + η \frac{\partial w_{la}}{\partial L}$$ -->
 
 
+
+
+[Go To Top](#content)
+
+---
+# AdaGrad (Adaptive Gradient Algorithm)
+
+AdaGrad is an optimization algorithm that adapts the learning rate for each model parameter individually during training.
+
+In standard gradient descent, every parameter uses the same learning rate.
+
+AdaGrad changes this by:
+- Giving smaller learning rates to parameters that receive large updates frequently.
+- Giving larger learning rates to parameters that are updated rarely.
+
+This helps the model learn more efficiently, especially when dealing with sparse data (e.g., text data where many features occur infrequently).
+
+### problem with normal gradient decent 
+1. **unnormalized data:**
+
+    when we have unnormalized data during training large updates happen on one parameter while other remains unchanged 
+
+    example:\
+    suppose you have features like:
+    - age (0 - 70)
+    - salary (0 - 100000+)
+
+    because of this overtime gradient of:
+    - age = small
+    - salary = large
+
+    as a result little to no updates will happen in age feature while salary changes rapidly
+
+    > by changing feature's we mean changing the weight assign to each feature
+
+    Note: this problem can be solved by normalization
+
+2. **spars data:**
+
+    sparse data is the data who has a feature with high number of 0 as a value
+
+    eg.,\
+    consider features as:
+    - IQ (0 - 150)
+    - CGPA (0 - 10),
+    - IIT student (0 / 1)
+
+    if we consider this feature for all collage student (IIT or non IIT student), then there will be lots of student from non IIT collage
+
+    Therefore the IIT student column will mostly be filled with `0`, there for this column will be known as sparse column
+
+    even after applying normalization this column will contain high frequency of `0` value
+
+    as a result most of the time its gradient will became zero stopping the updates completely
+
+because of the above two problem we get following type of loss function:
+
+
+1. circular contour plot of normal data vs normal data
+    
+    <img src="./Images/circle-countor.png" style="width:500px">
+
+
+
+2. elongated contour plot of sparse data vs normal data
+
+    <img src="./Images/elongated-countor.png" style="width:500px">
+
+
+
+
+because of this elongated graph the training became unstable
+
+> to understand this graph how they affect training [go check out normalization](#normalization)
+
+### The core problem
+The core problem of gradient decent is uneven update because of sparse data, where one feature is updating while other is not because of its sparse nature
+
+to imagine you can think of it as a vector sum:
+
+<img src="./Images/vector-sum.png" style="width:500px">
+
+- here each vector represent the gradient of a feature whereas resultant vector represent the update over both features
+
+- since both vector 1 and vector 2 have identical length we can say feature 1 and feature 2 has identical gradient
+
+- as resultant vector is exactly in middle of both vector we can say updates on both feature 1 and feature 2 in identical 
+
+
+but if we have a spare feature which usually has low gradient then our vector sum becomes something like:
+
+<img src="./Images/vector-sum-2.png" style="width:500px">
+
+- here:
+    - vector 1 = sparse feature
+    - vector 2 = normal feature
+
+
+- as we can see  vector 1 is significantly small (close to 0) compare to vector 2 indicating that gradient of feature 1 is very small whereas feature 2 has comparatively high gradient
+
+
+
+- Therefore the resultant vector is in the direction of vector 2 indicating that major updates happing over feature 2 whereas feature 1 remains same
+
+
+because of this we get following type of tanning curve:
+
+<img src="./Images/traning-curve.png" style="width:500px">
+
+- here:
+    - x axis = normal feature
+    - y axis = sparse feature
+
+- as you know in sparse feature most of our data will have `0` value so error will be less at `0` for that feature
+
+- but because of high number of `0` value the overall gradient will also became zero stopping the future updates
+
+- therefore we see no changes for `y` when training curve reaches `y = 0`
+
+- but this is not applicable to normal features, hence we can see changes on `X` axis
+
+
+as you can see in above training cure we take long path instead of directly going towards the center
 
 
 [Go To Top](#content)
