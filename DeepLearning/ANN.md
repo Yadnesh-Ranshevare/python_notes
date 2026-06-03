@@ -2534,7 +2534,7 @@ This helps the model learn more efficiently, especially when dealing with sparse
     - age (0 - 70)
     - salary (0 - 100000+)
 
-    because of this overtime gradient of:
+    because of this gradient of:
     - age = small
     - salary = large
 
@@ -2556,11 +2556,23 @@ This helps the model learn more efficiently, especially when dealing with sparse
 
     if we consider this feature for all collage student (IIT or non IIT student), then there will be lots of student from non IIT collage
 
-    Therefore the IIT student column will mostly be filled with `0`, there for this column will be known as sparse column
+    Therefore the IIT student column will mostly be filled with `0`, therefore this column will be known as sparse column
 
     even after applying normalization this column will contain high frequency of `0` value
 
-    as a result most of the time its gradient will became zero stopping the updates completely
+    If a feature is not present in an example (its value is 0), it often contributes nothing to the gradient for its corresponding weight.
+
+    Therefore, the weight associated with that feature is updated only when the feature actually appears in the training data.
+
+    $$\frac{\partial L}{\partial w_{la}} ∝ feature\ X$$
+
+    when $feature\ X$ = 0
+
+    $$\frac{\partial L}{\partial w_{la}} = 0$$
+
+    Since $X$ is nonzero only 1% of the time, $w1$ gets meaningful updates only 1% of the time.
+
+    as a result it makes updates rare, because the feature participates in very few training examples.
 
 because of the above two problem we get following type of loss function:
 
@@ -2622,7 +2634,7 @@ because of this we get following type of tanning curve:
 
 - as you know in sparse feature most of our data will have `0` value so error will be less at `0` for that feature
 
-- but because of high number of `0` value the overall gradient will also became zero stopping the future updates
+- but because of high number of `0` value the overall gradient will also became zero (close to zero) stopping the future updates
 
 - therefore we see no changes for `y` when training curve reaches `y = 0`
 
