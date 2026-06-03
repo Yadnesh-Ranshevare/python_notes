@@ -2416,6 +2416,11 @@ Although momentum helps us to reach the minima faster but in most of the cases b
 
 <img src="./Images/mum-3.png" style="width:500px">
 
+Note: once overshoot we go up the curve until gradient overcome the momentum, also momentum start to decreases because of opposite gradient
+
+
+<img src="./Images/mum-4.png" style="width:500px">
+
 > value of $\beta$ is responsibly for amount of oscitation occurring during training, as $\beta$ decide how much previous velocity to accumulate
 > - high $\beta$ = high oscitation
 > - low $\beta$ = low oscitation
@@ -2465,7 +2470,7 @@ here
 
 find Look-Ahead Position
 
-$$w_{la} = w_t -\beta v_{t-1}$$
+$$w_{la} = w_t -\beta v_{t-1} ------ (i)$$
 
 where:
 - $w_t$ = current weights
@@ -2482,6 +2487,15 @@ $$η\frac{\partial L}{\partial w_{la}}$$
 Final velocity
 
 $$v_t = \beta v_{t - 1} + η \frac{\partial L}{\partial w_{la}}$$
+
+$$\text{from i we have}$$
+
+$$\beta v_{t-1}  = w_t - w_{la}$$
+
+$$\text{Therefore}$$
+
+$$v_t = (w_t - w_{la}) + η \frac{\partial L}{\partial w_{la}}$$
+
 
 
 Update the Weights
