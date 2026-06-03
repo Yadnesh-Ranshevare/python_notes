@@ -2708,7 +2708,9 @@ if gradients are big:
 
 ### Disadvantage
 
-AdaGrad may fail to reach the optimal minimum because its learning rate continuously decreases during training. As the accumulated squared gradients grow, parameter updates become extremely small, causing the optimizer to stop making meaningful progress before reaching the global or local minimum.
+AdaGrad may fail to reach the optimal minimum because its learning rate continuously decreases during training. 
+
+As the accumulated squared gradients grow, parameter updates become extremely small, causing the optimizer to stop making meaningful progress before reaching the global or local minimum.
 
 
 in AdaGard our learning rate is:
@@ -2717,15 +2719,21 @@ $$\frac{η }{\sqrt{v_t + \epsilon}}$$
 
 - $v_t$ = squared sum
 
-here over the time our squared sum increases as a result $v_t$ became very big
+$v_t$ is just a simple addition of all the previous gradients and as epoch increases a new gradient is get added into it increasing the value of $v_t$
 
-therefore learning rate:
+at one point $v_t$ become too high that learning rate:
 
 $$\frac{η }{\sqrt{v_t + \epsilon}}$$
 
 became very small
 
-as a result, we hit a spot where eventually learning rate become zero before reaching the minima
+therefore, eventually we hit a spot where learning rate become zero before reaching the minima
+
+as a result irrespective to the number of epoch model stop training before reaching the optimal minimum and we get less accurate model than its actual potential
+
+this is the case where we compromise the model performance for faster training 
+
+for this disadvantage we usually doesn't use AdaGard in complex model and is used for simple liner models
 
 
 
