@@ -2629,7 +2629,106 @@ because of this we get following type of tanning curve:
 - but this is not applicable to normal features, hence we can see changes on `X` axis
 
 
-as you can see in above training cure we take long path instead of directly going towards the center
+as you can see in above training cure we take longer path instead of directly going towards the center
+
+this happens only because of uneven weight updates due to presence of sparse data 
+
+In AdaGard we try to solve this problem by updating the weight evenly so that similar weight upgrade happen across the network
+
+and to do that we adapts the learning rate for each model parameter individually during training.
+
+### AdaGard Intuition
+AdaGrad is an optimization algorithm that adapts the learning rate for each model parameter individually during training.
+
+In standard gradient descent, every parameter uses the same learning rate.
+
+AdaGrad changes this by:
+- small gradient = big learning rate
+- big gradient = small learning rate
+
+This make big gradient small and small gradient big so that they balance out each other and same updates happen  over all the feature
+
+### Mathematically
+
+$$w_{t+1} = w_t - \frac{η }{\sqrt{v_t + \epsilon}} \times \frac{\partial L}{\partial w_{t}}$$
+
+here:
+- $w_{t+1}$ = updated weight
+- $w_t$ = old weight
+- $η \frac{\partial L}{\partial w_{t}}$ = gradient
+- $\epsilon$ = very small number placed in case if $v_t$ became zero 
+
+$$v_t = v_{t-1} + \left(η \frac{\partial L}{\partial w_{t}}\right)^2$$
+
+you can think of $v_t$ as a squared sum of all the pervious gradients
+
+example:
+
+- for first update
+
+$$v_1 = 0 + \left(η \frac{\partial L}{\partial w_{1}}\right)^2$$
+
+- for second update
+
+$$v_2 = v_1 + \left(η \frac{\partial L}{\partial w_{2}}\right)^2$$
+
+$$v_2 = \left(η \frac{\partial L}{\partial w_{1}}\right)^2 + \left(η \frac{\partial L}{\partial w_{2}}\right)^2$$
+
+- for nth update
+
+$$v_n = \left(η \frac{\partial L}{\partial w_{1}}\right)^2 + \left(η \frac{\partial L}{\partial w_{2}}\right)^2 +.....+ \left(η \frac{\partial L}{\partial w_{n}}\right)^2$$
+
+as you can see its the squared sum of all the gradient up till now i.e, squared sum of all the pervious gradients
+
+### Why squared sum
+we take squared sum so that we can ignore the direction of gradient (positive / negative gradient) and only consider the magnitude 
+
+why not take mod:\
+because in gradient decent while updating the weight we do differentiation and it is easy to differentiate of $x^2$ that compare $x$ itself if $x$ is complex term
+
+At the time of using this squared sum we are taking its root to balance thing out
+
+$$\frac{η }{\sqrt{v_t + \epsilon}}$$
+
+- $v_t$ = squared sum
+
+### How it works
+
+if gradients are small:
+
+- squared sum of all the pervious gradients became small 
+- $v_t$ = small
+- learning rate = $η /{\sqrt{v_t + \epsilon}}$ = big
+
+if gradients are big:
+
+- squared sum of all the pervious gradients became big 
+- $v_t$ = big
+- learning rate = $η /{\sqrt{v_t + \epsilon}}$ = small
+
+### Disadvantage
+
+AdaGrad may fail to reach the optimal minimum because its learning rate continuously decreases during training. As the accumulated squared gradients grow, parameter updates become extremely small, causing the optimizer to stop making meaningful progress before reaching the global or local minimum.
+
+
+in AdaGard our learning rate is:
+
+$$\frac{η }{\sqrt{v_t + \epsilon}}$$
+
+- $v_t$ = squared sum
+
+here over the time our squared sum increases as a result $v_t$ became very big
+
+therefore learning rate:
+
+$$\frac{η }{\sqrt{v_t + \epsilon}}$$
+
+became very small
+
+as a result, we hit a spot where eventually learning rate become zero before reaching the minima
+
+
+
 
 
 [Go To Top](#content)
