@@ -28,6 +28,7 @@
     - [Momentum Optimizer](#momentum-optimizer)
     - [NAG - Nesterov Accelerated Gradient](#nag---nesterov-accelerated-gradient)
     - [AdaGrad (Adaptive Gradient Algorithm)](#adagrad-adaptive-gradient-algorithm)
+    - [RMS Prop - (Root Mean Square Propagation)](#rms-prop---root-mean-square-propagation)
 
 ---
 # Introduction
@@ -2676,17 +2677,17 @@ you can think of $v_t$ as a squared sum of all the pervious gradients
 
 example:
 
-- for first update
+- for first epoch
 
 $$v_1 = 0 + \left(η \frac{\partial L}{\partial w_{1}}\right)^2$$
 
-- for second update
+- for second epoch
 
 $$v_2 = v_1 + \left(η \frac{\partial L}{\partial w_{2}}\right)^2$$
 
 $$v_2 = \left(η \frac{\partial L}{\partial w_{1}}\right)^2 + \left(η \frac{\partial L}{\partial w_{2}}\right)^2$$
 
-- for nth update
+- for nth epoch
 
 $$v_n = \left(η \frac{\partial L}{\partial w_{1}}\right)^2 + \left(η \frac{\partial L}{\partial w_{2}}\right)^2 +.....+ \left(η \frac{\partial L}{\partial w_{n}}\right)^2$$
 
@@ -2746,6 +2747,111 @@ as a result irrespective to the number of epoch model stop training before reach
 this is the case where we compromise the model performance for faster training 
 
 for this disadvantage we usually doesn't use AdaGard in complex model and is used for simple liner models
+
+
+
+
+
+[Go To Top](#content)
+
+---
+# RMS Prop - (Root Mean Square Propagation)
+
+RMSProp (Root Mean Square Propagation) is an adaptive learning-rate optimization algorithm used to train neural networks.
+
+you can think of it as upgraded version of [AdaGard optimizer](#adagrad-adaptive-gradient-algorithm)
+
+### The problem with AdaGard
+
+AdaGrad may fail to reach the optimal minimum because its learning rate continuously decreases during training. 
+
+As the accumulated squared gradients grow, learning rate decreases, parameter updates become extremely small, causing the optimizer to stop making meaningful progress before reaching the global or local minimum.
+
+in AdaGard our learning rate is:
+
+$$\frac{η }{\sqrt{v_t + \epsilon}}$$
+
+where:
+
+$$v_t = v_{t-1} + \left(η \frac{\partial L}{\partial w_{t}}\right)^2$$
+
+$v_t$ sum of all the previous gradients
+
+as epoch increases this sum increases as result $v_t$ become huge
+
+- for first epoch
+
+$$v_1 = 0 + \left(η \frac{\partial L}{\partial w_{1}}\right)^2$$
+
+- for second epoch
+
+$$v_2 = v_1 + \left(η \frac{\partial L}{\partial w_{2}}\right)^2$$
+
+$$v_2 = \left(η \frac{\partial L}{\partial w_{1}}\right)^2 + \left(η \frac{\partial L}{\partial w_{2}}\right)^2$$
+
+- for nth epoch
+
+$$v_n = \left(η \frac{\partial L}{\partial w_{1}}\right)^2 + \left(η \frac{\partial L}{\partial w_{2}}\right)^2 +.....+ \left(η \frac{\partial L}{\partial w_{n}}\right)^2$$
+
+here:
+
+$$v_1 < v_2 < v_n$$
+
+as this $v_t$ become huge learning rate become extremely low (close to zero) stopping the further training (little to no training happens in the future)
+
+so the main problem of AdaGard is:\
+As epoch increases sum of previous gradient $v_t$ also increases, reducing the value of learning rate to the extend that it eventually became zero causing to future training
+
+### Solution - moving average
+as we know the main problem is that sum of previous gradient grows continuously overtime, eventually reaching a point sum become soo high that learning rate become zero or close to zero
+
+therefore to solve this issue we avoid taking this squared sum and use [moving average](#exponentially-weighted-moving-average-ewma)
+
+A moving average is just a way to smooth a sequence of values by averaging the most recent data points instead of using all past data equally.
+
+in moving average:
+- old gradients slowly fade out
+- recent gradients matter more
+- value stays bounded
+
+> to learn more about it you can visit [Exponentially Weighted Moving Average (EWMA)](#exponentially-weighted-moving-average-ewma)
+
+Therefore we can say that instead of using raw gradients directly, RMSProp keeps a moving average of squared gradients and uses it to normalize updates.
+
+by doing this we successfully avoid $v_t$ becoming too huge therefore our learning rate will never become too small (close to zero or zero) as a result our training will never stop and will successfully reach the optimal minima 
+
+### Mathematically
+
+weight remains same as that of [AdaGard](#adagrad-adaptive-gradient-algorithm):
+
+$$w_{t+1} = w_t - \frac{η }{\sqrt{v_t + \epsilon}} \times \frac{\partial L}{\partial w_{t}}$$
+
+thee only change is that how we compute $v_t$:
+
+- in [AdaGard](#adagrad-adaptive-gradient-algorithm)
+
+$$v_t = v_{t-1} + \left(η \frac{\partial L}{\partial w_{t}}\right)^2$$
+
+- in RMS Prop
+
+$$v_t = \beta v_{t-1} + (1 - \beta)\left(η \frac{\partial L}{\partial w_{t}}\right)^2$$
+
+This is the exponentially weighted moving average of squared gradients.
+
+here:\
+$\beta$ = decay rate generally equal to 0.95
+- $\beta$ = 0.9 means
+    - keep 90% of previous soured sum   
+    - New gradient has small influence
+    - $v_t$ changes / increases slowly
+
+- $\beta$ = 0.1 means
+    - keep 10% of previous soured sum   
+    - New gradient has large influence
+    - $v_t$ changes / increases rapidly
+
+> to learn more about this formula you can visit [Exponentially Weighted Moving Average (EWMA)](#exponentially-weighted-moving-average-ewma)
+
 
 
 
