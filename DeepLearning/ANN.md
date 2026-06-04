@@ -29,6 +29,7 @@
     - [NAG - Nesterov Accelerated Gradient](#nag---nesterov-accelerated-gradient)
     - [AdaGrad (Adaptive Gradient Algorithm)](#adagrad-adaptive-gradient-algorithm)
     - [RMS Prop - (Root Mean Square Propagation)](#rms-prop---root-mean-square-propagation)
+    - [Adam Optimizer](#adam-optimizer)
 
 ---
 # Introduction
@@ -2856,6 +2857,91 @@ $\beta$ = decay rate generally equal to 0.95
 
 
 
+
+[Go To Top](#content)
+
+---
+# Adam Optimizer
+
+The Adam optimizer (Adaptive Moment Estimation) is one of the most commonly used optimization algorithms in deep learning. It’s basically [RMSProp](#rms-prop---root-mean-square-propagation) + [Momentum](#momentum-optimizer) with bias correction glued together.
+
+> to understand how adam work make surer you know about [Momentum optimizer](#momentum-optimizer) and [RMSProp](#rms-prop---root-mean-square-propagation)
+
+Adam optimization algorithm maintains two moving averages:
+- First moment (mean of gradients) → like momentum
+- Second moment (squared sum of gradients) → like RMSProp
+
+### Mathematically
+
+$$w_{t+1} = w_t - \frac{η }{\sqrt{v_t + \epsilon}} \times m_t$$
+
+here
+- $m_t$ = momentum
+
+$$m_t = \beta _1 m_{t-1} + (1-\beta _1) \times η\frac{\partial L}{\partial w_{t}}$$
+
+- $v_t$ = moving average of squared sum of gradient
+
+$$v_t = \beta _2 v_{t-1} + (1-\beta _2) \times \left(η \frac{\partial L}{\partial w_{t}}\right)^2$$
+
+### Bias correction
+Bias correction in Adam exists because the moving averages $m_t$ and $v_t$ are initially biased toward zero.
+
+In Adam, you compute exponential moving averages:
+- $m_t$ = gradient mean
+- $v_t$ = squared gradient mean
+
+Both start from:
+
+- $m_0$ = 0
+- $v_0$ = 0
+
+As a result at early steps, the averages are computed from very little data, so they get artificially shrunk toward zero.
+
+#### Example:
+
+$$m_1 = \beta _1 m_{0} + (1-\beta _1) \times η\frac{\partial L}{\partial w_{1}}$$
+
+since $m_0$ = 0
+
+$$m_1 = 0 + (1-\beta _1) \times η\frac{\partial L}{\partial w_{1}}$$
+
+in most of the cases $\beta _1$ = 0.9
+
+$$m_1 = (1-0.9) \times η\frac{\partial L}{\partial w_{1}}$$
+
+$$m_1 = 0.1 \times η\frac{\partial L}{\partial w_{1}}$$
+
+so instead of just ($η \partial L / \partial w_{1}$), you get a scaled-down version.
+
+now for second epoch,
+
+$$m_2 = \beta _1 m_{1} + (1-\beta _1) \times η\frac{\partial L}{\partial w_{2}}$$
+
+now notice:
+- $m_1$ is still too small
+- as a result total weights still don’t sum to 1
+
+#### Solution
+therefore to solve this we use bias correction
+
+It mathematically “undoes” that shrinkage.
+
+Instead of using $m_t$ and $v_t$ directly, Adam rescales them:
+
+$$\hat{m}_t = \frac{m_t}{1-\beta_1 ^t}$$
+
+$$\hat{v}_t = \frac{v_t}{1-\beta_2 ^t}$$
+
+#### Why the formula works
+
+As $t→∞$:
+- $β^t→0$
+- correction → disappears automatically
+
+So:
+- early training → strong correction
+- later training → almost no correction
 
 [Go To Top](#content)
 
