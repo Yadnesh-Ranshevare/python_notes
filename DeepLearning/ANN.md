@@ -1,3 +1,7 @@
+<h3 style="text-align: center;">ANN - Artificial Neural Network </h3>
+
+---
+
 # Content
 1. [Introduction](#introduction)
 2. [Perceptron](#perceptron)
