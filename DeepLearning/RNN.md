@@ -66,16 +66,16 @@ now we vectorize this sentence using one hot encoding
 - similarly we can do for other two sentence as well
 - Also understand that:\
 number of words per sentence = number of input vectors for that sentence
-
+- each input vector provide n input variable where n is size of the input vector
 
 once the vectorization is done we feed the table to an ANN to predict an output
 
 but the problem is:
-- sentence 1 = "Hey my name is abc" = 5 words = 5 input vectors
-- sentence 2 = "I love AI" = 3 words = 3 input vectors
-- sentence 3 = "India won the match" = 4 words = 4 input vectors
+- sentence 1 = "Hey my name is abc" = 5 words = 5 input vectors = 60 (5 x 12) input variable
+- sentence 2 = "I love AI" = 3 words = 3 input vectors = 36 (3 x 12) input variables
+- sentence 3 = "India won the match" = 4 words = 4 input vectors = 48 (4 x 12) input variable
 
-This creates the problem as ANN only accept the fixed size input but with sequential data we didn't have  fixed number of input
+This creates the problem as ANN only accept the fixed number input variables but with sequential data we didn't have  fixed number of input
 
 ### Zero Padding
 to solve this dynamic input size problem with sequential data we can use the zero padding method
@@ -121,9 +121,6 @@ Example:
     ```
 
 ### Problem?
-- each input vector inside an ANN act as a separate node receiving n inputs, where n is size of input vector
-- hence we can say that if the size of input vector is n then each single vector will carry n weights
-- therefore sentence "Hey my name is abc" will have 60 weights (as it has 5 input vector each of size 12 and 5 x 12 = 60)
 
 lets suppose we have large dataset of text having approximately 10,000 unique word throughout the dataset
 
@@ -135,17 +132,47 @@ as you can see the size of input vector is 10,000
 
 lets suppose the largest sentence inside the dataset is of 10 words, suggesting that there will be 10 input nodes
 
-therefore number of weights will be: 10,000 x 10 = 1,00,000
+therefore number of input variable will be: 10,000 x 10 = 1,00,000
 
 lets suppose you have smallest sentence is of 4 words and on an average there are only 6-7 words per sentence
 
 now:
 - for smallest word we have 6 zero vector of size 1x10,000\
-number of weights not contributing due to zero vector = 6 x 10,000 = 60,000
+number of input variable not contributing due to zero vector = 6 x 10,000 = 60,000
 - for average size sentence we have 4-3 zero vector of size 1x10,000\
-number of weights not contributing due to zero vector = (3 to 4) x 10,000 = 30,000 - 40,000
+number of input variable not contributing due to zero vector = (3 to 4) x 10,000 = 30,000 - 40,000
 
-this numbers are too high for any dataset, around 30% - 40% weights not contributing in average case whereas in worst case 60% weights are not contributing
+this numbers are too high for any dataset, around 30% - 40% input variable are 0 in average case whereas in worst case 60% input variable are 0
+
+also having zero as a input variable stops the model form learning. as gradient depends on this input variable and having zero as a input makes the gradient zero as well
+
+- Gradient w.r.t weights:
+
+$$\frac{\partial L}{\partial w} = x \times \frac{\partial L}{\partial z}$$
+
+- But since x = 0:
+
+$$\frac{\partial L}{\partial w} = 0$$
+
+- now according to gradient decent:
+
+$$w_{new} = w_{old}- \alpha  \frac{\partial L}{\partial w}$$
+
+$$w_{new} = w_{old}$$
+
+
+Meaning:
+- No weight update comes from padded positions
+- Model literally learns nothing from them
+- So padding = dead zones for learning
+
+
+Mathematically those zeros don’t contribute at all but:
+- they still go through matrix multiplications
+- still consume compute and memory bandwidth
+- as a result we waste computation
+
+so in our case we have around 30% - 60% of zero input variable which indicate high dead zones for learning and hugh unnessery computational cost
 
 
 
