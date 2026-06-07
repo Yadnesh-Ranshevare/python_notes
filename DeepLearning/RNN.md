@@ -4,6 +4,10 @@
 
 # Content
 1. [Introduction](#introduction)
+2. [Why to use RNN over ANN](#why-to-use-rnn-over-ann)
+3. [Zero Padding Problem](#zero-padding)
+4. [[timestep, input_feature]](#timestep-input_feature)
+5. [Architecture](#architecture)
 
 ---
 # Introduction
@@ -40,7 +44,31 @@ Sequential data is data where order matters. The meaning of the data changes if 
     - Frame 1 → Frame 2 → Frame 3
     - Changing order breaks motion logic.
 
-### Why to use RNN and Not ANN
+
+### Memory in RNN via Hidden State
+
+RNNs have a concept of “memory” through a hidden state. This hidden state is a vector that carries information from previous time steps to the current step.
+
+At each step, the model updates this hidden state using the current input and the previous hidden state. Because of this, earlier information in the sequence influences later outputs.
+
+Example sentence: `“I love AI”`
+1. Input: `“I”`\
+    → model processes it\
+    → creates hidden state (context so far)
+2. Input: `“love”`\
+→ uses “love” + previous hidden state (“I” context)
+
+3. Input: `“AI”`\
+→ uses “AI” + updated hidden state (“I love” context)
+
+Note: this is not true memory like storing facts. It is a compressed representation of past information, and older details can get weaker as the sequence becomes longer.
+
+
+[Go To Top](#content)
+
+---
+
+# Why to use RNN over ANN
 
 the problem of ANN is that it only accept the fixed size input
 
@@ -77,7 +105,15 @@ but the problem is:
 
 This creates the problem as ANN only accept the fixed number input variables but with sequential data we didn't have  fixed number of input
 
-### Zero Padding
+
+
+
+
+[Go To Top](#content)
+
+---
+
+# Zero Padding
 to solve this dynamic input size problem with sequential data we can use the zero padding method
 
 lets suppose input vectors of:
@@ -174,9 +210,172 @@ Mathematically those zeros don’t contribute at all but:
 
 so in our case we have around 30% - 60% of zero input variable which indicate high dead zones for learning and hugh unnessery computational cost
 
+### Problem 2
+
+all the above analysis works in a ideal case where we are assuming all the input text are equal to or less than that of largest sentence present inside the dataset used for training
+
+but at the time of testing we might encounter a bigger sentence that that of training time
+
+| dataset | larges sentence |
+| --- | --- |
+|training | 10 words |
+| testing | 15 words |
+
+As during training we have largest sentence with 10 words there must be 10 input vector in our model, even with the zero padding we can only accept at max 10 input vector
+
+but in the testing we have a word with 15 words i.e, 15 input vectors and our model can only take 10 input vector 
+
+> in production a user might pass even larger word on which we have no control 
 
 
 
+
+[Go To Top](#content)
+
+---
+# [timestep, input_feature]
+
+It describes the shape (structure) of input data for an RNN.
+
+### 1. Timestep = “how many steps in the sequence”
+
+This is the length of the sequence.
+
+Example:
+
+- Sentence: “I love AI”
+- Timesteps = 3 (I → love → AI)
+
+### 2. Input_feature = “what each step contains”
+This is the size of each input at one timestep.
+
+> It is NOT “number of words”.
+
+It is the vector representation of each word.
+
+Example:\
+Each word is converted into numbers (embedding):
+
+- “I” → [0.2, 0.8, 0.1]
+- “love” → [0.5, 0.9, 0.3]
+- “AI” → [0.7, 0.4, 0.6]
+
+Here:
+- input_feature = 3 (because each word is a 3D vector)
+
+### Example 
+
+consider a dataset:
+
+| no. | text|
+|--- | ---|
+|1. | `movie` `was` `good`|
+|2. | movie was `not` good | 
+
+as we have 4 unique in our dataset (movie, was, good, not) our vocabulary size of 4
+
+we can use one hot encoding to convert each word into their respective vector representation
+
+word | vector representation
+--- |---
+movie | [1, 0, 0, 0]
+was | [0, 1, 0, 0]
+good | [0, 0, 1, 0]
+not | [0, 0, 0, 1]
+
+now as each vector is of 4 size `input_feature = 4`
+
+Therefore
+
+| no. | text| vector form | length / timestep  | [timestep, input_feature] |
+|--- | ---| --- | --- | --- |
+|1. | `movie` `was` `good`| [[1, 0, 0, 0]  [0, 1, 0, 0] [0, 0, 1, 0]] | 3 | [3, 4]
+|2. | movie was `not` good | [[1, 0, 0, 0] [0, 1, 0, 0] [0, 0, 0, 1] [0, 0, 1, 0]] | 4 | [4, 4]
+
+
+> you can think of [timestep, input_feature] as dimension of vector form of that respective sentence
+
+so for sentence `movie was good` we provide a array of size 3x4 into our model to process
+
+
+
+[Go To Top](#content)
+
+---
+# Architecture
+
+in ANN whatever input we provide it flows only in forward direction to provide an output
+
+```
+input layer -> hidden layer -> output layer
+```
+
+but in RNN the output of each hidden layer is pass again into that hidden layer for future computation 
+
+<img src="./Images/RNN.png" style="width:500px">
+
+
+
+### Example
+
+consider a simple network:
+
+```
+input layer → single hidden layer → output layer
+```
+
+sentence `movie was good`
+
+so when we pass this sentence inside a model,  it process each word at a time i.e, 
+- for t = 1 → `movie`
+- for t = 2 → `was`
+- for t = 3 → `good`
+
+whenever we process any word we use output of hidden layer from previous timestamp in current timestamp
+
+> i.e, using hidden layer output at t = 1 as a input for hidden layer when t = 2
+
+input = `movie`
+```
+"movie" vector → input layer → hidden layer → hidden layer output for word "movie"
+```
+input = `was`
+```
+                    hidden layer output for word "movie"
+                                 ↓
+"was" vector → input layer → hidden layer → hidden layer output for word "was"                  
+```
+input = `good`
+```
+                        hidden layer output for word "was" 
+                                 ↓
+"good" vector → input layer → hidden layer → output layer → output
+```
+
+<img src="./Images/RNN-architecture.png" style="width:500px">
+
+in above image you can see how exactly the output of hidden layer from previous timestamp is passed as input into the hidden layer of current timestamp
+
+for t = 1 (first pass) we provide a default input (all 0 or random values) in place of previous hidden layer output
+
+
+for t = 1 → input = `movie`
+```
+                          random values / all 0
+                                   ↓
+"movie" vector → input layer → hidden layer → hidden layer output for word "movie"
+```
+The Actual flow
+
+```
+                   default      "was" vector     "good" vector 
+                      ↓                ↓            ↓
+"movie" vector → hidden layer → hidden layer → hidden layer → output
+```
+
+so you can think of it as a loop that accept the initial word compute the output, loop back to accept the second word and again compute the output with second word and output of previous iteration, and repeat until all the words from a sentence gets completed
+
+<img src="./Images/RNN-flow.png" style="width:500px">
 
 [Go To Top](#content)
 
