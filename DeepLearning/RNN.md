@@ -304,7 +304,7 @@ so for sentence `movie was good` we provide a array of size 3x4 into our model t
 ---
 # Architecture
 
-in ANN whatever input we provide it flows only in forward direction to provide an output
+in ANN whatever input we provide it flows only in forward direction to compute an output
 
 ```
 input layer -> hidden layer -> output layer
@@ -324,42 +324,42 @@ consider a simple network:
 input layer → single hidden layer → output layer
 ```
 
-sentence `movie was good`
+sentence `"movie was good"`
 
 so when we pass this sentence inside a model,  it process each word at a time i.e, 
-- for t = 1 → `movie`
-- for t = 2 → `was`
-- for t = 3 → `good`
+- for t = 1 → `"movie"`
+- for t = 2 → `"was"`
+- for t = 3 → `"good"`
 
 whenever we process any word we use output of hidden layer from previous timestamp in current timestamp
 
 > i.e, using hidden layer output at t = 1 as a input for hidden layer when t = 2
 
-input = `movie`
+input = `"movie"`
 ```
 "movie" vector → input layer → hidden layer → hidden layer output for word "movie"
 ```
-input = `was`
+input = `"was"`
 ```
                     hidden layer output for word "movie"
                                  ↓
 "was" vector → input layer → hidden layer → hidden layer output for word "was"                  
 ```
-input = `good`
+input = `"good"`
 ```
                         hidden layer output for word "was" 
                                  ↓
 "good" vector → input layer → hidden layer → output layer → output
 ```
 
-<img src="./Images/RNN-architecture.png" style="width:500px">
+<img src="./Images/RNN-architecture.png" style="width:800px">
 
-in above image you can see how exactly the output of hidden layer from previous timestamp is passed as input into the hidden layer of current timestamp
+in above image you can see how exactly the output of hidden layer from previous timestamp is passed as input into the hidden layer of next timestamp
 
 for t = 1 (first pass) we provide a default input (all 0 or random values) in place of previous hidden layer output
 
 
-for t = 1 → input = `movie`
+for t = 1 → input = `"movie"`
 ```
                           random values / all 0
                                    ↓
@@ -373,7 +373,7 @@ The Actual flow
 "movie" vector → hidden layer → hidden layer → hidden layer → output
 ```
 
-so you can think of it as a loop that accept the initial word compute the output, loop back to accept the second word and again compute the output with second word and output of previous iteration, and repeat until all the words from a sentence gets completed
+so you can think of it as a loop that accept the initial word compute the output of hodden layer, loop back to accept the second word and again compute the output with second word and output of previous iteration, and repeat until all the words from a sentence gets completed
 
 <img src="./Images/RNN-flow.png" style="width:500px">
 
