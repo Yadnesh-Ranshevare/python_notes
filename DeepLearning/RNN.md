@@ -6,9 +6,10 @@
 1. [Introduction](#introduction)
 2. [Why to use RNN over ANN](#why-to-use-rnn-over-ann)
 3. [Zero Padding Problem](#zero-padding)
-4. [[timestep, input_feature]](#timestep-input_feature)
+4. [[ timestep, input_feature ] Representation](#timestep-input_feature)
 5. [Architecture](#architecture)
 6. [Types of RNN ](#types-of-rnn)
+7. [Backpropagation In RNN](#backpropagation-in-rnn)
 
 ---
 # Introduction
@@ -467,6 +468,107 @@ in this type we provide a non sequential data as a input to model and model also
 <img src="./Images/one_to_one.png" style="width:200px">
 
 as you can for given input model provides an output
+
+[Go To Top](#content)
+
+---
+# Backpropagation In RNN
+
+consider a RNN
+
+<img src="./Images/RNN-example.png" style="width:500px">
+
+here:
+- $X$ = input
+- $Y$ = models output
+- $W_i$ = weight between input and hidden layer 
+- $W_o$ = weight between hidden and output layer 
+- $W_h$ = weight between hidden layer for looping back
+
+
+
+Now for input: `"i love AI"`
+
+vector format: `[[1, 0, 0] [0, 1, 0] [0, 0, 1]]`
+
+here: 
+- $X_1$ = [1, 0, 0]
+- $X_2$ = [0, 1, 0]
+- $X_3$ = [0, 0, 1]
+
+therefore the forward propagation is like:
+
+<img src="./Images/RNN-forward-propagation.drawio.png" style="width:500px">
+
+here:
+- $O_0$ = default input (all zero) for hidden layer
+- $O_1$ = hidden layer output for $X_1$
+- $O_2$ = hidden layer output for $X_2$
+- $O_3$ = hidden layer output for $X_3$
+
+so in order to minimize the error we have to find the optimal value of $W_i$, $W_o$ and $W_h$ so that minimize the loss
+
+### According to gradient decent:
+
+$$W_{new} = W_{old} - η \frac{\partial L}{\partial W_{old}}$$
+
+
+Loss function:
+
+$$L = f(Y)$$
+
+
+loss function is a function that takes model output as a input and compare it with the actual answer and compute the error, therefore we can say that loss function is a function of Y (models output) that returns an error 
+
+now in order to solve that gradient decent to update the weights we just have to figure out how to compute those gradient / differentiation
+
+
+
+To do that we first find the dependency of loss $L$ with respect to $W_i$, $W_o$ and $W_h$
+
+<img src="./Images/Dependency-flow.png" style="width:500px">
+
+#### for $W_o$ 
+
+$${W_{o}}^l = W_{o} - η \frac{\partial L}{\partial W_{o}}$$
+
+now relation between $L$ and $W_o$
+
+```
+L -> Y -> W_o
+```
+
+> L is a function of Y and Y is a function of $W_o$ and $O_3$
+> - $L = f(Y)$
+>- $Y = f(W_o, O_3)$
+
+
+therefore, from chain rule:
+
+$$\frac{\partial L}{\partial W_{o}} = \frac{\partial L}{\partial Y} \frac{\partial Y}{\partial W_{o}}$$
+
+#### for $W_i$
+
+$${W_{i}}^l = W_{i} - η \frac{\partial L}{\partial W_{i}}$$
+
+now relation between $L$ and $W_i$
+
+```
+1. L -> Y -> O_3 -> W_i
+2. L -> Y -> O_3 -> O_2 -> W_i
+3. L -> Y -> O_3 -> O_2 -> O_1 -> W_i
+```
+
+therefore, from chain rule:
+
+$$\frac{\partial L}{\partial W_{i}} = \frac{\partial L}{\partial Y} \frac{\partial Y}{\partial O_{3}} \frac{\partial O_3}{\partial W_i} + \frac{\partial L}{\partial Y} \frac{\partial Y}{\partial O_{3}} \frac{\partial O_3}{\partial O_2} \frac{\partial O_2}{\partial W_i} + \frac{\partial L}{\partial Y} \frac{\partial Y}{\partial O_{3}} \frac{\partial O_3}{\partial O_2} \frac{\partial O_2}{\partial O_1}\frac{\partial O_1}{\partial W_i}$$
+
+Simplified version:
+
+$$\frac{\partial L}{\partial W_i} = \sum \frac{\partial L}{\partial Y} \frac{\partial Y}{\partial O_j} \frac{\partial O_j}{\partial w_i}$$
+
+
+
 
 [Go To Top](#content)
 
