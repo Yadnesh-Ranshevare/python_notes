@@ -8,6 +8,7 @@
 3. [Zero Padding Problem](#zero-padding)
 4. [[timestep, input_feature]](#timestep-input_feature)
 5. [Architecture](#architecture)
+6. [Types of RNN ](#types-of-rnn)
 
 ---
 # Introduction
@@ -376,6 +377,96 @@ The Actual flow
 so you can think of it as a loop that accept the initial word compute the output of hodden layer, loop back to accept the second word and again compute the output with second word and output of previous iteration, and repeat until all the words from a sentence gets completed
 
 <img src="./Images/RNN-flow.png" style="width:500px">
+
+[Go To Top](#content)
+
+---
+# Types of RNN 
+
+There are basically 4 types of different RNN based on their architecture
+
+### 1. Many to one
+
+- input = sequential data
+- output = non sequential (scaler value like integer or number)
+
+in this type we provide a sequential data as a input to model and in return model gives out a scaler output
+
+Example: sentiment analysis
+- for input we provide a sentence (sequence of words)
+- model output:
+    - 0 = sad
+    - 1 = happy
+    - 2 = normal\
+    etc...
+
+<img src="./Images/many-to-one.png" style="width:400px">
+
+from this image we can see that we are providing the multiple input to our model, whereas the model is returning the single scaler output
+
+### 2. One to many
+
+- input = non sequential data
+- output = sequential
+
+in this type we provide a non sequential data as a input to model and in return model gives out a sequential output
+
+Example: Image to text
+- for input we provide a image (a metric that carry a hex code of pixel)
+- for output we get textual info (sequence of words) for that image 
+
+<img src="./Images/One-to-Many.png" style="width:400px">
+
+from this image we can see that we are providing the single input to our model, whereas the model is returning the multiple output which can be consider as sequence of output
+
+### 3. Many to many
+
+- input = sequential data
+- output = also sequential
+
+in this type we provide a sequential data as a input to model and model also return the sequential output
+
+> also known as sequence to sequence model
+
+#### Type:
+1. **same length many to many:**
+    - size of input sequence = size of output sequence  
+    - Example: POS Tagging (Part-of-Speech tagging)
+        - Input: `"I love pizza"`
+        - output: `PRON VERB NOUN`
+
+        Each word gets a label → output length = input length. 
+
+    <img src="./Images/many-to-many-pos.png" style="width:400px">
+
+2. **variable length many to many:**
+    - size of input sequence != size of output sequence  
+    - Example 1: Machine Translation
+        - Input (English — variable length): `“I eat rice”`
+        - Output (French — variable length): `“Je mange du riz”`
+
+    - Example 2: Text Summarization
+        - Input (long paragraph): `“Artificial intelligence is transforming industries...”`
+        - Output (short summary): `“AI is changing industries”`
+
+    - Example 3: Speech-to-Text (frame → words)
+        - Input (Audio is split frames): `frame1, frame2, frame3, ..., frameN`
+        - Output (text): `"I need help"`
+    
+    <img src="./Images/many-to-many-variable-len.png" style="width:400px">
+
+### 4. One to one
+
+- input = non sequential data
+- output = also non sequential
+
+in this type we provide a non sequential data as a input to model and model also return the non sequential output
+
+> Technically this is not a RNN, this is just a simple neural network like ANN or CNN
+
+<img src="./Images/one_to_one.png" style="width:200px">
+
+as you can for given input model provides an output
 
 [Go To Top](#content)
 
