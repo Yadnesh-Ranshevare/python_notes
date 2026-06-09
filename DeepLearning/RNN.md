@@ -565,9 +565,32 @@ $$\frac{\partial L}{\partial W_{i}} = \frac{\partial L}{\partial Y} \frac{\parti
 
 Simplified version:
 
-$$\frac{\partial L}{\partial W_i} = \sum \frac{\partial L}{\partial Y} \frac{\partial Y}{\partial O_j} \frac{\partial O_j}{\partial w_i}$$
+$$\frac{\partial L}{\partial W_i} = \sum_{j=0}^n \frac{\partial L}{\partial Y} \frac{\partial Y}{\partial O_j} \frac{\partial O_j}{\partial W_i}$$
+
+n = timestep (number of words in a sentence)
 
 
+
+
+#### Similarly for $W_h$
+
+$${W_{h}}^l = W_{i} - η \frac{\partial L}{\partial W_{h}}$$
+
+now relation between $L$ and $W_h$
+
+```
+1. L -> Y -> O_3 -> W_h
+2. L -> Y -> O_3 -> O_2 -> W_h
+3. L -> Y -> O_3 -> O_2 -> O_1 -> W_h
+```
+
+therefore, from chain rule:
+
+$$\frac{\partial L}{\partial W_{h}} = \frac{\partial L}{\partial Y} \frac{\partial Y}{\partial O_{3}} \frac{\partial O_3}{\partial W_h} + \frac{\partial L}{\partial Y} \frac{\partial Y}{\partial O_{3}} \frac{\partial O_3}{\partial O_2} \frac{\partial O_2}{\partial W_h} + \frac{\partial L}{\partial Y} \frac{\partial Y}{\partial O_{3}} \frac{\partial O_3}{\partial O_2} \frac{\partial O_2}{\partial O_1}\frac{\partial O_1}{\partial W_h}$$
+
+Simplified version:
+
+$$\frac{\partial L}{\partial W_h} = \sum_{j=0}^n \frac{\partial L}{\partial Y} \frac{\partial Y}{\partial O_j} \frac{\partial O_j}{\partial W_h}$$
 
 
 [Go To Top](#content)
