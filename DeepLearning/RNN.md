@@ -11,6 +11,7 @@
 6. [Types of RNN ](#types-of-rnn)
 7. [Backpropagation In RNN](#backpropagation-in-rnn)
 8. [Problem With RNN](#problem-with-rnn)
+9. [LSTM - Long Short Term Memory ](#lstm---long-short-term-memory)
 
 ---
 # Introduction
@@ -625,7 +626,7 @@ Example
  `“I grew up in France … so I speak ___”`
  
 - expected output:  `“French”`\
-but the correct word (`“French”`) depends on something said very early (`France`) which model might forget.
+but the correct word (`“French”`) depends on something said very early (`“France”`) which model might forget.
 
 This creates the problem where the model prioritizes short-term patterns instead of long-term structure
 
@@ -707,6 +708,50 @@ in ReLU gradient can be either 0 or any positive number, therefore for positive 
 - use better activation function like Leaky ReLU
 - use better weight initialization technique
 - use different RNN architecture like LSTM
+
+[Go To Top](#content)
+
+---
+# LSTM - Long Short Term Memory 
+Long Short-Term Memory is a type of recurrent neural network (RNN) used in machine learning for processing sequences of data.
+
+It was designed to solve a problem with traditional RNNs where they struggle to remember information from far back in a sequence because of the vanishing gradient problem.
+
+### How LSTM Works
+In RNN we have hidden state that carry the working memory to store the sequence data for final output, but as sequence became long the working memory start to loose the earlier data 
+
+To solve this LSTM add one more state:
+1. short term memory = similar to working memory of hidden state of RNN which store the most recent data
+2. Long term memory = stores data for long period of time
+
+<img src="./Images/RNN-vs-LSTM.png" style="width:500px">
+
+now with this architecture our model can carry most recent data up till end using short term memory, and older data using long term memory
+
+Example
+- consider a long sentence like:\
+ `“I grew up in France … so I speak ___”`
+- here word `“France”` get store is long term memory 
+- now as we move ahead in our sequence it slowly get removed from short term memory as it appear earlier
+- but since we have stored it in long term memory which stores data over a long period (up till end of the sequence) we can access word `“France”` for final output
+
+>for final output:
+>- recent data -> carried by short term memory
+>- older data -> carried by long term memory
+
+*Note: our can model decide which data to store / remove from long term memory, and to do that there exit a communication channel between short term memory and long term memory*
+
+### Architecture
+An LSTM has a special memory cell and three main gates that control information flow:
+
+1. **Forget Gate** – Decides what information to discard from long term memory.
+2. **Input Gate** – Decides what new information to store in long term memory.
+3. **Output Gate** – responsibly for final output and maintaining short term memory.
+
+These gates allow the network to keep important information for long periods and forget irrelevant details.
+
+<img src="./Images/LSTM-memory-cell.png" style="width:500px">
+
 
 [Go To Top](#content)
 
