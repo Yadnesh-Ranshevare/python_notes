@@ -10,6 +10,7 @@
 5. [Architecture](#architecture)
 6. [Types of RNN ](#types-of-rnn)
 7. [Backpropagation In RNN](#backpropagation-in-rnn)
+8. [Problem With RNN](#problem-with-rnn)
 
 ---
 # Introduction
@@ -592,6 +593,120 @@ Simplified version:
 
 $$\frac{\partial L}{\partial W_h} = \sum_{j=0}^n \frac{\partial L}{\partial Y} \frac{\partial Y}{\partial O_j} \frac{\partial O_j}{\partial W_h}$$
 
+
+[Go To Top](#content)
+
+---
+#  Problem With RNN
+There ae three major issues with RNN i.e,
+1. Long term dependency
+2. stagnated Training
+3. Exploded gradient
+
+### 1. Long term dependency
+
+- RNN processes sequential data one timestep at a time
+- It maintains a hidden memory (state) that carries information forward
+- As sequence length increases, earlier information becomes harder to retain
+- This happen because when RNN processes long sequences:
+    - each new timestep updates the memory
+    - older information gets weakened or overwritten
+- So the model becomes better at remembering recent inputs
+- and worse at remembering early inputs
+
+Problem?
+
+- If a key piece of information appears early in the sequence:
+- RNN may forget it by the time it reaches the end
+
+
+Example
+- consider a long sentence like:\
+ `“I grew up in France … so I speak ___”`
+ 
+- expected output:  `“French”`\
+but the correct word (`“French”`) depends on something said very early (`France`) which model might forget.
+
+This creates the problem where the model prioritizes short-term patterns instead of long-term structure
+
+### 2. Stagnated Training
+Stagnated training in RNN occurs when the model stops improving because gradients become too weak to update weights effectively, often due to vanishing gradient and poor long-term learning.
+
+consider a RNN flow
+
+<img src="./Images/RNN-forward-propagation.drawio.png" style="width:500px">
+
+here:
+- $X_i$ = timestep $i$
+- $Y$ = models output
+- $W_i$ = weight between input and hidden layer 
+- $W_o$ = weight between hidden and output layer 
+- $W_h$ = weight between hidden layer for looping back
+- $O_0$ = default input (all zero) for hidden layer
+- $O_1$ = hidden layer output for $X_1$
+- $O_2$ = hidden layer output for $X_2$
+- $O_3$ = hidden layer output for $X_3$
+
+According to gradient decent:
+
+$$W_{new} = W_{old} - η \frac{\partial L}{\partial W_{old}}$$
+
+for $W_i$
+
+$${W_{i}}^l = W_{i} - η \frac{\partial L}{\partial W_{i}}$$
+
+now relation between $L$ and $W_i$
+
+```
+1. L -> Y -> O_3 -> W_i
+2. L -> Y -> O_3 -> O_2 -> W_i
+3. L -> Y -> O_3 -> O_2 -> O_1 -> W_i
+```
+
+therefore, from chain rule:
+
+$$\frac{\partial L}{\partial W_{i}} = \frac{\partial L}{\partial Y} \frac{\partial Y}{\partial O_{3}} \frac{\partial O_3}{\partial W_i} + \frac{\partial L}{\partial Y} \frac{\partial Y}{\partial O_{3}} \frac{\partial O_3}{\partial O_2} \frac{\partial O_2}{\partial W_i} + \frac{\partial L}{\partial Y} \frac{\partial Y}{\partial O_{3}} \frac{\partial O_3}{\partial O_2} \frac{\partial O_2}{\partial O_1}\frac{\partial O_1}{\partial W_i}$$
+
+Here:
+
+- $\frac{\partial L}{\partial Y} \frac{\partial Y}{\partial O_{3}} \frac{\partial O_3}{\partial W_i}$ = short term dependency (gradient because of recent timestep)
+
+- $\frac{\partial L}{\partial Y} \frac{\partial Y}{\partial O_{3}} \frac{\partial O_3}{\partial O_2} \frac{\partial O_2}{\partial O_1}\frac{\partial O_1}{\partial W_i}$ = long term dependency (gradient because of oldest timestep)
+
+> lets assume activation = `tanh` i.e, output = `0-1`
+
+as number of timestep increases the long term dependency became long and their overall sum became soo less that they contribute nothing compare to short term dependency in gradient decent
+
+> number of timestep increase -> long term dependency decreases -> contribution of long term dependency decreases -> gradient depends of short term dependency
+
+As a result the learning signal (gradient) becomes extremely small for early steps
+
+As Gradient = how much each earlier step should change so the final answer improves
+- big gradient → model learns strongly from that step
+- small gradient → model almost ignores that step
+
+as earlier steps has small gradient model ignores them causing vanishing gradient problem
+
+### 3. Exploded gradient
+
+similar to stagnant training where because of saturated activation function tanh we are facing the problem of vanishing gradient
+
+were:\
+as number of timestep increases the long term dependency became long and their overall sum became soo less that they contribute nothing compare to short term dependency in gradient decent
+
+but in exploding gradient exactly opposite happens:\
+as number of timestep increases the long term dependency became long and their overall sum became soo huge that short term dependency gets ignores in gradient decent
+
+This specially happens when you work with unsaturated activation function, where gradient of each step is above 1
+
+Example:\
+in ReLU gradient can be either 0 or any positive number, therefore for positive case we might face exploding gradient problem
+
+
+### Solution
+- use better activation function like Leaky ReLU
+- use better weight initialization technique
+- use different RNN architecture like LSTM
 
 [Go To Top](#content)
 
