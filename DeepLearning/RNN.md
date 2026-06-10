@@ -7,10 +7,10 @@
 2. [Why to use RNN over ANN](#why-to-use-rnn-over-ann)
 3. [Zero Padding Problem](#zero-padding)
 4. [[ timestep, input_feature ] Representation](#timestep-input_feature)
-5. [Architecture](#architecture)
+5. [Architecture of RNN](#architecture-of-rnn)
 6. [Types of RNN ](#types-of-rnn)
 7. [Backpropagation In RNN](#backpropagation-in-rnn)
-8. [Problem With RNN](#problem-with-rnn)
+8. [Problems With RNN](#problems-with-rnn)
 9. [LSTM - Long Short Term Memory ](#lstm---long-short-term-memory)
 
 ---
@@ -306,7 +306,7 @@ so for sentence `movie was good` we provide a array of size 3x4 into our model t
 [Go To Top](#content)
 
 ---
-# Architecture
+# Architecture of RNN
 
 in ANN whatever input we provide it flows only in forward direction to compute an output
 
@@ -598,7 +598,7 @@ $$\frac{\partial L}{\partial W_h} = \sum_{j=0}^n \frac{\partial L}{\partial Y} \
 [Go To Top](#content)
 
 ---
-#  Problem With RNN
+#  Problems With RNN
 There ae three major issues with RNN i.e,
 1. Long term dependency
 2. stagnated Training
@@ -751,6 +751,10 @@ An LSTM has a special memory cell and three main gates that control information 
 These gates allow the network to keep important information for long periods and forget irrelevant details.
 
 <img src="./Images/LSTM-memory-cell.png" style="width:500px">
+
+Here:
+- cell state -> carry long term memory
+- hidden state -> carry short term memory
 
 
 [Go To Top](#content)
