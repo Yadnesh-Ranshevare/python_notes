@@ -756,6 +756,33 @@ Here:
 - cell state -> carry long term memory
 - hidden state -> carry short term memory
 
+### Understand each element
+
+<img src="./Images/LSTM-cell-architecture.png" style="width:500px">
+
+#### 1. vector Multiplication
+- Its just a value by value multiplication between two vector of same size
+- Example:
+    - vector 1 = [1, 2, 3]
+    - vector 2 = [4, 5, 6]
+    - Element Wise Multiplication = [1x4, 2x5, 3x6] = [4, 10, 18]
+
+#### 2. vector addition
+- Its just a value by value addition between two vector of same size
+- Example:
+    - vector 1 = [1, 2, 3]
+    - vector 2 = [4, 5, 6]
+    - Element Wise Multiplication = [1+4, 2+5, 3+6] = [5, 7, 9]
+
+#### 3. Tangent function
+- it accept a vector and output its tanh value for each value init
+- example:
+    - input vector = [1, 2, 3]
+    - tanh (1) = 0.76
+    - tanh (2) = 0.96
+    - tanh (3) = 0.99
+    - final output = [0.76, 0.96, 0.99] 
+
 
 [Go To Top](#content)
 
