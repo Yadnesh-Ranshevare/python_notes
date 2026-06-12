@@ -756,32 +756,109 @@ Here:
 - cell state -> carry long term memory
 - hidden state -> carry short term memory
 
-### Understand each element
+> both hidden state and cell state are same in size
+
+#### Understand each element
 
 <img src="./Images/LSTM-cell-architecture.png" style="width:500px">
 
-#### 1. vector Multiplication
-- Its just a value by value multiplication between two vector of same size
-- Example:
-    - vector 1 = [1, 2, 3]
-    - vector 2 = [4, 5, 6]
-    - Element Wise Multiplication = [1x4, 2x5, 3x6] = [4, 10, 18]
+#### Point vise operation
 
-#### 2. vector addition
-- Its just a value by value addition between two vector of same size
-- Example:
-    - vector 1 = [1, 2, 3]
-    - vector 2 = [4, 5, 6]
-    - Element Wise Multiplication = [1+4, 2+5, 3+6] = [5, 7, 9]
+ 1. **vector Multiplication**
+    - Its just a value by value multiplication between two vector of same size
+    - Example:
+        - vector 1 = [1, 2, 3]
+        - vector 2 = [4, 5, 6]
+        - Element Wise Multiplication = [1x4, 2x5, 3x6] = [4, 10, 18]
 
-#### 3. Tangent function
-- it accept a vector and output its tanh value for each value init
-- example:
-    - input vector = [1, 2, 3]
-    - tanh (1) = 0.76
-    - tanh (2) = 0.96
-    - tanh (3) = 0.99
-    - final output = [0.76, 0.96, 0.99] 
+ 2. **vector addition**
+    - Its just a value by value addition between two vector of same size
+    - Example:
+        - vector 1 = [1, 2, 3]
+        - vector 2 = [4, 5, 6]
+        - Element Wise Multiplication = [1+4, 2+5, 3+6] = [5, 7, 9]
+
+3. **Tangent function**
+    - it accept a vector and output its tanh value for each value init
+    - example:
+        - input vector = [1, 2, 3]
+        - tanh (1) = 0.76
+        - tanh (2) = 0.96
+        - tanh (3) = 0.99
+        - final output = [0.76, 0.96, 0.99] 
+
+#### Neural Network Layer
+
+carries a neural network inside
+
+1. tanh neural network
+    - multiple nodes connected in to each other
+    - each nodes has tanh as an activation function
+
+2. sigmoid neural network
+    - multiple nodes connected in to each other
+    - each nodes has sigmoid as an activation function
+
+Note: number of nodes in all of the neural network is same, as that of the dimension of the hidden state and cell state
+
+
+### Forget Gate
+forget gate is responsive for removing the irrelevant information from cell state (long term memory)
+
+<img src="./Images/forget-gate.jpg" style="width:500px">
+
+lets assume:
+- $h_{t-1}$ = 3 dimensional vector 
+- $C_{t-1}$ = 3 dimensional vector 
+- $X_t$ = 4 dimensional vector
+
+in forgat gate we perform two steps i.e, 
+1. calculate $f_t$
+2. point vise multiplication between $C_{t-1}$ and $f_t$
+
+
+#### calculate $f_t$
+1. combine $h_{t-1}$ and $X_t$
+    - $h_{t-1}$ = 3 dimensional vector = $[h_1, h_2, h_3]$
+    - $X_t$ = 4 dimensional vector = $[X_1, X_2, X_3, X_4]$
+    - $h_{t-1} + X_t$ = 3 + 4 = 7 dimensional vector = $[h_1, h_2, h_3, X_1, X_2, X_3, X_4]$
+2. pass this combine vector to sigmoid neural network
+    - since hidden state and cell state is a 3 dimensional vector number of nodes in this neural network is also 3
+    - as a result in output we also get a 3 dimensional vector
+
+    <img src="./Images/Forget-gate-network.png" style="width:500px">
+
+    - here output vector = $[f_1, f_2, f_3]$
+3. compute the $f_t$
+    - whatever value the sigmoid neural network is returning will be the value of $f_t$
+    - in above example, $f_t = [f_1, f_2, f_3]$
+    - mathematically
+
+    $$f_t = \sigma \left( W_f [h_{t-1}, X_t] + b_f \right)$$
+    
+    - here:
+        - $W_f$ = weight matrix of neural network
+        - $[h_{t-1}, X_t]$ = combine $h_{t-1}$ and $X_t$
+        - $b_f$ = basie matrix
+        - $\sigma ()$ = sigmoid function  
+
+#### point vise multiplication between $C_{t-1}$ and $f_t$
+- from above example we can see that our $f_t = [f_1, f_2, f_3]$
+- lets assume $C_{t-1} = [C_1, C_2, C_3]$ 
+- point vise multiplication = $[f_1 \times C_1, f_2 \times C_2, f_3 \times C_3]$
+- this is our updated value of cell state (long term memory) 
+
+#### How it help to remove irrelevant information
+- we are using sigmoid neural network that gives output between 0 & 1
+- here:
+    - 0 = everything is irrelevant, therefore remove everything
+    - 1 = everything is relevant, therefore keep everything
+    - 0.5 = only 50% is relevant, therefore remove other 50% 
+- therefore:
+    - if $f_t = [0, 0, 0]$ -> point vise multiplication = $[0, 0, 0]$
+    - if $f_t = [1, 1, 1]$ -> point vise multiplication = $[C_1, C_2, C_3]$ (same as $C_{t-1}$)
+    - if $f_t = [0.5, 0.5, 0.5]$ -> point vise multiplication = $\left[\frac{C_1}{2}, \frac{C_2}{2}, \frac{C_3}{2} \right]$ (removed 50% info from $C_{t-1}$)
+
 
 
 [Go To Top](#content)
