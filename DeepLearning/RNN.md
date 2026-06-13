@@ -860,6 +860,67 @@ in forgat gate we perform two steps i.e,
     - if $f_t = [0.5, 0.5, 0.5]$ -> point vise multiplication = $\left[\frac{C_1}{2}, \frac{C_2}{2}, \frac{C_3}{2} \right]$ (removed 50% info from $C_{t-1}$)
 
 
+### Input gate
+Input gat is responsible for adding new info into the cell state (long term memory)
+
+<img src="./Images/input-gate.png" style="width:500px">
+
+lets assume:
+- $h_{t-1}$ = 3 dimensional vector 
+- $C_{t-1}$ = 3 dimensional vector 
+- $X_t$ = 4 dimensional vector
+
+
+in input gate we perform 3 stapes:
+1. calculate $\bar{C_t}$ i.e, candidate cell state -> possible data that can be added into the cell state 
+2. calculate $i_t$ -> decide which $\bar{C_t}$ is gonna add into cell state
+3. Calculate $C_t$ -> update cell state i.e, long term memory
+
+#### calculate $\bar{C_t}$
+- just like the input gate we combine $h_{t-1}$ and $X_t$ and pass the resultant vector into the tanh neural network
+- But unlike sigmoid neural network in forget gate where we has sigmoid function as an activation function here in input gate we have tanh network which have tanh as an activation function 
+
+    <img src="./Images/Tanh-lstm.png" style="width:500px">
+
+- just like forget gate here output vector = $[f_1, f_2, f_3]$
+- $\bar{C_t} = [f_1, f_2, f_3]$
+
+mathematically
+
+$$\bar{C_t} = tanh \left( W_f [h_{t-1}, X_t] + b_f \right)$$
+
+- here:
+    - $W_f$ = weight matrix of neural network
+    - $[h_{t-1}, X_t]$ = combine $h_{t-1}$ and $X_t$
+    - $b_f$ = basie matrix
+    - $tanh ()$ = tanh activation function  
+
+
+#### calculate $i_t$
+this is exactly same as that of forget gate where we calculate the $f_t$ with the sigmoid neural network
+
+unlike previous step where we use tanh neural network in this step we use sigmoid neural network (same as that of forget gate)
+
+1. combine $h_{t-1}$ and $X_t$
+2. pass the combine vector into the sigmoid neural network
+3. get the output vector
+
+<img src="./Images/Forget-gate-network.png" style="width:500px">
+
+- output vector = $[f_1, f_2, f_3]$
+- $i_t = [f_1, f_2, f_3]$
+
+
+mathematically
+
+$$i_t = \sigma \left( W_f [h_{t-1}, X_t] + b_f \right)$$
+
+- here:
+    - $W_f$ = weight matrix of neural network
+    - $[h_{t-1}, X_t]$ = combine $h_{t-1}$ and $X_t$
+    - $b_f$ = basie matrix
+    - $\sigma ()$ = sigmoid function  
+
 
 [Go To Top](#content)
 
