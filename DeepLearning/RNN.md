@@ -12,6 +12,9 @@
 7. [Backpropagation In RNN](#backpropagation-in-rnn)
 8. [Problems With RNN](#problems-with-rnn)
 9. [LSTM - Long Short Term Memory ](#lstm---long-short-term-memory)
+    - [Forget Gate](#forget-gate)
+    - [Input Gate](#input-gate)
+    - [Output Gate](#output-gate)
 
 ---
 # Introduction
@@ -801,8 +804,11 @@ carries a neural network inside
 
 Note: number of nodes in all of the neural network is same, as that of the dimension of the hidden state and cell state
 
+[Go To Top](#content)
 
-### Forget Gate
+---
+
+# Forget Gate
 forget gate is responsive for removing the irrelevant information from cell state (long term memory)
 
 <img src="./Images/forget-gate.jpg" style="width:500px">
@@ -817,7 +823,7 @@ in forgat gate we perform two steps i.e,
 2. point vise multiplication between $C_{t-1}$ and $f_t$
 
 
-#### calculate $f_t$
+### calculate $f_t$
 1. combine $h_{t-1}$ and $X_t$
     - $h_{t-1}$ = 3 dimensional vector = $[h_1, h_2, h_3]$
     - $X_t$ = 4 dimensional vector = $[X_1, X_2, X_3, X_4]$
@@ -842,13 +848,13 @@ in forgat gate we perform two steps i.e,
         - $b_f$ = basie matrix
         - $\sigma ()$ = sigmoid function  
 
-#### point vise multiplication between $C_{t-1}$ and $f_t$
+### point vise multiplication between $C_{t-1}$ and $f_t$
 - from above example we can see that our $f_t = [f_1, f_2, f_3]$
 - lets assume $C_{t-1} = [C_1, C_2, C_3]$ 
 - point vise multiplication = $[f_1 \times C_1, f_2 \times C_2, f_3 \times C_3]$
 - this is our updated value of cell state (long term memory) 
 
-#### How it help to remove irrelevant information
+### How it help to remove irrelevant information
 - we are using sigmoid neural network that gives output between 0 & 1
 - here:
     - 0 = everything is irrelevant, therefore remove everything
@@ -860,7 +866,14 @@ in forgat gate we perform two steps i.e,
     - if $f_t = [0.5, 0.5, 0.5]$ -> point vise multiplication = $\left[\frac{C_1}{2}, \frac{C_2}{2}, \frac{C_3}{2} \right]$ (removed 50% info from $C_{t-1}$)
 
 
-### Input gate
+
+[Go To Top](#content)
+
+---
+
+# Input gate
+> Before this read about [Forget Gate](#forget-gate)
+
 Input gat is responsible for adding new info into the cell state (long term memory)
 
 <img src="./Images/input-gate.png" style="width:500px">
@@ -876,7 +889,7 @@ in input gate we perform 3 stapes:
 2. calculate $i_t$ -> decide which $\bar{C_t}$ is gonna add into cell state
 3. Calculate $C_t$ -> update cell state i.e, long term memory
 
-#### calculate $\bar{C_t}$
+### calculate $\bar{C_t}$ (Candidate cell state)
 - just like the input gate we combine $h_{t-1}$ and $X_t$ and pass the resultant vector into the tanh neural network
 - But unlike sigmoid neural network in forget gate where we has sigmoid function as an activation function here in input gate we have tanh network which have tanh as an activation function 
 
@@ -896,7 +909,7 @@ $$\bar{C_t} = tanh \left( W_f [h_{t-1}, X_t] + b_f \right)$$
     - $tanh ()$ = tanh activation function  
 
 
-#### calculate $i_t$
+### calculate $i_t$
 this is exactly same as that of forget gate where we calculate the $f_t$ with the sigmoid neural network
 
 unlike previous step where we use tanh neural network in this step we use sigmoid neural network (same as that of forget gate)
@@ -911,7 +924,7 @@ unlike previous step where we use tanh neural network in this step we use sigmoi
 - $i_t = [f_1, f_2, f_3]$
 
 
-mathematically
+#### mathematically
 
 $$i_t = \sigma \left( W_f [h_{t-1}, X_t] + b_f \right)$$
 
@@ -921,6 +934,110 @@ $$i_t = \sigma \left( W_f [h_{t-1}, X_t] + b_f \right)$$
     - $b_f$ = basie matrix
     - $\sigma ()$ = sigmoid function  
 
+### calculate $C_t$
+once we find the value of $i_t$ and $\bar{C}_t$ its just the series of point vise operation to compute the update $C_t$
+
+<img src="./Images/input-gate-point-vise.png" style="width:500px">
+
+1. point vise multiplication between $\bar{C}_t$ and $i_t$
+    - $i_t = [i_1, i_2, i_3]$
+    - $\bar{C}_t = [\bar{C}_1, \bar{C}_2, \bar{C}_3]$ 
+    - point vise multiplication = $[i_1 * \bar{C}_1, i_2 * \bar{C}_2, i_3 * \bar{C}_3]$
+2. point vise addition of this vector (output of point vise multiplication) with updated value of $C_{t-1}$ (from forget gate)
+    - output vector of point vise multiplication = $[i_1 * \bar{C}_1, i_2 * \bar{C}_2, i_3 * \bar{C}_3]$
+    - updated $C_{t-1}$ from forget gate = $[C_1, C_2, C_3]$
+    - point vise addition = $[(i_1 * \bar{C}_1)+C_1, (i_2 * \bar{C}_2)+C_2, (i_3 * \bar{C}_3) + C_3]$
+
+Therefore, current cell state:
+
+$$C_t = [(i_1 * \bar{C}_1)+C_1, (i_2 * \bar{C}_2)+C_2, (i_3 * \bar{C}_3) + C_3]$$
+
+#### Mathematically
+
+$$C_t = (i_t \otimes \bar C_t) \oplus (f_t \otimes C_{t-1})$$
+
+Here:
+- $f_t \otimes C_{t-1}$ = output of forget gate
+
+### How it work?
+- we are using sigmoid neural network that gives output between 0 & 1
+- here:
+    - 0 = everything is irrelevant from candidate cell state $(\bar C_{t})$, therefore add nothing
+    - 1 = everything is relevant from candidate cell state $(\bar C_{t})$, therefore add everything
+    - 0.5 = only 50% is relevant from candidate cell state $(\bar C_{t})$, therefore add only that 50% 
+- therefore:
+    - if $i_t = [0, 0, 0]$ -> point vise multiplication = $[0, 0, 0]$
+    - if $i_t = [1, 1, 1]$ -> point vise multiplication = $[\bar C_1, \bar C_2,\bar C_3]$ (same as candidate cell state $\bar C_{t}$)
+    - if $i_t = [0.5, 0.5, 0.5]$ -> point vise multiplication = $\left[\frac{\bar C_1}{2}, \frac{\bar C_2}{2}, \frac{\bar C_3}{2} \right]$ (removed 50% info from candidate cell state $\bar C_{t}$)
+- now once we find what to add we just perform the point vise addition to add that into our cell sate ($C_t$)
+
+
+[Go To Top](#content)
+
+---
+
+# Output gate
+> before this read about [input Gate](#input-gate)
+
+this gate is responsible for generating the output hidden state i.e, $h_t$ for current timestep
+
+it take two thing in input i.e,:
+1. current cell state $C_t$ from input gate
+2. combine vector of previous hidden state and input vector
+
+<img src="./Images/output-gate.png" style="width:500px">
+
+lets assume:
+- $h_{t-1}$ = 3 dimensional vector 
+- $C_{t-1}$ = 3 dimensional vector 
+- $X_t$ = 4 dimensional vector
+
+to calculate the $h_t$ we simply follow the three simple steps:
+1. calculate the output of tanh neural network
+2. calculate the output of sigmoid neural network i.e, $O_t$
+3. perform the point vise multiplication
+
+### calculate the output of tanh neural network
+- input = $C_{t}$ = 3 dimensional vector from input gate
+- let say input = $[C_1, C_2, C_3]$
+- output = 3 dimensional vector 
+- let say output = $[f_1, f_2, f_3]$
+
+<img src="./Images/Output-gate-tanh.png" style="width:300px">
+
+#### Mathematically:
+
+$$output = tanh(C_t)$$
+
+### calculate the output of sigmoid neural network i.e, $O_t$
+- input = combine vector of $h_{t-1}$ and $X_t$
+- let say $h_{t-1} = [h_1, h_2, h_3]$ and $X_t = [X_1, X_2, X_3]$
+- combined vector = $[h_1, h_2, h_3, X_1, X_2, X_3, X_4]$
+- output = 3 dimensional vector
+
+<img src="./Images/Forget-gate-network.png" style="width:500px">
+
+Therefore $O_t = [f_1, f_2, f_3]$
+
+#### Mathematically:
+
+$$O_t = \sigma \left( W_f [h_{t-1}, X_t] + b_f \right)$$
+
+
+### point vise multiplication
+- once we calculate the sigmoid output $O_t$ and output of tanh network we perform the point vise multiplication between them to find the value of current hidden state $h_t$
+- let say:
+    - tanh output = $[f_1, f_2, f_3]$
+    - sigmoid output $O_t = [O_1, O_2, O_3]$
+- point vise multiplication = $[f_1 * O_1, f_2 * O_2, f_3 * O_3]$
+
+Therefore;
+
+$$h_t = [f_1 * O_1, f_2 * O_2, f_3 * O_3]$$
+
+#### Mathematically
+
+$$h_t = O_t \otimes  tanh(C_t)$$
 
 [Go To Top](#content)
 
