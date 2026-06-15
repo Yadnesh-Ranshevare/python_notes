@@ -9,13 +9,17 @@
 4. [[ timestep, input_feature ] Representation](#timestep-input_feature)
 5. [Architecture of RNN](#architecture-of-rnn)
 6. [Types of RNN ](#types-of-rnn)
-7. [Backpropagation In RNN](#backpropagation-in-rnn)
-8. [Problems With RNN](#problems-with-rnn)
-9. [LSTM - Long Short Term Memory ](#lstm---long-short-term-memory)
+    - [many to one](#1-many-to-one)
+    - [one to many](#2-one-to-many)
+    - [many to many](#3-many-to-many)
+    - [one to one](#4-one-to-one)
+7. [Deep RNN](#deep-rnn)
+8. [Backpropagation In RNN](#backpropagation-in-rnn)
+9. [Problems With RNN](#problems-with-rnn)
+10. [LSTM - Long Short Term Memory ](#lstm---long-short-term-memory)
     - [Forget Gate](#forget-gate)
     - [Input Gate](#input-gate)
     - [Output Gate](#output-gate)
-10. [Deep RNN](#deep-rnn)
 
 ---
 # Introduction
@@ -478,6 +482,71 @@ as you can for given input model provides an output
 [Go To Top](#content)
 
 ---
+# Deep RNN
+
+A Deep RNN (Deep Recurrent Neural Network) is a Recurrent Neural Network that has multiple hidden layers, making it deeper than a standard RNN.
+
+### Standard RNN
+
+A basic RNN has a single recurrent hidden layer:
+
+
+<img src="./Images/simple-RNN.png" style="width:500px">
+
+
+It processes sequences one step at a time while maintaining a hidden state (memory).
+
+### Deep RNN
+
+A Deep RNN stacks multiple recurrent layers on top of each other:
+
+<img src="./Images/deep-RNN.png" style="width:500px">
+
+Each layer learns different levels of abstraction:
+- Lower layers learn simple patterns.
+- Middle layers learn more complex relationships.
+- Higher layers learn high-level sequence representations.
+
+### internally
+
+<img src="./Images/Deep-RNN_architecture.png" style="width:500px">
+
+
+### Notation
+
+for hidden state:
+
+$h_t^{(l)}$
+
+here:
+- $l$ = number of layer
+- $t$ = current timestep
+
+example:
+
+$h_3^{(2)}$ = hidden state of 3rd timestep of 2nd layer
+
+#### how each cell is represented
+
+<img src="./Images/deep-RNN-notation.png" style="width:500px">
+
+here:
+- $h_{t-1}^{(l)}$ = hidden state value of previous timestep of current layer
+- $h_{t}^{(l-1)}$ = hidden state value of current timestep of previous layer
+- $h_{t}^{(l)}$ = hidden state value of current timestep of current layer
+- $W^{(l)}$ and $u^{(l)}$ = weights
+
+### Mathematically
+
+$$h_t^{(l)} = tanh(W^{(l)}h_{t-1}^{(l)} + u^{(l)}h_{t}^{(l-1)} + b^{(l)})$$
+
+
+
+[Go To Top](#content)
+
+--- 
+
+
 # Backpropagation In RNN
 
 consider a RNN
@@ -713,9 +782,13 @@ in ReLU gradient can be either 0 or any positive number, therefore for positive 
 - use better weight initialization technique
 - use different RNN architecture like LSTM
 
+
+
 [Go To Top](#content)
 
 ---
+
+
 # LSTM - Long Short Term Memory 
 Long Short-Term Memory is a type of recurrent neural network (RNN) used in machine learning for processing sequences of data.
 
@@ -1039,68 +1112,6 @@ $$h_t = [f_1 * O_1, f_2 * O_2, f_3 * O_3]$$
 #### Mathematically
 
 $$h_t = O_t \otimes  tanh(C_t)$$
-
-[Go To Top](#content)
-
---- 
-# Deep RNN
-A Deep RNN (Deep Recurrent Neural Network) is a Recurrent Neural Network that has multiple hidden layers, making it deeper than a standard RNN.
-
-### Standard RNN
-
-A basic RNN has a single recurrent hidden layer:
-
-
-<img src="./Images/simple-RNN.png" style="width:500px">
-
-
-It processes sequences one step at a time while maintaining a hidden state (memory).
-
-### Deep RNN
-
-A Deep RNN stacks multiple recurrent layers on top of each other:
-
-<img src="./Images/deep-RNN.png" style="width:500px">
-
-Each layer learns different levels of abstraction:
-- Lower layers learn simple patterns.
-- Middle layers learn more complex relationships.
-- Higher layers learn high-level sequence representations.
-
-### internally
-
-<img src="./Images/Deep-RNN_architecture.png" style="width:500px">
-
-
-### Notation
-
-for hidden state:
-
-$h_t^{(l)}$
-
-here:
-- $l$ = number of layer
-- $t$ = current timestep
-
-example:
-
-$h_3^{(2)}$ = hidden state of 3rd timestep of 2nd layer
-
-#### how each cell is represented
-
-<img src="./Images/deep-RNN-notation.png" style="width:500px">
-
-here:
-- $h_{t-1}^{(l)}$ = hidden state value of previous timestep of current layer
-- $h_{t}^{(l-1)}$ = hidden state value of current timestep of previous layer
-- $h_{t}^{(l)}$ = hidden state value of current timestep of current layer
-- $W^{(l)}$ and $u^{(l)}$ = weights
-
-### Mathematically
-
-$$h_t^{(l)} = tanh(W^{(l)}h_{t-1}^{(l)} + u^{(l)}h_{t}^{(l-1)} + b^{(l)})$$
-
-
 
 [Go To Top](#content)
 
