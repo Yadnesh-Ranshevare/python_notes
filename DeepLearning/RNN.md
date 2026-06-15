@@ -540,7 +540,37 @@ here:
 
 $$h_t^{(l)} = tanh(W^{(l)}h_{t-1}^{(l)} + u^{(l)}h_{t}^{(l-1)} + b^{(l)})$$
 
+### Advantages
+- Multiple recurrent layers allow the network to learn representations at different levels.
+- For text:
+    - Layer 1 → word patterns
+    - Layer 2 → phrases
+    - Layer 3 → sentence meaning
+- This often performs better than a single-layer RNN.
 
+### Disadvantages
+1. **Overfitting**
+
+    - Deep RNNs have large numbers of parameters.
+    - Effect:
+        - Can memorize training data.
+        - Generalization may suffer if the dataset is small.
+    - Common remedies:
+        - Dropout
+        - Regularization
+        - More training data
+2. **Memory Requirements**
+
+    - Multiple recurrent layers require storing activations for every time step.
+    - Effect:
+        - High RAM/VRAM usage.
+        - Limits sequence length and batch size.
+3. **High Computational Cost**
+    - Deep RNNs contain multiple recurrent layers.
+    - Effect:
+        - More parameters to train.
+        - Higher memory consumption.
+        - Longer training times.
 
 [Go To Top](#content)
 
