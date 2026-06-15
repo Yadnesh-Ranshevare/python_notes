@@ -61,4 +61,5 @@ For example, in image processing lower layers may identify edges, while higher l
 # Acknowledgment
 
 
-[CampusX](https://www.youtube.com/@campusx-official): 100 days of Deep learning playlist
+- [CampusX](https://www.youtube.com/@campusx-official): 100 days of Deep learning playlist
+- [tenserFlow Playground](https://playground.tensorflow.org/): visual representation of model training

@@ -15,6 +15,7 @@
     - [Forget Gate](#forget-gate)
     - [Input Gate](#input-gate)
     - [Output Gate](#output-gate)
+10. [Deep RNN](#deep-rnn)
 
 ---
 # Introduction
@@ -1041,4 +1042,66 @@ $$h_t = O_t \otimes  tanh(C_t)$$
 
 [Go To Top](#content)
 
----
+--- 
+# Deep RNN
+A Deep RNN (Deep Recurrent Neural Network) is a Recurrent Neural Network that has multiple hidden layers, making it deeper than a standard RNN.
+
+### Standard RNN
+
+A basic RNN has a single recurrent hidden layer:
+
+
+<img src="./Images/simple-RNN.png" style="width:500px">
+
+
+It processes sequences one step at a time while maintaining a hidden state (memory).
+
+### Deep RNN
+
+A Deep RNN stacks multiple recurrent layers on top of each other:
+
+<img src="./Images/deep-RNN.png" style="width:500px">
+
+Each layer learns different levels of abstraction:
+- Lower layers learn simple patterns.
+- Middle layers learn more complex relationships.
+- Higher layers learn high-level sequence representations.
+
+### internally
+
+<img src="./Images/Deep-RNN_architecture.png" style="width:500px">
+
+
+### Notation
+
+for hidden state:
+
+$h_t^{(l)}$
+
+here:
+- $l$ = number of layer
+- $t$ = current timestep
+
+example:
+
+$h_3^{(2)}$ = hidden state of 3rd timestep of 2nd layer
+
+#### how each cell is represented
+
+<img src="./Images/deep-RNN-notation.png" style="width:500px">
+
+here:
+- $h_{t-1}^{(l)}$ = hidden state value of previous timestep of current layer
+- $h_{t}^{(l-1)}$ = hidden state value of current timestep of previous layer
+- $h_{t}^{(l)}$ = hidden state value of current timestep of current layer
+- $W^{(l)}$ and $u^{(l)}$ = weights
+
+### Mathematically
+
+$$h_t^{(l)} = tanh(W^{(l)}h_{t-1}^{(l)} + u^{(l)}h_{t}^{(l-1)} + b^{(l)})$$
+
+
+
+[Go To Top](#content)
+
+--- 
