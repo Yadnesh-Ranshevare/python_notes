@@ -20,6 +20,7 @@
     - [Forget Gate](#forget-gate)
     - [Input Gate](#input-gate)
     - [Output Gate](#output-gate)
+11. [Gated Recurrent Unit (GRU)](#gated-recurrent-unit-gru)
 
 ---
 # Introduction
@@ -810,7 +811,7 @@ in ReLU gradient can be either 0 or any positive number, therefore for positive 
 ### Solution
 - use better activation function like Leaky ReLU
 - use better weight initialization technique
-- use different RNN architecture like LSTM
+- use different RNN architecture like LSTM and GRU
 
 
 
@@ -1142,6 +1143,138 @@ $$h_t = [f_1 * O_1, f_2 * O_2, f_3 * O_3]$$
 #### Mathematically
 
 $$h_t = O_t \otimes  tanh(C_t)$$
+
+[Go To Top](#content)
+
+--- 
+# Gated Recurrent Unit (GRU)
+
+
+A Gated Recurrent Unit (GRU) is a type of recurrent neural network (RNN) architecture designed to solve the vanishing gradient problem that makes standard RNNs struggle with long-term dependencies.
+
+It was introduced as a simpler alternative to the more complex [Long Short-Term Memory (LSTM)](#lstm---long-short-term-memory).
+
+> Before learning about GRU make sure you know about LSTM and its architecture along with its gates
+
+### Why GRU needed when we have LSTM?
+LSTM solved the vanishing gradient problem very effectively, but it came with a cost:
+
+- 3 gates (Input, Forget, Output)
+- Separate cell state $C_t$
+- Hidden state $h_t$
+
+Because of this three the total number of trainable parameter increases rapidly, increasing overall model complexity, memory usage and training time
+
+Therefore GRU simplified the architecture by:
+- Removing the Cell State
+- Reducing number of Gates (only two gates)
+
+this significantly reduces the total number of trainable parameter which makes the model less complex, with less memory usage and low training time
+
+> In simplified way we can say that GRU provide a simple and less complex version of the LSTM, that can train faster with less memory usage
+
+There is no one superior to one another, in some cases LSTM works better than that of GRU, and in some cases GRU word better
+
+### Rule of Thumb
+- GRU → smaller datasets, faster training, limited compute.
+- LSTM → very long sequences where memory retention is critical.
+
+### How GRU works
+GRU uses a single hidden state to manage the memory and to avoid long term dependency problem instead of deriving the completely new hidden state it update the previous hidden state, by removing the irrelevant info and adding the relevant one
+
+**How RNN woks?**
+- RNN divide the sequence into the timestamp, and pass each timestamp at a time
+- RNN maintain the hidden state that carry the memory of each timestamp 
+- whenever RNN get the input it uses the hidden state from previous timestamp and current input to compute the new hidden state for current timestamp
+- by doing this it can carry the data of each timestamp towards the end of the RNN where it generate the output
+
+**Long term dependency problem:**
+- as the input sequence gets too long model start to forget the initial data in the sequence
+- because of this the model output mostly depends on the last values in the sequence, and ignore the initial values
+
+**How LSTM solves it?**
+- LSTM maintains two memory state i.e, hidden state and cell state
+- hidden state carry the latest data in the sequence whereas cell state carry the initial data
+- because of this model can access both initial and last data a sequence and predict the output  more accurately
+
+**How GRU solves it?**
+- GRU maintain the single memory state i.e, hidden state
+- But unlike the simple RNN that just compute the completely new hidden state GRU just update the previous one
+- It removes the irrelevant data from the previous hidden state and add the relevant one
+
+**Example:**
+- in RNN:
+    - previous hidden state = $[h_1, h_2, h_3]$
+    - current hidden state = $[h_4, h_5, h_6]$
+
+- in GRU
+    - previous hidden state = $[h_1, h_2, h_3]$
+    - current hidden state = $[\frac{h_1}{2}, h_2, h_3]$ -> 50% $h_1$ is irrelevant
+
+
+
+### Architecture
+ 
+
+<img src="./Images/GRU-architecture.png" style="width:500px">
+
+here:
+- vectors
+    - $h_{t-1}$ = hidden state for previous timestamp
+    - $h_t$ = hidden state for current timestamp
+    - $\bar h_t$ = candidate hidden state
+    - $r_t$ = reset gate vector
+    - $z_t$ = update gate vector
+    - $x_t$ = input vector
+    > all the vector must be same in size / dimension except the input vector
+- Neural network Layer
+    - $\sigma$ = sigmoid neural network
+    - $tanh$ = tanh neural network
+    > number of nodes in all the network must be same, and is equal to hidden state size or number of dimension
+- point vise operations
+    - $\otimes$ = point vise multiplication
+    - $\oplus$ = point vise addition
+    - $-1$ = point vise -1
+
+#### candidate hidden state $\bar h_t$
+- not an actual hidden state for current timestamp
+- just potential candidate for that
+
+#### Point vise -1:
+- input vector = $[X_1, X_2, X_3]$
+- point vise -1 output = $[X_1 - 1, X_2 - 1, X_3 - 1]$
+
+> Rest of the element is explained in [LSTM](#lstm---long-short-term-memory)
+
+
+### Workflow
+<img src="./Images/GRU-gates.png" style="width:500px">
+
+in GRU you are given with the $h_{t-1}$ and $x_t$ and your goal is to find the $h_t$
+
+- input = $h_{t-1}$ and $x_t$
+- output = $h_t$
+
+To find the current hidden state $h_t$ we first calculate the $\bar h_t$ (candidate hidden state) using previous hidden state $h_{t-1}$
+
+$h_{t-1}$ -> $\bar h_t$ -> $h_t$
+
+**Why not use $\bar h_t$ (candidate hidden state) as a final hidden state?**
+- $\bar h_t$ is a new hidden state that we compute in normal RNN
+- and this $\bar h_t$ is highly inclined towards current timestamp
+- therefore we this of $\bar h_t$ as a potential candidate  use to calculate $h_t$ which is your final hidden state
+
+**Reset gate:** take $h_{t-1}$ and uses $r_t$ to compute the $\bar h_t$
+
+**Update gate:** uses $\bar h_t$ and $z_t$ to compute the $h_t$
+
+Therefore to find the $h_t$ we simply follow the following steps:
+1. calculate $r_t$ (reset gate vector)
+2. calculate $\bar h_t$ (candidate hidden state)
+3. calculate $z_t$ (update gate vector)
+4. calculate $h_t$ (hidden state for current timestamp)
+
+<img src="./Images/GRU-flow.png" style="width:500px">
 
 [Go To Top](#content)
 
