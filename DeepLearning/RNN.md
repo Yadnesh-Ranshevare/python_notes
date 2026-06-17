@@ -20,7 +20,10 @@
     - [Forget Gate](#forget-gate)
     - [Input Gate](#input-gate)
     - [Output Gate](#output-gate)
-11. [Gated Recurrent Unit (GRU)](#gated-recurrent-unit-gru)
+11. [GRU - Gated Recurrent Unit](#gru---gated-recurrent-unit)
+    - [Reset gate](#reset-gate)
+    - [Update gate](#update-gate)
+    - [Workflow](#workflow)
 
 ---
 # Introduction
@@ -1147,7 +1150,7 @@ $$h_t = O_t \otimes  tanh(C_t)$$
 [Go To Top](#content)
 
 --- 
-# Gated Recurrent Unit (GRU)
+# GRU - Gated Recurrent Unit
 
 
 A Gated Recurrent Unit (GRU) is a type of recurrent neural network (RNN) architecture designed to solve the vanishing gradient problem that makes standard RNNs struggle with long-term dependencies.
@@ -1240,15 +1243,96 @@ here:
 - not an actual hidden state for current timestamp
 - just potential candidate for that
 
-#### Point vise -1:
+#### Point vise 1-:
 - input vector = $[X_1, X_2, X_3]$
-- point vise -1 output = $[X_1 - 1, X_2 - 1, X_3 - 1]$
+- point vise -1 output = $[1-X_1, 1-X_2, 1-X_3]$
 
 > Rest of the element is explained in [LSTM](#lstm---long-short-term-memory)
 
 
-### Workflow
-<img src="./Images/GRU-gates.png" style="width:500px">
+[Go To Top](#content)
+
+--- 
+
+# Reset Gate 
+<img src="./Images/reset-gate.png" style="width:500px">
+
+In a GRU (Gated Recurrent Unit), the reset gate controls how much of the previous hidden state should be ignored when computing the new candidate memory.
+
+Reset gate vector formula:
+> Its just a output vector from sigmoid neural network
+
+$$r_t = \sigma(W_rx_t + U_rh_{t-1} + b_r)$$
+
+
+Where:
+- $r_t$ = reset gate vector
+- $h_{1-t}$ = previous hidden state
+- $\sigma$ = sigmoid function (outputs values between 0 and 1)
+- $x_t$ = input vector
+- $W_r, U_r$ = weight metrics
+- $b_r$ = bias vector
+
+The reset gate is applied when creating the candidate hidden state:
+
+$$\bar h_t = tanh(W_hx_t + U_h(r_t \odot h_{t-1}))$$
+
+where $⊙$ denotes element-wise multiplication.
+
+- if $r_t ≈ 0$:
+    - Previous hidden state is mostly ignored.
+    - The network "forgets" past information. 
+- if $r_t ≈ 1$:
+    - Previous hidden state is fully used.
+    - Past information is retained.
+
+
+[Go To Top](#content)
+
+--- 
+
+
+# Update gate:
+
+<img src="./Images/update-gate.png" style="width:500px">
+The update gate in a GRU (Gated Recurrent Unit) controls how much information from the previous hidden state should be carried forward to the current hidden state.
+
+It plays a role similar to the combination of the forget gate + input gate in an LSTM.
+
+update gate vector formula:
+
+$$z_t = \sigma(W_zx_t + U_zh_{t-1} + b_z)$$
+
+Where:
+- $z_t$ = update gate vector
+- $h_{1-t}$ = previous hidden state
+- $\sigma$ = sigmoid function (outputs values between 0 and 1)
+- $x_t$ = input vector
+- $W_z, U_z$ = weight metrics
+- $b_z$ = bias vector
+
+Computing the Final Hidden State
+
+$$h_t = (1-z_t) \odot h_{t-1} + z_t \odot \bar h_t$$
+
+- if $z_t ≈ 0$:
+    - Keep almost all previous information.
+    - Ignore the new candidate state.
+    - Useful for preserving long-term dependencies.
+- if $z_t ≈ 1$:
+    - Replace old memory with new information.
+    - Useful when the current input contains important new context.
+
+
+
+[Go To Top](#content)
+
+--- 
+
+# Workflow
+
+<img src="./Images/GRU-architecture.png" style="width:500px">
+
 
 in GRU you are given with the $h_{t-1}$ and $x_t$ and your goal is to find the $h_t$
 
@@ -1263,10 +1347,6 @@ $h_{t-1}$ -> $\bar h_t$ -> $h_t$
 - $\bar h_t$ is a new hidden state that we compute in normal RNN
 - and this $\bar h_t$ is highly inclined towards current timestamp
 - therefore we this of $\bar h_t$ as a potential candidate  use to calculate $h_t$ which is your final hidden state
-
-**Reset gate:** take $h_{t-1}$ and uses $r_t$ to compute the $\bar h_t$
-
-**Update gate:** uses $\bar h_t$ and $z_t$ to compute the $h_t$
 
 Therefore to find the $h_t$ we simply follow the following steps:
 1. calculate $r_t$ (reset gate vector)
