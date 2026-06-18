@@ -2,6 +2,7 @@
 1. [Introduction](#introduction)
 2. [ANN (Artificial Neural Network)](./ANN.md)
 3. [RNN (Recurrent Neural Network)](./RNN.md)
+4. [Sequence to Sequence Models](./Seq2Seq.md)
 
 
 
@@ -63,3 +64,4 @@ For example, in image processing lower layers may identify edges, while higher l
 
 - [CampusX](https://www.youtube.com/@campusx-official): 100 days of Deep learning playlist
 - [tenserFlow Playground](https://playground.tensorflow.org/): visual representation of model training
+- [Sequence to Sequence Learning with Neural Networks](https://arxiv.org/pdf/1409.3215): Research Paper
