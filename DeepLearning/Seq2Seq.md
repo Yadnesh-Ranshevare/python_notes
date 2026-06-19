@@ -1,6 +1,7 @@
 # Content
 1. [Introduction](#introduction)
 2. [Encoder Decoder](#encoder-decoder)
+3. [How To Train Encoder Decoder Model](#how-to-train-encoder-decoder-model)
 
 ---
 
@@ -82,11 +83,19 @@ here ht and ct are the context vector provided by the encoder
 - `<start>` -> a special type of symbol that tells the model to `start` producing output
 - `<end>` -> a special type of symbol that tells the model to `stop` producing output
 
-### How training happen
+
+
+
+[Go To Top](#content)
+
+---
+
+
+# How To Train Encoder Decoder Model
 
 in machine translation we generally require a supervised dataset, i.e, tabular data with one column containing sentence from input language and other with output language
 
-eg,.
+### Example
 
 english | hindi
 --- | ---
@@ -109,11 +118,13 @@ now we first convert sentence into their respective vector format using one hot 
     - सोचिए = [0, 0, 0, 0, 1, 0]
     - `<end>` = [0, 0, 0, 0, 0, 1]
 
-Dataset in vector format
+### Dataset in vector format
 
 input vector | output vector
 --- | ---
 [[1, 0, 0], [0, 1, 0], [0, 0, 1]] | [[1, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0], [0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 1]]
+
+### forward propagation
 
 now we pass the input vector into encoder and compute the context vector 
 
@@ -121,19 +132,20 @@ initially we'll be having the random weights and biases
 
 <img src="./Images/Encoder-training.png" style="width:500px">
 
+
 Now in case of decoder:
 - we first pass this context vector as a input in decoder and compute the first output for first timestamp
 
     <img src="./Images/Decoder-timestamp-one.png" style="width:200px">
 
-    here n = number of output vector dimension
+    soft max is just a neural network that convert the LSTM cell output into an required output, in our case its 6 dimension vector containing probability that represent the output word in vector format
 
     now:
     - y_predicted = [0.2, 0.1, 0.8, 0.5, 0.3, 0.6]  -> [0, 0, 1, 0, 0, 0] -> में
     - y_original = [0, 1, 0, 0, 0, 0] -> इस
 
     As you can see there is an error at y_predicted and y_original
-- now for timestamp 2 instead of passing the output of previous output y_predicted we pass the y_original 
+- now for timestamp 2 instead of passing  previous output i.e, y_predicted we pass the y_original 
 
     <img src="./Images/Decoder-timestamp-two.png" style="width:500px">
 
@@ -149,6 +161,55 @@ Now in case of decoder:
     - y_original = [0, 0, 0, 1, 0, 0] -> बारे
 
     since model output `<end>` we stop prediction
+
+### Calculate Loss
+
+
+| timestamp | 1 | 2 | 3|
+--- | --- | --- | ---
+**y_predicted** | [0.2, 0.1, 0.8, 0.5, 0.3, 0.6] | [0.3, 0.2, 0.4, 0.6, 0.7, 0.4] | [0.3, 0.2, 0.4, 0.6, 0.7, 0.9] |
+**y_original** |[0, 1, 0, 0, 0, 0] | [0, 0, 1, 0, 0, 0] | [0, 0, 0, 1, 0, 0] | 
+
+now calculate the loos for each timestamp
+- since we have multi class classification problem will be use categorical cross entropy as a loss function
+- mathematically:
+
+    $$L = -\sum_{i=1}^n y_i^{og}\ log(y_i^{pred})$$
+
+    here:
+    - n = dimension of output vector
+    - $y^{og}$ = y_original
+    - $y^{pred}$ = y_predicted
+- for timestamp 1:
+    - $y^{og}$ = [0, 1, 0, 0, 0, 0]
+    - $y^{pred}$ = [0.2, 0.1, 0.8, 0.5, 0.3, 0.6]
+    - $L_1 = -[(0 \times log\ 0.2) + (1 \times log\ 0.1) + (0 \times log\ 0.8) + (0 \times log\ 0.5) + (0 \times log\ 0.3) + (0 \times log\ 0.6)]$
+    - $L_1 = - (1 \times log\ 0.1) = 1$
+- for timestamp 2:
+    - $y^{og}$ = [0, 0, 1, 0, 0, 0]
+    - $y^{pred}$ = [0.3, 0.2, 0.4, 0.6, 0.7, 0.4]
+    - $L_2 = - (1 \times log\ 0.4) = 0.39$
+- for timestamp 3:
+    - $y^{og}$ = [0, 0, 0, 1, 0, 0]
+    - $y^{pred}$ = [0.3, 0.2, 0.4, 0.6, 0.7, 0.9]
+    - $L_3 = - (1 \times log\ 0.6) = 0.22$
+
+- total loss = 1 + 0.39 + 0.22 = 1.61
+- average loss = 1.61 / 3 = 0.53
+
+### Backpropagation
+
+1. calculate gradient for loss using formula:
+
+    $$\frac{\partial L}{\partial W} = \sum_{i=1}^n \frac{\partial L_i}{\partial W}$$
+
+    here:
+    - $W$ = trainable Parameter
+    - $L$ = loss function 
+    - $i$ = number of timestamp in decoder
+2. Update the parameter using gradient decent:
+
+    $$W_{new} = W_{old} - \alpha \frac{\partial L}{\partial W_{old}}$$
 
 
 
