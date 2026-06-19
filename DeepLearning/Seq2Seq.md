@@ -2,6 +2,8 @@
 1. [Introduction](#introduction)
 2. [Encoder Decoder](#encoder-decoder)
 3. [How To Train Encoder Decoder Model](#how-to-train-encoder-decoder-model)
+4. [Problem with Encoder Decoder Architecture](#problem-with-encoder-decoder-architecture)
+5. [Attention Mechanism](#attention-mechanism)
 
 ---
 
@@ -211,6 +213,132 @@ now calculate the loos for each timestamp
 
     $$W_{new} = W_{old} - \alpha \frac{\partial L}{\partial W_{old}}$$
 
+
+
+[Go To Top](#content)
+
+---
+# Problem with Encoder Decoder Architecture
+
+Suppose we have an LSTM encoder.
+
+Input sentence:
+
+>"The student who studied machine learning for six months built an excellent project."
+
+The encoder reads words one by one:
+```
+"The"      → h1
+"student"  → h2
+"who"      → h3
+...
+"project"  → h12
+```
+At each step we calculate the hidden state of LSTM till we get final hidden state:
+```
+h12
+```
+This becomes the context vector.
+
+### In encoder decoder the assumption is:
+> h12 contains all important information about the entire sentence.
+
+The decoder only receives this vector.
+
+hidden state size is decided at the time of training and is fixed, now suppose the hidden state size is:
+```
+512
+```
+Then regardless of whether the input contains:
+```
+10 words
+100 words
+1000 words
+```
+the output is still:
+```
+512 numbers
+```
+That means:
+```
+Input
+--------------------------------
+10 words   → 512 values
+100 words  → 512 values
+1000 words → 512 values
+--------------------------------
+```
+- The amount of information grows.
+- But the storage capacity remains fixed.
+
+### Now imagine:
+```
+A paragraph of 200 words
+```
+The encoder is being asked to compress a large amount of information into a fixed-size representation.
+
+Think of it like this:
+```
+200-page book
+        ↓
+1-page summary
+        ↓
+Reconstruct the entire book
+```
+Information will inevitably be lost.
+
+As a result eventually the encoder is forced to discard information.
+
+### Earlier Words Are More Likely to Be Forgotten
+
+Consider a 100-word sentence.
+```
+w1 w2 w3 ... w100
+```
+The encoder processes sequentially:
+```
+h1 → h2 → h3 → ... → h100
+``` 
+When computing:
+
+```
+h100
+```
+the information from:
+```
+w1
+```
+has been transformed 99 times.
+```
+w1
+ ↓
+h1
+ ↓
+h2
+ ↓
+...
+ ↓
+h100
+```
+Each transformation slightly alters the representation.
+
+By the end, the signal from the earliest words may become very weak.
+
+### Static Representation of Context 
+- In the original encoder-decoder architecture, the decoder receives the same context vector at every timestamp.
+
+- However, different output tokens require information from different parts of the input sequence.
+
+- Since the context vector is static and represents the entire sequence, the decoder cannot selectively focus on the most relevant input words for each output step.
+
+- This limits performance, especially for long sequences, and is one of the motivations behind the attention mechanism.
+
+
+
+[Go To Top](#content)
+
+---
+# Attention Mechanism
 
 
 [Go To Top](#content)
