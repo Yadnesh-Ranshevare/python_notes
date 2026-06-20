@@ -7,7 +7,7 @@
 
 
 
-[Acknowledgment](#acknowledgment)
+[Acknowledgment And Reference](#acknowledgment-and-reference)
 
 ---
 
@@ -59,9 +59,10 @@ For example, in image processing lower layers may identify edges, while higher l
 
 ---
 
-# Acknowledgment
+# Acknowledgment And Reference
 
 
 - [CampusX](https://www.youtube.com/@campusx-official): 100 days of Deep learning playlist
 - [tenserFlow Playground](https://playground.tensorflow.org/): visual representation of model training
 - [Sequence to Sequence Learning with Neural Networks](https://arxiv.org/pdf/1409.3215): Research Paper
+- [Neural Machine Translation by Jointly Learning to Align and Translate](https://arxiv.org/pdf/1409.0473): Research paper

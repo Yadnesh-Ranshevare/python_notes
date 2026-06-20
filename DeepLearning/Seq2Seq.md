@@ -339,6 +339,57 @@ By the end, the signal from the earliest words may become very weak.
 
 ---
 # Attention Mechanism
+The attention mechanism is a technique used in neural networks that allows a model to focus on the most relevant parts of the input when producing an output.
+
+Suppose you're translating:
+```
+"The animal didn't cross the street because it was too tired."
+```
+
+To understand what "it" refers to, you need to pay more attention to "animal" than to "street". Attention gives the model this ability.
+
+### Classical Encoder-decoder
+
+<img src="./Images/Encoder-decoder-flow.png" style="width:500px">
+
+In classical encoder decoder architecture we provide two vector as an input for decoder to generate the output
+- $S_{i-1}$ -> predicted output of previous timestamp
+- $Y_{i-1}$ -> Original output of previous timestamp
+
+### attention mechanism
+
+<img src="./Images/Encoder-decoder-with-attention.png" style="width:500px">
+
+In case of attention we get three input in decoder for decoder to generate the output
+
+- $S_{i-1}$ -> predicted output of previous timestamp
+- $Y_{i-1}$ -> Original output of previous timestamp
+- $C_i$ -> think of it as attention input
+
+### What is $C_i$
+
+$C_i$ is a weighted combination of all encoder hidden states. It summarizes the parts of the input sequence that are most relevant for generating the output at time step i.
+
+<img src="./Images/Ci-network.png" style="width:300px">
+
+here:
+- $\alpha_{ij}$ = is like a weight between nodes $C_i$ and $h_j$, it tells how much important $h_j$ is for generating the output in timestamp $i$
+
+#### Mathematically
+
+If the encoder hidden states are:
+
+$$h_1, h_2, ...h_T$$
+
+then:
+
+$$C_i = \sum_{j=1}^T \alpha_{ij}h_j$$
+
+where:
+
+- $h_j$ = encoder hidden state at input position j,
+- $\alpha_{ij}$ = attention weight telling how much the decoder at step i should focus on encoder state $h_j$,
+
 
 
 [Go To Top](#content)
