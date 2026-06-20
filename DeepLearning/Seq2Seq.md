@@ -414,15 +414,15 @@ $$\alpha_{ij} = f(h_j, S_{i-1})$$
 
 here:
 - $i$ = current timestamp in decoder
-- $j$ = timestamp of encoder state
+- $j$ = timestamp of encoders hidden state
 
-In real case its just a ANN that takes $h_j$ and $S_{i-1}$ as an input and return $\alpha_{ij}$, and as for tanning its happen while we train the encoder decoder model where this ANN also get train along with the rest of the model 
+In real case its just a ANN that takes $h_j$ and $S_{i-1}$ as an input and return $\alpha_{ij}$, and as for training its happen while we train the encoder decoder model where this ANN also get train along with the rest of the model 
 
-#### Example
+#### Example of How $\alpha_{ij}$ is computed
 
 <img src="./Images/Alpha-calculation.png" style="width:400px">
 
-here we want to calculate the $C2$ for with we need $\alpha_{21}$, $\alpha_{22}$ and $\alpha_{23}$ and according to this image
+here we want to calculate the $C2$ for which we need $\alpha_{21}$, $\alpha_{22}$ and $\alpha_{23}$ and according to this image:
 - ANN input:
     - $S_1$
     - $h_1$
@@ -442,6 +442,14 @@ where:
 
 - $h_j$ = encoder hidden state for timestamp j,
 
+
+Therefore:
+
+$$C_2 = \alpha_{21}h_1 + \alpha_{22}h_2 + \alpha_{23}h_3$$
+
+Now
+- LSTM input = $[Y_1, C_2]$ (combined vector)
+- LSTM output = $S_2$
 
 
 [Go To Top](#content)
