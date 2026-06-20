@@ -364,7 +364,15 @@ In case of attention we get three input in decoder for decoder to generate the o
 
 - $S_{i-1}$ -> predicted output of previous timestamp
 - $Y_{i-1}$ -> Original output of previous timestamp
-- $C_i$ -> think of it as attention input
+- $C_i$ -> tells which part of the input sequence is important for generating output
+
+### How does the LSTM handle second input vector $C_i$?
+
+The decoder combines $Y_{i-1}$ and $C_i$ into a single input vector:
+
+$$x_i = [Y_{i-1},  C_i]$$
+
+LSTM actually receive this $x_i$ vector 
 
 ### What is $C_i$
 
@@ -372,8 +380,7 @@ $C_i$ is a weighted combination of all encoder hidden states. It summarizes the 
 
 <img src="./Images/Ci-network.png" style="width:300px">
 
-here:
-- $\alpha_{ij}$ = is like a weight between nodes $C_i$ and $h_j$, it tells how much important $h_j$ is for generating the output in timestamp $i$
+>$\alpha_{ij}$ = is like a weight between nodes $C_i$ and $h_j$, it tells how much important $h_j$ is for generating the output in timestamp $i$
 
 #### Mathematically
 
@@ -387,8 +394,53 @@ $$C_i = \sum_{j=1}^T \alpha_{ij}h_j$$
 
 where:
 
-- $h_j$ = encoder hidden state at input position j,
+- $h_j$ = encoder hidden state for timestamp j,
 - $\alpha_{ij}$ = attention weight telling how much the decoder at step i should focus on encoder state $h_j$,
+
+
+### What is $\alpha$
+In the attention mechanism, α usually represents the attention weight (or alignment score after normalization). It tells the model how much importance to assign to each encoder state when producing an output.
+
+$\alpha$ is depend on two things;
+1. encoder state $h_j$
+2. decoder state from previous timestamp $S_{i-1}$
+
+> think of it like:\
+> given the outputs up till now $(S_{i-1})$ how much encoder state $h_j$ is important for next output i.e, $S_i$
+
+Mathematically we can say that:
+
+$$\alpha_{ij} = f(h_j, S_{i-1})$$
+
+here:
+- $i$ = current timestamp in decoder
+- $j$ = timestamp of encoder state
+
+In real case its just a ANN that takes $h_j$ and $S_{i-1}$ as an input and return $\alpha_{ij}$, and as for tanning its happen while we train the encoder decoder model where this ANN also get train along with the rest of the model 
+
+#### Example
+
+<img src="./Images/Alpha-calculation.png" style="width:400px">
+
+here we want to calculate the $C2$ for with we need $\alpha_{21}$, $\alpha_{22}$ and $\alpha_{23}$ and according to this image
+- ANN input:
+    - $S_1$
+    - $h_1$
+- ANN output
+    - $\alpha_{21}$
+
+we use same ANN to compute the value of $\alpha_{22}$ and $\alpha_{23}$ as follow:
+
+- input = $S_1$, $h_2$ -> output = $\alpha_{22}$
+- input = $S_1$, $h_3$ -> output = $\alpha_{23}$
+
+Now since we have all values of $\alpha_{ij}$ we can calculate the $C2$ using formula:
+
+$$C_i = \sum_{j=1}^T \alpha_{ij}h_j$$
+
+where:
+
+- $h_j$ = encoder hidden state for timestamp j,
 
 
 
