@@ -4,6 +4,8 @@
 3. [How To Train Encoder Decoder Model](#how-to-train-encoder-decoder-model)
 4. [Problem with Encoder Decoder Architecture](#problem-with-encoder-decoder-architecture)
 5. [Attention Mechanism](#attention-mechanism)
+    - [Bahdanau Attention](#bahdanau-attention)
+    - [Luong Attention](#luong-attention) 
 
 ---
 
@@ -397,8 +399,18 @@ where:
 - $h_j$ = encoder hidden state for timestamp j,
 - $\alpha_{ij}$ = attention weight telling how much the decoder at step i should focus on encoder state $h_j$,
 
+### Types of Attention mechanism
 
-### What is $\alpha$
+Now based on the how we calculate this $\alpha$ value there are two type of attention mechanism
+1. [Bahdanau Attention](#bahdanau-attention): uses ANN 
+2. [Luong Attention](#luong-attention): uses dot product for similarity search
+
+
+[Go To Top](#content)
+
+---
+
+# Bahdanau Attention
 In the attention mechanism, α usually represents the attention weight (or alignment score after normalization). It tells the model how much importance to assign to each encoder state when producing an output.
 
 $\alpha$ is depend on two things;
@@ -408,7 +420,7 @@ $\alpha$ is depend on two things;
 > think of it like:\
 > given the outputs up till now $(S_{i-1})$ how much encoder state $h_j$ is important for next output i.e, $S_i$
 
-Mathematically we can say that:
+### Mathematically we can say that:
 
 $$\alpha_{ij} = f(h_j, S_{i-1})$$
 
@@ -418,7 +430,10 @@ here:
 
 In real case its just a ANN that takes $h_j$ and $S_{i-1}$ as an input and return $\alpha_{ij}$, and as for training its happen while we train the encoder decoder model where this ANN also get train along with the rest of the model 
 
-#### Example of How $\alpha_{ij}$ is computed
+**This ANN is known as alignment model**
+
+
+### Example of How $\alpha_{ij}$ is computed
 
 <img src="./Images/Alpha-calculation.png" style="width:400px">
 
@@ -450,6 +465,151 @@ $$C_2 = \alpha_{21}h_1 + \alpha_{22}h_2 + \alpha_{23}h_3$$
 Now
 - LSTM input = $[Y_1, C_2]$ (combined vector)
 - LSTM output = $S_2$
+
+
+
+[Go To Top](#content)
+
+---
+# Luong Attention
+
+In Bahdanau Attention attention to calculate the $\alpha_{ij}$ we use:
+
+$$\alpha_{ij} = f(h_j, S_{i-1})$$
+
+where $f(h_j, S_{i-1})$ is just a ANN that takes $h_j$ and $S_{i-1}$ as input
+
+>- $h_j$ = hidden state of encoder for timestamp j
+>- $S_{i-1}$ = hidden state of decoder for previous timestamp
+
+But here in Luong Attention we change that to:
+
+$$\alpha_{ij} = f(h_j, S_{i})$$
+
+where:
+- $h_j$ = hidden state of encoder for timestamp j
+- $S_i$ = hidden state of decoder for current timestamp
+
+And this time $f(h_j, S_{i})$ is just a dot product between $h_i$ and $S_i$
+
+> in Luong Attention we are using current hidden state of decoder rather that previous hidden state, then perform the dot product and generate the final output for current timestamp
+
+### Mathematically
+
+$$f(h_j, S_{i}) = S_i^T \cdot h_j$$
+
+where:
+- $S_i^T$ = transpose of $S_i$
+
+This dot products produce raw scores, not probabilities, Therefore we need to use softmax, that convert those score into the probability
+
+Therefore:
+
+$$\alpha_{ij} = S_i^T \cdot h_j$$
+
+### Example
+- $S_j = [a, b, c, d]$ 
+- $h_j = [e, f, g, h]$ 
+
+Now
+
+$$S_i^T = \begin{bmatrix}
+a\\
+b\\
+c\\
+d
+\end{bmatrix}$$
+
+$$
+\alpha_{ij} =  S_i^T \cdot h_j =
+\begin{bmatrix}
+a\\
+b\\
+c\\
+d
+\end{bmatrix}
+\begin{bmatrix}
+e & f & g & h
+\end{bmatrix}
+=
+ae + bf + cg + dh
+$$
+
+> Its a scalar value, as dot product return a scalar (number)
+
+### Architectural Diagram
+
+<img src="./Images/Luong-Attention.png" style="width:400px">
+
+Here:
+- $S_i$ = hidden state for timestamp i
+- $O_i$ = Predicted output vector for timestamp i
+- $Y_i$ = original output vector from previous timestamp
+- $h_j$ = encoder hidden state for timestamp 
+- $C_i$ = context vector that tells which $h_j$ is important for generating output
+- $\alpha_{ij}$ = how much $C_i$ focus on $h_j$
+
+### Softmax
+In Luong attention, the dot products produce **raw scores**, not probabilities. Softmax converts these scores into **attention weights** ($\alpha$) that can be interpreted and used meaningfully.
+
+Suppose the scores are:
+
+- $\alpha_{11} = 2$
+- $\alpha_{12} = 1$
+- $\alpha_{13} = 3$
+
+$$score = [2,1,3]$$
+
+These numbers tell us that the third encoder state is more relevant, but they don't tell us **how much** each state should contribute.
+
+#### Step 1: Apply exponential
+
+$$e^{score} = [e^2,e^1,e^3]$$
+
+$$\approx [7.39,\ 2.72,\ 20.09]$$
+
+#### Step 2: Normalize
+
+$$\alpha_{i} = \frac{e^{score_i}}{\sum e^{score_j}}$$
+
+So,
+
+$$
+\alpha_{i} =
+\left[
+\frac{7.39}{30.20},
+\frac{2.72}{30.20},
+\frac{20.09}{30.20}
+\right]
+=
+[0.245,\ 0.090,\ 0.665]
+$$
+
+Now the weights:
+
+* Are all between 0 and 1.
+* Sum to 1.
+* Can be interpreted as probabilities or relative importance.
+
+### Why not use raw scores directly?
+
+Suppose the scores are:
+
+$$[100, 50, -10]$$
+
+If you used them directly:
+
+$$c_t = 100h_1 + 50h_2 - 10h_3$$
+
+Problems:
+
+* Negative weights are hard to interpret.
+* The scale is arbitrary; larger scores can make the context vector explode.
+* The weights don't represent relative importance.
+* They don't sum to 1.
+
+Softmax fixes all these issues. 
+
 
 
 [Go To Top](#content)
