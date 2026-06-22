@@ -6,6 +6,7 @@
 5. [Attention Mechanism](#attention-mechanism)
     - [Bahdanau Attention](#bahdanau-attention)
     - [Luong Attention](#luong-attention) 
+6. [Self Attention](#self-attention)
 
 ---
 
@@ -609,6 +610,93 @@ Problems:
 * They don't sum to 1.
 
 Softmax fixes all these issues. 
+
+
+
+[Go To Top](#content)
+
+---
+# Self Attention
+
+NLP (Natural Language Processing) is a field of computer science and AI focused on enabling computers to understand, interpret, generate, and interact with human language like human text.
+
+But the problem is that our computer only understand the numeric value and is unable to process any textual input.
+
+Therefore in any NLP application the first important step to convert the text into number, and this numeric representation of text is what we called vector / token
+
+
+
+### Embeddings
+
+- Embeddings are one of the most popular methods for converting words into vectors.
+
+- Embeddings convert things like words or sentences into lists of numbers such that similar meanings correspond to nearby vectors.
+
+#### Why do we need embeddings?
+Suppose we have:
+```
+cat
+dog
+car
+```
+Using One-Hot Encoding:
+```
+cat → [1,0,0]
+dog → [0,1,0]
+car → [0,0,1]
+```
+The model sees all three as equally unrelated.
+
+But with embeddings:
+```
+cat → [0.2, -0.7, 0.9, ...]
+dog → [0.3, -0.6, 0.8, ...]
+car → [-0.8, 0.4, -0.1, ...]
+```
+Now, cat and dog have similar vectors because they are semantically related.
+
+#### How embedding Capture semantic similarity
+embedding convert word into vector such that Similar meanings word have similar vectors.
+
+Examples:
+<!-- 
+- king ↔ queen
+- cat ↔ dog
+- happy ↔ joyful
+
+All of those pairs will have similar vectors -->
+
+<img src="./Images/embedding-vector.png" style="width:300px">
+
+As you can see in above image
+- `cat` and `dog` -> similar vector
+- `cat` / `dog` and `snake` -> large difference between vector
+
+This is because `cat` and `dog` is somewhat similar to each other as they both have four legs, they both can be tame, etc
+
+whereas `snake` is soo much different from `cat` and `dog`, like `cat` and `dog` are mammals whereas `snake` is reptile
+
+### Problem with embeddings
+Embedding assign one vector per word, regardless of context.
+
+lets suppose we have sentence like:
+```
+I deposited money in the bank.
+I sat by the river bank.
+``` 
+Both occurrences of bank get the same vector, even though they mean different things, and since the vector is identical, the model mixes information from both meanings.
+
+Therefore we need a mechanism where we can change the vector embedding according to sentence, like in above example both bank will have different vectors as they have different meaning
+
+To solve this problem we use self attention, it allow us to create the different vectors for same word if they have different meaning in a sentence
+
+### How self attention solves it?
+Self-attention is a mechanism that determines how much "attention" different words or tokens in a sequence should pay to each other
+
+Consider the sentence:\
+`"The animal didn't cross the street because it was too tired."`
+
+To understand what "it" refers to, the model needs to look at the other words in the sentence. Self-attention helps the model decide that "it" is related to "animal" more than to "street".
 
 
 
