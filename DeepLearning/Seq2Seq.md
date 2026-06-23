@@ -684,7 +684,7 @@ lets suppose we have sentence like:
 I deposited money in the bank.
 I sat by the river bank.
 ``` 
-Both occurrences of bank get the same vector, even though they mean different things, and since the vector is identical, the model mixes information from both meanings.
+Both occurrences of bank get the same vector, even though they mean different things, and since the vector is identical, the model mixes information and will think that they both have same meanings.
 
 Therefore we need a mechanism where we can change the vector embedding according to sentence, like in above example both bank will have different vectors as they have different meaning
 
@@ -698,6 +698,65 @@ Consider the sentence:\
 
 To understand what "it" refers to, the model needs to look at the other words in the sentence. Self-attention helps the model decide that "it" is related to "animal" more than to "street".
 
+### Example:
+consider a sentences:
+1. money bank grows
+2. river bank flows
+
+here we can see word `bank` appear in both of those sentence but in each sentence the meaning of that word is different, therefore we must represent that word with different vector for different sentence
+
+to do that we first calculate the embedding for each words 
+- money = vector1
+- bank = vector2
+- grows = vector3 
+- river = vector 4
+- flows = vector6
+
+> well only be having one vector for word bank as embedding generate same vector for same word
+
+Now using self attention:
+
+- sentence 1:
+    - bank = 0.1 [money vector] + 0.7[bank vector] + 0.2[grows vector]
+- sentence 2:
+    - bank = 0.2 [river vector] + 0.6[bank vector] + 0.2[flows vector]
+
+Now as you can see for both sentence we have different vector embedding for word `bank` indicating their meaning is different 
+
+Also because of different vector representation the model now can distinguished between those word
+
+### Similarly we can do for other words also
+consider a sentences:
+1. money bank grows
+2. river bank flows
+
+now their word embedding are:
+- money = vector1
+- bank = vector2
+- grows = vector3 
+- river = vector 4
+- flows = vector6
+
+Now with self attention:
+- Sentence 1:
+    - money = 0.4[vector1] + 0.1[vector2] + 0.6[vector3]
+    - bank = 0.7[vector1] + 0.1[vector2] + 0.2[vector3]
+    - grows = 0.5[vector1] + 0.2[vector2] + 0.3[vector3]
+- Sentence 2:
+    - river = 0.1[vector4] + 0.3[vector2] + 0.5[vector5]
+    - bank = 0.6[vector4] + 0.2[vector2] + 0.2[vector5]
+    - flows = 0.5[vector4] + 0.4[vector2] + 0.6[vector5]
+
+You can think of it as:\
+while generating the text embedding each word in a sequence giving attention to other words in its sequence
+
+Example:
+- sentence 1 bank = 0.7[vector1] + 0.1[vector2] + 0.2[vector3]
+    - here word bank is giving around 70% attention to vector1 i.e, money while generating embeddings
+    - therefore the model will know that we are talking about money bank
+- sentence 2 bank = 0.6[vector4] + 0.2[vector2] + 0.2[vector5]
+    - here word bank is giving around 60% attention to vector4 i.e, river while generating embeddings 
+    - Therefore the model will know that we are not talking about money bank, and that ots something else
 
 
 [Go To Top](#content)
