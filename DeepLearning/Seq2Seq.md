@@ -717,13 +717,24 @@ to do that we first calculate the embedding for each words
 Now using self attention:
 
 - sentence 1:
-    - bank = 0.1 [money vector] + 0.7[bank vector] + 0.2[grows vector]
+    - bank = 0.7 [money vector] + 0.1[bank vector] + 0.2[grows vector]
 - sentence 2:
-    - bank = 0.2 [river vector] + 0.6[bank vector] + 0.2[flows vector]
+    - bank = 0.6 [river vector] + 0.2[bank vector] + 0.2[flows vector]
 
 Now as you can see for both sentence we have different vector embedding for word `bank` indicating their meaning is different 
 
-Also because of different vector representation the model now can distinguished between those word
+Also because of different vector representation the model now can distinguished between those words
+
+
+You can think of it as:\
+while generating the text embedding each word in a sequence giving attention to other words in its own sequence
+
+- sentence 1 bank = 0.7[money vector] + 0.1[bank vector] + 0.2[grows vector]
+    - here word bank is giving around 70% attention to vector1 i.e, money while generating embeddings
+    - therefore the model will know that we are talking about money bank
+- sentence 2 bank = 0.6[river vector] + 0.2[bank vector] + 0.2[flows vector]
+    - here word bank is giving around 60% attention to vector4 i.e, river while generating embeddings 
+    - Therefore the model will know that we are not talking about money bank, and that it's something else
 
 ### Similarly we can do for other words also
 consider a sentences:
@@ -747,16 +758,298 @@ Now with self attention:
     - bank = 0.6[vector4] + 0.2[vector2] + 0.2[vector5]
     - flows = 0.5[vector4] + 0.4[vector2] + 0.6[vector5]
 
-You can think of it as:\
-while generating the text embedding each word in a sequence giving attention to other words in its sequence
+### Similarity
+
+Consider a word:
+- money bank grows
+
+their word embedding:
+- money = vector1
+- bank = vector2
+- grows = vector3 
+
+now using self attention:
+```
+bank = a [vector1] + b [vector2] + c [vector3]
+```
+- here a,b,c are fraction value that represent the similarity scores
+    - a = similarity between bank vector and money vector
+    - b = similarity between bank vector and bank vector
+    - c = similarity between bank vector and grows vector
+- higher the similarity more related the words are to each other
+
+####  calculate the similarity using dot product
+
+Whenever we have two vector we can check how much those two vector are related to each other by simply calculating the dot product between those vectors
+
+- higher the dot product = higher the similarity
+- lower the dot product = lower the similarity
+
+from above Example:
+- $vector1 \cdot vector2$ = similarity between word money and bank
+
+Now from this we can compute:
+```
+bank = a [vector1] + b [vector2] + c [vector3]
+```
+- a = $vector2 \cdot vector1^T$
+- b = $vector2 \cdot vector2^T$
+- c = $vector2 \cdot vector3^T$
+
+Therefore:
+
+$$
+bank = (vector2 \cdot vector1^T)[vector1] + (vector2 \cdot vector2^T)[vector2] + (vector2 \cdot vector3^T)[vector3]
+$$
+
+here:
+- $vector1, vector2, vector3$ = n dimension vector generated using embeddings
+- $vector1^T, vector2^T, vector3^T$ = Transpose vectors of $vector1, vector2, vector3$ respectively
+
+#### Example:
+
+sentence = Money bank grows
+
+using embeddings we get:
+- money = [0.2, 0.5, 0.3]
+- bank = [0.5, 0.1, 0.4]
+- grows = [0.8, 0.5, 0.1]
+
+
+$$
+bank = 
+\left(
+\begin{bmatrix}
+0.5 & 0.1 & 0.4 
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+0.2\\
+0.5\\
+0.4
+\end{bmatrix}
+\right)
+\begin{bmatrix}
+0.2 & 0.5 & 0.4 
+\end{bmatrix}
++
+\left(
+\begin{bmatrix}
+0.5 & 0.1 & 0.4 
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+0.5\\
+0.1\\
+0.4
+\end{bmatrix}
+\right)
+\begin{bmatrix}
+0.5 & 0.1 & 0.4 
+\end{bmatrix}
++
+\left(
+\begin{bmatrix}
+0.5 & 0.1 & 0.4 
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+0.8\\
+0.5\\
+0.1
+\end{bmatrix}
+\right)
+\begin{bmatrix}
+0.8 & 0.5 & 0.1
+\end{bmatrix}
+$$
+
+
+$$
+bank = 0.27 
+\begin{bmatrix}
+0.2 & 0.5 & 0.4 
+\end{bmatrix}
++
+0.42
+\begin{bmatrix}
+0.5 & 0.1 & 0.4 
+\end{bmatrix}
++
+0.49
+\begin{bmatrix}
+0.8 & 0.5 & 0.1
+\end{bmatrix}
+$$
+
+<!-- 
+$$
+bank = 
+\begin{bmatrix}
+0.054 & 0.135 & 0.081
+\end{bmatrix}+
+\begin{bmatrix}
+0.210 & 0.042 & 0.168
+\end{bmatrix}+
+\begin{bmatrix}
+0.392 & 0.245 & 0.049
+\end{bmatrix}
+$$
+
+$$
+bank = 
+\begin{bmatrix}
+0.656 & 0.422 & 0.298
+\end{bmatrix}
+$$ -->
+
+### Normalization
+
+from above example we get to know we can represent word bank in vector format using self attention mechanism
+
+where;
+
+$$bank = 0.27[vector1] + 0.42[vector2] + 0.49[vector3]$$
+
+But the here problem is that in this representation we doesn't exactly know how much attention we are giving the each vector in a sequence
+
+Therefore in this case we normalize the output of dot product, so that their sum will be equal to 1
 
 Example:
-- sentence 1 bank = 0.7[vector1] + 0.1[vector2] + 0.2[vector3]
-    - here word bank is giving around 70% attention to vector1 i.e, money while generating embeddings
-    - therefore the model will know that we are talking about money bank
-- sentence 2 bank = 0.6[vector4] + 0.2[vector2] + 0.2[vector5]
-    - here word bank is giving around 60% attention to vector4 i.e, river while generating embeddings 
-    - Therefore the model will know that we are not talking about money bank, and that ots something else
+- a = 0.27
+- b = 0.42
+- c = 0.49
+
+$$a_{norm} = \frac{a}{a+b+c} = \frac{0.27}{1.18} \approx 0.23$$
+
+$$b_{norm} = \frac{b}{a+b+c} = \frac{0.42}{1.18} \approx 0.355$$
+
+$$c_{norm} = \frac{c}{a+b+c} = \frac{0.49}{1.18} \approx 0.415$$
+
+Therefore
+
+$$bank = 0.23[vector1] + 0.355[vector2] + 0.415[vector3]$$
+
+now you can see word bank gives:
+- 23% attention to vector 1
+- 35.5% attention to vector 2
+- 41.5% attention to vector3
+
+Sometimes we use softmax instead of regular normalization to normalize the dot products
+
+
+
+[Go To Top](#content)
+
+---
+# Properties of Self Attention
+there are two major properties that self attention mechanism show i.e, 
+1. parallel computation
+2. There is no parameter involve
+
+### 1. parallel computation
+- once we compute the embedding for all the words in the sequence we can apply self attention to all of them parallelly
+- this is because self attention is only depends on the embedding of the sequence to compute new vectors and is not depending on self attention vector of other words
+- example:
+    - embeddings:
+        - money = [vector1]
+        - bank = [vector2]
+        - grows = [vector3]
+    - now self attention can compute new vectors for each of those word parallelly as self attention vector of word bank is not depending on self attention vector of money or grows and same for other self attention vectors also
+
+we can do this using liner algebra:
+- money = [0.2, 0.5, 0.3]
+- bank = [0.5, 0.1, 0.4]
+- grows = [0.8, 0.5, 0.1]
+
+matrix of embeddings:
+
+$$
+\begin{bmatrix}
+money \ vector\\
+bank\ vector\\
+grows\ vector
+\end{bmatrix}
+=
+\begin{bmatrix}
+0.2 & 0.5 & 0.3\\
+0.5 & 0.1 & 0.4\\
+0.8 & 0.5 & 0.1
+\end{bmatrix}
+$$
+
+Transpose matrix
+
+$$
+\begin{bmatrix}
+0.2 & 0.5 & 0.8\\
+0.5 & 0.1 & 0.5\\
+0.3 & 0.4 & 0.1
+\end{bmatrix}
+$$
+
+dot product
+
+$$
+\begin{bmatrix}
+0.2 & 0.5 & 0.3\\
+0.5 & 0.1 & 0.4\\
+0.8 & 0.5 & 0.1
+\end{bmatrix}
+\begin{bmatrix}
+0.2 & 0.5 & 0.8\\
+0.5 & 0.1 & 0.5\\
+0.3 & 0.4 & 0.1
+\end{bmatrix}
+=
+\begin{bmatrix}
+0.38 & 0.27 & 0.44\\
+0.27 & 0.42 & 0.49\\
+0.44 & 0.49 & 0.90
+\end{bmatrix}
+$$
+
+Using normalization
+
+$$
+\begin{bmatrix}
+0.35 & 0.25 & 0.40\\
+0.23 & 0.36 & 0.42\\
+0.24 & 0.27 & 0.49
+\end{bmatrix}
+$$
+
+multiply this with embedding matrix:
+
+$$
+\begin{bmatrix}
+0.35 & 0.25 & 0.40\\
+0.23 & 0.36 & 0.42\\
+0.24 & 0.27 & 0.49
+\end{bmatrix}
+\begin{bmatrix}
+money \ vector\\
+bank\ vector\\
+grows\ vector
+\end{bmatrix}
+$$
+
+Therefore:
+
+$$
+\begin{bmatrix}
+0.35\ money\ vector + 0.25\ bank\ vector+ 0.40\ grows\ vector\\
+0.23\ money\ vector + 0.36\ bank\ vector+ 0.42\ grows\ vector\\
+0.24\ money\ vector + 0.27\ bank\ vector+ 0.49\ grows\ vector
+\end{bmatrix}
+$$
+
+from this we can see:
+- money = $0.35\ money\ vector + 0.25\ bank\ vector+ 0.40\ grows\ vector$
+- bank = $0.23\ money\ vector + 0.36\ bank\ vector+ 0.42\ grows\ vector$
+- grows = $0.24\ money\ vector + 0.27\ bank\ vector+ 0.49\ grows\ vector$
+
+### 2. There is no parameter involve
 
 
 [Go To Top](#content)
