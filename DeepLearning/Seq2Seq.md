@@ -7,6 +7,7 @@
     - [Bahdanau Attention](#bahdanau-attention)
     - [Luong Attention](#luong-attention) 
 6. [Self Attention](#self-attention)
+7. [Properties of Self Attention](#properties-of-self-attention)
 
 ---
 
@@ -531,10 +532,11 @@ d
 \end{bmatrix}
 \begin{bmatrix}
 e & f & g & h
-\end{bmatrix}
-=
+\end{bmatrix} =
 ae + bf + cg + dh
 $$
+
+
 
 > Its a scalar value, as dot product return a scalar (number)
 
@@ -581,8 +583,7 @@ $$
 \frac{7.39}{30.20},
 \frac{2.72}{30.20},
 \frac{20.09}{30.20}
-\right]
-=
+\right] =
 [0.245,\ 0.090,\ 0.665]
 $$
 
@@ -969,8 +970,7 @@ $$
 money \ vector\\
 bank\ vector\\
 grows\ vector
-\end{bmatrix}
-=
+\end{bmatrix} =
 \begin{bmatrix}
 0.2 & 0.5 & 0.3\\
 0.5 & 0.1 & 0.4\\
