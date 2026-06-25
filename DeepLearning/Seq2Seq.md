@@ -1099,6 +1099,8 @@ As a result, they often contain features that act as noise for a specific task.
 
 ---
 # Task Specific Embeddings in Self Attention
+> This is the actual self attention we used in todays date
+
 As we learn that normal self attention generate the general contextual embeddings which tries to capture overall meaning of the sentence, and not what your task cares about.
 
 To solve this problem we usually generate the task specific embeddings 
@@ -1227,7 +1229,37 @@ This is because there is no training involve in normal self attention, so our se
 
 Therefore we use 3 transformation vectors $W_q, W_k$ and $W_v$ that learn from the dataset and transform the embedding according to our dataset and the task needed
 
-> This is the actual self attention we used in todays date
+### Mathematical Representation
+
+$$Attention(Q,K,V) = Softmax\left( \frac{QK^T}{d_K}\right)V$$
+
+where:
+- $Q$ = quey vector
+- $K$ = key vector
+- $V$ = value vector
+- $d_K$ = dimension of key vector
+
+Also
+- $QK^T$ = dot product between query vector and key vector
+
+#### why $\frac{1}{d_K}$
+in dot product as number of dimension of a vector increases the variance also increases
+
+> high valance means values are far apart from each other, i.e, some values ae too big whereas some are too small
+
+because of high variance softmax convert big number into high probability (90%-95%) and small number into small probability (1%-5%)
+
+> softmax is just a function that takes a list of number as input and scale them such that their sum will be equal to 1 i.e, 100%
+
+because of this we face the vanishing gradient problem where  points with low probability barely update its value
+
+therefore to solve this vanishing gradient problem we somehow need to reduce the high variance of dot product
+
+And since the reason behind high variance is high number of dimension of a vector we divide the dot product with the number of dimension to scale the product down to lower the variance
+
+> if the list has high values its variance will be high and if it has small values its variance will be small
+
+
 
 [Go To Top](#content)
 
