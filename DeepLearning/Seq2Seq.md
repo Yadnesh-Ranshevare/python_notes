@@ -8,6 +8,7 @@
     - [Luong Attention](#luong-attention) 
 6. [Self Attention](#self-attention)
 7. [Properties of Self Attention](#properties-of-self-attention)
+8. [Task Specific Embeddings in Self Attention](#task-specific-embeddings-in-self-attention)
 
 ---
 
@@ -945,10 +946,10 @@ Sometimes we use softmax instead of regular normalization to normalize the dot p
 ---
 # Properties of Self Attention
 there are two major properties that self attention mechanism show i.e, 
-1. parallel computation
-2. There is no parameter involve
+1. Parallel computation
+2. General contextual embeddings
 
-### 1. parallel computation
+### 1. Parallel computation
 - once we compute the embedding for all the words in the sequence we can apply self attention to all of them parallelly
 - this is because self attention is only depends on the embedding of the sequence to compute new vectors and is not depending on self attention vector of other words
 - example:
@@ -1048,8 +1049,185 @@ from this we can see:
 - bank = $0.23\ money\ vector + 0.36\ bank\ vector+ 0.42\ grows\ vector$
 - grows = $0.24\ money\ vector + 0.27\ bank\ vector+ 0.49\ grows\ vector$
 
-### 2. There is no parameter involve
+### 2. General contextual embeddings
 
+In any Deep learning model there will always be few training parameters like weights and biases, but in self attention there is no such training parameter
+
+Since there is no learning parameter the model is not learning from our data and is dependent on current sequence (sentence)
+
+Therefore we can say that self attention mechanism is independent of your dataset, and can generate general contextual embeddings
+
+These embeddings capture the meaning of tokens in context but are not optimized for any specific task.
+
+Example:\
+`"The movie was amazing."`
+
+The embedding of "amazing" captures its contextual meaning, but it doesn't explicitly represent:
+
+- sentiment
+- spam probability
+- topic category
+- named entity type
+
+It is a general representation.
+
+#### Problem with general contextual embeddings
+A general embedding tries to capture overall meaning, not what your task cares about.
+
+Example:
+```
+"The movie was absolutely fantastic."
+```
+For sentiment analysis, the important information is that "fantastic" = positive sentiment.
+
+A general embedding also encodes:
+
+- grammar
+- topic
+- syntax
+- word relationships
+- sentence structure
+
+Much of that information may be irrelevant to sentiment classification.
+
+General embeddings are designed to work across many tasks.
+
+As a result, they often contain features that act as noise for a specific task.
+
+
+[Go To Top](#content)
+
+---
+# Task Specific Embeddings in Self Attention
+As we learn that normal self attention generate the general contextual embeddings which tries to capture overall meaning of the sentence, and not what your task cares about.
+
+To solve this problem we usually generate the task specific embeddings 
+
+### How normal self attention work
+normal self attention follows a simple flow:
+1. find the vector embeddings
+2. dot product between the embeddings to find similarity score
+3. normalize the similarity score
+3. multiply embedding with similarity score
+
+example:
+- sentence = `"money bank grows"`
+- embeddings:
+    - money = e1
+    - bank = e2
+    - grows = e3
+
+- now with self attention:\
+money = ae1 + be2 + ce3
+- you can see how we compute that in following image
+
+<img src="./Images/Self-attention.png" style="width:500px">
+
+now if you look closely we have use 3 vector to solve this self attention problem i.e, 
+- 2 vectors for dot product
+- 1 vector for final attention representation
+
+Now on the bases of how we have use those vector we can classify them into three types:
+
+### 1. Query Vector (Q)
+A Query represents:
+
+>"What information am I looking for?"
+
+When processing a token, its query is compared against every token's key.
+
+For example, in:
+
+>"money bank grows"
+
+Suppose we're computing attention for money.
+
+The query of money asks:
+
+>"Which words are relevant to me?"
+### 2. Key Vector (K)
+
+A Key represents:
+
+> "What kind of information do I contain?"
+
+Every token publishes a key.
+
+Examples:
+```
+money -> k₁
+bank  -> k₂
+grows -> k₃
+```
+### 3. Value Vector (V)
+Value represents:
+
+>"What information should I send if someone attends to me?"
+
+Once attention scores are computed, we don't use keys anymore.
+
+Instead we combine values.
+
+Suppose attention weights become:
+```
+money -> 0.1
+bank  -> 0.8
+grows -> 0.1
+```
+Then:
+
+money = 0.1 $V_{money}$ + 0.8 $V_{bank}$ + 0.1 $V_{grows}$
+
+### Example
+here is the example of word `money` in sentence `money bank grows`
+
+<img src="./Images/Self-attentio-with-vectors.png" style="width:500px">
+
+### How to divide a embedding into 3 vectors
+from the above example we can see that we need to somehow convert the one embedding vector into 3 vectors i.e, query vector, key vector and value vector 
+
+Therefore in order to transform our one embedding vector into 3 different vector we use liner transformation
+
+> A linear transformation takes an input vector and produces a new vector according to some rule (usually a matrix multiplication). The vector may be stretched, shrunk, rotated, reflected, or sheared.
+
+Hence we simple matrix multiplication we can transform our original embedding vector into 3 different vectors
+
+Example:
+- $e_{bank}$ =  embedding vector for word bank
+- $W_q$ = matrix for query transformation
+- $W_k$ = matrix for key transformation
+- $W_v$ = matrix for value transformation
+
+Therefore
+- $e_{bank} \times W_q = Q_{bank}$ -> query vector
+- $e_{bank} \times W_k = K_{bank}$ -> key vector
+- $e_{bank} \times W_v = V_{bank}$ -> value vector
+
+now since we have this 3 vectors we can use that self attention flow to generate the task specific embeddings
+
+<img src="./Images/task-specific-self-attention.png" style="width:700px">
+
+> Note: the parallel execution property of self attention is still true for this architecture
+
+### how to find the transformation matrix $W_q, W_k$ and $W_v$
+we doesn't have to decide what the matrix will be like as its done with the help of our data
+
+- we start with the random values for matrix
+- feed the data for training
+- predict the output
+- calculate the loss
+- update the matrix values using backpropagation
+- repeat until the loss is minimum
+
+### How this solve task specific problem
+normal self attention generate the general contextual embeddings which tries to capture overall meaning of the sentence, and not what your task cares about.
+
+
+This is because there is no training involve in normal self attention, so our self attention model doesn't learn anything from our data. Because of this whatever vector are being generated using self attention are general contextual embedding and are not task specific contextual embedding
+
+Therefore we use 3 transformation vectors $W_q, W_k$ and $W_v$ that learn from the dataset and transform the embedding according to our dataset and the task needed
+
+> This is the actual self attention we used in todays date
 
 [Go To Top](#content)
 
