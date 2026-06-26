@@ -9,6 +9,7 @@
 6. [Self Attention](#self-attention)
 7. [Properties of Self Attention](#properties-of-self-attention)
 8. [Task Specific Embeddings in Self Attention](#task-specific-embeddings-in-self-attention)
+9. [Multi Head Attention](#multi-head-attention)
 
 ---
 
@@ -1258,6 +1259,88 @@ therefore to solve this vanishing gradient problem we somehow need to reduce the
 And since the reason behind high variance is high number of dimension of a vector we divide the dot product with the number of dimension to scale the product down to lower the variance
 
 > if the list has high values its variance will be high and if it has small values its variance will be small
+
+
+
+[Go To Top](#content)
+
+---
+# Multi Head Attention
+Although self attention is good for capturing the contextual embedding of any word but they fails in cas of ambiguous sentence
+
+Example:
+- Sentence: `"The man saw the astronomer with a telescope"`
+- who has the telescope?
+    - does man use telescope to saw astronomer?
+    - Or there was a astronomer who has telescope with him and that man just happen to saw that astronomer along with that telescope
+- now as you can see since this sentence has multiple meaning, but our self attention can only be able to capture one one of them
+- so with self attention we can either capture:
+    - man with telescope
+    - Or astronomer with telescope
+- not both at the same time
+
+Now to solve this problem we use multi head attention
+
+### What is multi head attention
+as we see in above example if a sentence has multiple meaning self attention can only capture one of them at a time, Therefore to solve this problem we can use multiple self attention so that each self attention will capture different meaning. Hence we call it self multi head attention
+
+
+Example:
+- Sentence: `"The man saw the astronomer with a telescope"`
+- 1st self attention ->  man use telescope to saw astronomer
+- 2nd self attention -> astronomer with telescope
+
+as you can see with 2 self attention working together we can capture both of those meaning
+
+<img src="./Images/multi-head-attention.png" style="width:500px">
+
+### How to do that?
+in self attention to generate any embeddings we need three essential vectors
+- $Q$ = query vector
+- $K$ = key vector
+- $V$ = value vector
+
+and to compute this vectors we use matrix multiplication 
+- $W_k$ = matrix for key vector
+- $W_Q$ = matrix for query vector
+- $W_V$ = matrix for value vector
+
+this matrix is like a trainable parameter that train over the with the help of data
+
+Now for single self attention we need one set of that vector, by that logic for two self attention we need two sets
+
+Therefore we can say that for multi head attention we just need multiple set of $Q, V$ and $K$ vectors
+- $Q_1, K_1, V_1$ ->  1st self attention 
+- $Q_2, K_2, V_2$ ->  2nd self attention 
+- $Q_n, K_n, V_n$ ->  nth self attention 
+
+and to compute this vector we need multiple matrix
+- $W_k^1, W_V^1, W_Q^1$ -> key, value and quey matrix for 1st self attention
+- $W_k^2, W_V^2, W_Q^2$ -> key, value and quey matrix for 2nd self attention
+- $W_k^n, W_V^n, W_Q^n$ -> key, value and quey matrix for nth self attention
+
+Now for sentence with multiple meaning:
+- $W_k^1, W_V^1, W_Q^1$ -> $Q_1, K_1, V_1$ -> vector1 -> capture 1st meaning
+- $W_k^2, W_V^2, W_Q^2$ -> $Q_2, K_2, V_2$ -> vector2 -> capture 2nd meaning\
+and so on
+
+### how to combine multiple output vector
+now using multi head attention we may generate multiple contextual embedding so that they can capture multiple meanings, but in output we want single vector that can represent all that information
+
+and to do that we just concatenate those multiple contextual embedding into single vector and then apply liner liner transformation to merge them
+
+Example:
+- $W_k^1, W_V^1, W_Q^1$ -> $Q_1, K_1, V_1$ -> $[a, b, b]$
+- $W_k^2, W_V^2, W_Q^2$ -> $Q_2, K_2, V_2$ -> $[e, f, g]$
+
+- concatenate: $[q, b, c, e, f, g]$
+- liner transformation: $[q, b, c, e, f, g] \times W_0 = [h, i, j]$
+
+here 
+- $[h, i, j]$ is the final output of our multi head attention
+- $W_0$ is that matrix merger vectors, and is trainable just like $W_k, W_V, W_Q$
+
+<img src="./Images/multi-head-attention-2.png" style="width:700px">
 
 
 
