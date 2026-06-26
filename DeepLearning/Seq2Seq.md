@@ -1340,7 +1340,7 @@ here
 - $[h, i, j]$ is the final output of our multi head attention
 - $W_0$ is that matrix merger vectors, and is trainable just like $W_k, W_V, W_Q$
 
-<img src="./Images/multi-head-attention-2.png" style="width:700px">
+<img src="./Images/Multi-head-attention-2.png" style="width:700px">
 
 
 
