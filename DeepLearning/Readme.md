@@ -3,6 +3,7 @@
 2. [ANN (Artificial Neural Network)](./ANN.md)
 3. [RNN (Recurrent Neural Network)](./RNN.md)
 4. [Sequence to Sequence Models](./Seq2Seq.md)
+5. [Transformers](./Transformers.md)
 
 
 
