@@ -748,6 +748,147 @@ Without positional information, these sentences would look like the same collect
 
 Positional encoding solves this by giving every word information about where it appears in the sequence.
 
+### Simple solution
+The simplest solution for positional encoding could be count i.e, for each word embedding vector we just add a number at last position that describe the position of that that word in a sentence
+
+Example:
+- sentence: `"I like AI"`
+- now embeddings:
+    - I = [a, b, c]
+    - like = [e, f, g]
+    - AI = [h, i, j]
+- with positional encoding:
+    - I = [a, b, c, 1]
+    - like = [e, f, g, 2]
+    - AI = [h, i, j, 3]
+
+As you can see in positional encoding at last position we have count that represent at what position the number lies in the sequence
+
+### Problem with this solution
+The problem with this approach os that out count function is:
+1. unbound
+2. discrete
+3. Unable to capture relative positioning
+#### 1. Unbounded solution:
+- this approach has no maximum limit of the count
+- if there is a sentence with 1000's of words the count goes from 1 to 1000
+- this makes the training unstable (backpropagation usually need normalized data)
+
+**What if we normalized the count?**
+- by saying normalized the count we mean that to keep the count between 0 to 1
+- and to do that we simply divide each count by total number of words
+- Example:
+    - Sentence: `"I like AI"`
+    - total number of words = 3
+    - with positional encoding:
+        - I = [a, b, c, 1/3] = [a, b, c, 0.33] 
+        - like = [e, f, g, 2/3] = [e, f, g, 0.66] 
+        - AI = [h, i, j, 3/3]  = [h, i, j, 1] 
+    - but the problem with this normalized count approach is that if sentence length change then positional encoding for a position will also change
+    - that makes model confuse which number represent the true position
+    - example:
+        - sentence1 = `"Thank you"`
+        - sentence2 = `"nice to meet you"`
+        - nor according to normalized count position encoding:
+            - 2nd word in sentence1 = you = [. . . , 2/2 ] = [. . . , 1 ]
+            - 2nd word in sentence2 = to = [. . . , 2/4 ] = [. . . , 0.5 ]
+        - now our model get confuse:
+            - is 1 represent the position 2?
+            - or 0.5 represent the position 2?
+#### 2. Discrete Numbers:
+- the count is discrete variable and not a continuos one
+- and neural network does not work well with discrete values, they generally required continuous data
+
+#### 3. Unable to capture relative positioning
+- relative positioning the position of the word with respect to other word
+- example:
+    - Sentence: `"I like AI"`
+    - absolute position:
+        - I = 1
+        - like = 2
+        - AI = 3
+    - relative distance from `I` to `AI` = 2
+- this happen because the count is discrete variable and model does not have data between two values, 
+- model has data for position 2 and 3 but none for values between 2 and 3, so model does not know how much they are far apart
+
+### Using sin(x) instead of count
+as we know the problem with count function is that count function is unbounded, discrete  and unable to capture relative positioning
+
+Therefore we use sing(x) function as sin(x) is bounded and continuous
+
+Example:
+
+<img src="./Images/sin-wave.jpg" style="width:500px">
+
+as you can the sin wave is bounded between 1 to -1, and has continuous values
+
+Therefore, for sentence `"I like AI"`
+- I = sin(1) = 0.65 -> [. . . , 0.65]
+- like = sin(2) = 0.85 -> [. . . , 0.85]
+- I = sin(3) = 0.2 -> [. . . , 0.2]
+
+### Problem with thi approach
+as each word must have unique position in a sentence  i.e, no two word can be at same position in a same sentence. Their positional encoding must be unique
+
+but the problem is that sin curve is periodic i.e, pattern repeat itself therefore, for multiple X input we can have same output for sin(x)
+
+now if the sentence is too long then that increases the probability of having similar positional encoding for few words in that sentence
+
+because of which we might have same positional encoding to multiple words and model will think that those words are on the same position in a sentence
+
+### Multiple trigonometric  function
+
+the problem with single sin(X) function is that the sin curve repeat its pattern after some time, because of which we might have same positional encoding to multiple words in a same sequence
+
+now instead sin(X) alone if we use sin(X) and Cos(X) function together we reduce the probability of same encoding
+
+<img src="./Images/sin-cos-wave.png" style="width:700px">
+
+now for each word we use both waves to calculate the positional encoding
+
+Example:
+- sentence `"I like AI"`
+- for I -> X = 1 
+    - sin(1) = 0.65
+    - cos(1) = 0.5
+- for like -> X = 2 
+    - sin(2) = 0.85
+    - cos(2) = -0.4
+- for AI -> X = 3
+    - sin(3) = 0.2
+    - cos(3) = 0.1
+- therefore:
+    - I = [. . . , 0.65, 0.5]
+    - like = [. . . , 0.85, -0.4]
+    - AI = [. . . , 0.2, 0.1]
+
+Note: this approach does not provide 100% unique values, although the chances of having duplicate outputs is low but not 0% as pattern may repeat 
+
+now to reduce to reduce the chances of duplicate outputs we can add more trigonometric functions like:
+- first pair = sin(x) , cons(x)
+- second pair = sin(x/2), cos(x/2)
+- third pair = sin(x/3), cos(x/)\
+... and so on
+
+
+
+<img src="./Images/trigno-function.png" style="width:700px">
+
+now here we have even less chances of repeating sequence and getting duplicate outputs
+
+> size of positional vector will be equal to Number of trigonometric function used
+
+Example with 4 trigonometric functions sin(x), cos(x), sin(x/2) & cos(x/2):
+- sentence `"I like AI"`
+- for I -> x = 1
+    - sin(1) = 0.65
+    - cos(1) = 0.5
+    - sin(1/2) = 0.25
+    - cos(1/2) = 0.9
+- therefore positional vector of I = [0.65, 0.5, 0.25, 0.9] -> 4 function = 4 dimensions
+- now I = [. . . , 0.65, 0.5, 0.25, 0.9]
+
+
 [Go To Top](#content)
 
 ---
