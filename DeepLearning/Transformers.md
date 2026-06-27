@@ -885,8 +885,102 @@ Example with 4 trigonometric functions sin(x), cos(x), sin(x/2) & cos(x/2):
     - cos(1) = 0.5
     - sin(1/2) = 0.25
     - cos(1/2) = 0.9
-- therefore positional vector of I = [0.65, 0.5, 0.25, 0.9] -> 4 function = 4 dimensions
+- therefore positional encoding of I = [0.65, 0.5, 0.25, 0.9] -> 4 function = 4 dimensions
 - now I = [. . . , 0.65, 0.5, 0.25, 0.9]
+
+### Problem with concatenation and why to use addition
+Up til now we have learn that once we find the position vector we can simple concatenate it to our main embedding vector so that our embedding vector will have information about positions of each word in a given sentence 
+
+example:
+- embedding vector = [a, b, c]
+- position vector = [e, f, g]
+- final vector = [a, b, c, e, f, g]
+
+But the problem with this approach is that it increases the number of dimension of our final embedding vector,  because of which the computational cost increases
+
+> we pass this final embedding vector into self attention model and as we know self attention uses matrix multiplication, and as number of dimension increases cost for multiplying those matrix also increases
+
+therefore to solve this problem we simply perform vector addition to prevent the dimension increase because of concatenation
+
+example:
+- embedding vector = [a, b, c]
+- position vector = [e, f, g]
+- final vector = [a+e, b+f, c+g]
+
+now as you can see our final matrix contains the positional information without increasing its dimension
+
+**Note: for this approach to work make sure that embedding vector and positional vector has same size**
+
+### Mathematically
+
+$$PE_{(pos, 2i)} = sin(pos/1000^{2i/d_m})$$
+
+$$PE_{(pos, 2i+1)} = cos(pos/1000^{2i/d_m})$$
+
+Where
+- pos = position of word in sentence (start from 0)
+- $d_m$ = dimension of embeddings 
+- $i$ = value between $0$ to $d_m/2$
+
+#### Example:
+consider a sentence: `"river bank"`
+
+now will be finding the positional embedding for word `"bank"`
+
+therefore:
+- pos = 1
+- $d_m$ = 6
+- $i$ = 0 to 3
+
+for $i=0$
+
+$$PE_{(1,0)} = sin(1/1000^{0}) = 0.84$$
+
+$$PE_{(1,1)} = cos(1/1000^{0}) = 0.54$$
+
+for $i=1$
+
+$$PE_{(1,2)} = sin(1/1000^{1/3}) = 0.04$$
+
+$$PE_{(1,3)} = cos(1/1000^{1/3}) = 0.99$$
+
+for $i=2$
+
+$$PE_{(1,4)} = sin(1/1000^{2/3}) = 0.00$$
+
+$$PE_{(1,5)} = cos(1/1000^{2/3}) = 0.99$$
+
+now positional encoding for `bank` will be:
+
+$$bank = [0.84, 0.54, 0.04, 0.99, 0.00, 0.99]$$
+
+>Note:
+>- according to the paper [attention is all you need](https://arxiv.org/pdf/1706.03762) we generally compute positional encoding in pair of sin and cos function
+>- therefore in final embedding we have dimensions in multiples of 2, i.e, one for sin function and another one for cos function  
+
+### How this help in relative positioning
+- relative positioning the position of the word with respect to other word
+- example:
+    - Sentence: `"I like AI"`
+    - absolute position:
+        - I = 1
+        - like = 2
+        - AI = 3
+    - relative distance from `I` to `AI` = 2
+
+with this positional embedding approach we can use liner transformation i.e, matrix multiplication to jump from one vector to any other vector
+
+example:
+- $V_{10}$ -> liner transformation -> output = $V_{20}$
+
+as you can see with liner transformation we go to next 10th words from current word
+
+this distance is also known as delta, i.e,
+
+for delta = 5
+- $V_{10}$ -> liner transformation -> output = $V_{15}$
+
+therefore in this approach for each delta i.e, distance we have a liner transformation, through which we can understand the relative positioning of any word
 
 
 [Go To Top](#content)
