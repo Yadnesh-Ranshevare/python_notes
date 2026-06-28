@@ -973,7 +973,7 @@ with this positional embedding approach we can use liner transformation i.e, mat
 example:
 - $V_{10}$ -> liner transformation -> output = $V_{20}$
 
-as you can see with liner transformation we go to next 10th words from current word
+as you can see with liner transformation we go to next 10th  words from current word
 
 this distance is also known as delta, i.e,
 
@@ -981,6 +981,92 @@ for delta = 5
 - $V_{10}$ -> liner transformation -> output = $V_{15}$
 
 therefore in this approach for each delta i.e, distance we have a liner transformation, through which we can understand the relative positioning of any word
+
+
+[Go To Top](#content)
+
+---
+# Layer Normalization
+> To understand Layer normalization you first need to understand [Normalization](./ANN.md#normalization) and [Batch Normalization](./ANN.md#batch-normalization)
+
+Normalization is the process of changing data to a common scale or standard so it can be compared, analyzed, or stored more effectively. The exact meaning depends on the context.
+
+> to understand more about normalization why to use it please check out [Normalization](./ANN.md#normalization) from ./ANN.md
+
+### Why didn't use batch norm in transformers?
+
+> To understand about batch norm and why to use it please checkout of [Batch Normalization](./ANN.md#batch-normalization) from ANN.md
+
+The problem with batch norm it that is doesn't work well with the self attention model or sequential data
+
+#### 1. BatchNorm depends on other examples in the batch
+
+- BatchNorm computes means across the batch so the output for one sample depends on all the other samples in the mini-batch.
+- Self-attention, however, is designed so that each sequence can be processed independently.
+- If you use batch norm is self attention the representation of sentence A changes depending on what other sentences are in the batch.
+
+Example:
+- Suppose your batch contains:
+    - "I love cats."
+    - "Quantum mechanics is fascinating."
+- The normalization statistics are computed using both sequences together, even though they're unrelated.
+
+#### 2. Variable-length sequences
+Transformers process sequences of different lengths.
+
+Example:
+
+- Sentence 1: 8 tokens
+- Sentence 2: 100 tokens
+- Sentence 3: 25 tokens
+
+To batch them, you need to perform the zer padding over the shorter sequences.
+
+### what is layer normalization?
+Layer Normalization (LayerNorm) is a normalization technique that normalizes the features of a single data point 
+
+In Transformers, LayerNorm is applied independently to each token.
+
+#### Example:
+
+<img src="./Images/Layer-norm.png" style="width:700px">
+
+here input vector i.e, self attention embedding of a single word is of 2 dimension
+```
+embedding = [f1 f2]
+```
+
+where as z1, z2 and z3 are the activation of three nodes present in the hidden state
+
+for first word input vector: [2 3]
+
+activation from hidden layer = [7 5 4]
+
+- now use following formula to get normalized value:
+
+$$x_{norm} = \frac{x - \mu}{\sigma}$$
+
+where:
+- $\mu$ = average
+- $\sigma$ = standard deviation
+
+
+Therefore normalized output vectors can be
+```
+normalized activation = [1.336, -0.267, -1.069]
+```
+
+### Scale and Shift
+in most of the cases some of the nodes does't want the normalized input in that case we want the flexibility so that our model can decide whether to apply normalization or not
+
+to do that we simply update our output as follow:
+
+$$x_{final} = \lambda x_{norm} + \beta$$
+
+where:
+- $\lambda$ and $\beta$ both are trainable parameter
+
+> to learn more about it please learn [Batch norma](./ANN.md#batch-normalization)
 
 
 [Go To Top](#content)
