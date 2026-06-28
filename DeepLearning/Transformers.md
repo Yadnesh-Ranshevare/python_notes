@@ -1,13 +1,65 @@
 
 # Content
-
-1. Self Attention
+1. [introduction](#introduction)
+2. Self Attention
     -  [Self Attention](#self-attention)
     -  [Properties of Self Attention](#properties-of-self-attention)
     -  [Task Specific Embeddings in Self Attention](#task-specific-embeddings-in-self-attention)
-2. [Multi Head Attention](#multi-head-attention)
-3. [Positional Encoding](#positional-encoding)
+3. [Multi Head Attention](#multi-head-attention)
+4. [Positional Encoding](#positional-encoding)
+5. [Layer Normalization](#layer-normalization)
+6. [Encoder](#encoder)
+
+
 ---
+# Introduction
+A transformer is a deep learning architecture designed to understand relationships between pieces of data (usually words or tokens) using a mechanism called self-attention. It is the foundation of modern large language models like ChatGPT.
+
+
+
+### Why were transformers invented?
+
+Before transformers, models like RNNs and LSTMs processed text one word at a time.
+
+For example:
+
+> "The cat, which was sitting on the roof, jumped."
+
+When the model reaches "jumped", it has to remember that the subject is "cat", even though many words came in between. RNNs often struggled with long-range dependencies and were slow because they processed words sequentially.
+
+Transformers solve this by processing all words simultaneously and letting every word "look at" every other relevant word.
+
+### Components of Transformers
+
+<img src="./Images/transformers.webp" style="width:300px">
+
+1. **Self-Attention:**\
+it is a mechanism that determines how much "attention" different words or tokens in a sequence should pay to each other
+
+2. **Multi-Head Attention:**\
+Instead of one attention mechanism, the model uses several in parallel.
+
+3. **Positional Encoding:**\
+information about word with respect to its position in sequence
+
+4. **Layer Normalization:**\
+These help stabilize training and allow very deep transformer models.
+
+### Transformers are same as encoder decoder
+
+<img src="./Images/transformers-encoder-decoder.png" style="width:500px">
+
+- encoder = encode the input sequence
+- decoder = decodes the encoded input and generate output
+
+> to learn more about this check ot [sequence to sequence model](./Seq2Seq.md)
+
+
+
+[Go To Top](#content)
+
+---
+
 # Self Attention
 
 NLP (Natural Language Processing) is a field of computer science and AI focused on enabling computers to understand, interpret, generate, and interact with human language like human text.
@@ -1067,6 +1119,34 @@ where:
 - $\lambda$ and $\beta$ both are trainable parameter
 
 > to learn more about it please learn [Batch norma](./ANN.md#batch-normalization)
+
+
+[Go To Top](#content)
+
+---
+# Encoder 
+
+An encoder is the part of a transformer that reads the input and converts it into a meaningful numerical representation that the rest of the model can use.
+
+<img src="./Images/transformers-encoder-decoder.png" style="width:500px">
+
+Here, Nx represent that there can be multiple encoder decoder block i.e, for Nx = 6
+
+<img src="./Images/Nx-transformer.png" style="width:500px">
+
+As you can see that there are six encoder and decoder block as Nx is 6
+
+Also:
+- all of the encoder blocks are identical to each other
+- all of the decoder blocks are identical to each other
+
+### encoder Block
+if you look at the single encoder block you'll be seeing two things i.e, 
+1. feed forward neural network (ANN)
+2. self attention
+
+<img src="./Images/encoder-block-digram.png" style="width:500px">
+
 
 
 [Go To Top](#content)
