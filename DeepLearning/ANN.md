@@ -2019,7 +2019,7 @@ $$Z_n = \frac{Z - \mu}{\sigma + E}$$
 - $E$ = error term to prevent zero in denominator
 
 ### Scale and Shift
-in most od the cases some of the nodes does't what the normalized input in that case we want the flexibility so that our model can decide whether to apply normalization or not
+in most of the cases some of the nodes does't want the normalized input in that case we want the flexibility so that our model can decide whether to apply normalization or not
 
 to do that we simply update our output as follow:
 
