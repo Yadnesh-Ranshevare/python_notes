@@ -1137,8 +1137,27 @@ Here, Nx represent that there can be multiple encoder decoder block i.e, for Nx 
 As you can see that there are six encoder and decoder block as Nx is 6
 
 Also:
-- all of the encoder blocks are identical to each other
-- all of the decoder blocks are identical to each other
+- all of the encoder blocks are identical to each other in terms of their architecture
+- all of the decoder blocks are identical to each other in terms of their architecture
+
+The similarity between the encoder/decoder blocks is only limited to  their architecture because of in terms of parameter (weight and biases) they are different
+
+### what type of input does encoder block gets?
+before we provide any sentence as an input to encoder we need to perform certain operations so that encoder can process them
+
+those operations are:
+- **Tokenization**: divide sentence into token
+- **Embedding**: generate embedding for each token
+- **Position encoding**: perform position encoding on each vector
+
+<img src="./Images/Input-to-encoder.png" style="width:400px">
+
+here:
+- E1, E2, E3 are the embeddings for word How, are, you respectively
+- P1, P2, P3 are the position encoding for each word
+- X1, X2, X3 are the final position encoded embedding vectors, use as input in encoder
+
+
 
 ### encoder Block
 if you look at the single encoder block you'll be seeing two things i.e, 
@@ -1148,6 +1167,16 @@ if you look at the single encoder block you'll be seeing two things i.e,
 <img src="./Images/encoder-block-digram.png" style="width:500px">
 
 
+### Self attention Module
+
+<img src="./Images/Self-attention-module-of-encoder.png" style="width:400px">
+
+### Feed Forward Neural Network Module
+output of self attention module is use as input here
+
+<img src="./Images/Feed-forward-module-of-encoder.png" style="width:400px">
+
+now the output can pass to next encoder block in line or to the decoder
 
 [Go To Top](#content)
 
