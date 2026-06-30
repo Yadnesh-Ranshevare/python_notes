@@ -9,6 +9,7 @@
 4. [Positional Encoding](#positional-encoding)
 5. [Layer Normalization](#layer-normalization)
 6. [Encoder](#encoder)
+7. [Masked self attention](#masked-self-attention)
 
 
 ---
@@ -1177,6 +1178,51 @@ output of self attention module is use as input here
 <img src="./Images/Feed-forward-module-of-encoder.png" style="width:400px">
 
 now the output can pass to next encoder block in line or to the decoder
+
+[Go To Top](#content)
+
+---
+# Masked self attention
+Transformer decoder is autoregressive at the time of inference and non-autoregressive at training time
+
+Autoregressive: 
+- model that generate the new datapoint in a sequence by using previously generated points
+- example:\
+in encoder decoder model uses each previous state to compute current state
+
+
+### Short example:
+Dataset:
+english | hindi |
+--- | ---
+how are you | आप कैसे हैं?
+
+during inference our model predict each word one after another, where current word is predicted by using previous word:
+
+<img src="./Images/Decoder-inference.png" style="width:400px">
+
+here:
+- input = "how are you"
+- output = "आप अच्छे हैं"
+
+as you can see we have predicted one word wrong i.e, "अच्छे" but we still pass it as input for next prediction
+
+but during the training instead of previously generated word we use actual word from dataset
+
+
+
+<img src="./Images/Decoder-training.png" style="width:400px">
+
+as you can even though we predicted one wrong word i.e, "अच्छे" we pass the correct one i.e,  "कैसे" from dataset
+
+### Why autoregressive
+
+now as you can see from above example that at the time of inference our model is completely depend on previous sate to generate the current word
+
+Whereas in training time the model get fresh and correct input from dataset, i.e, it is not depended on previous sate fof generating output at the time of training
+
+because of which we can train each decoder timestamp individually in parallel to increases the training speed, therefore decoder of transformer is non-autoregressive at the time of training
+
 
 [Go To Top](#content)
 
