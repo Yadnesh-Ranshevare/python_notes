@@ -11,6 +11,8 @@
 6. [Encoder](#encoder)
 7. [Masked self attention](#masked-self-attention)
 8. [Cross Attention](#cross-attention)
+9. [Decoder](#decoder)
+    - [Decoder at training - non Autoregressive](#decoder-at-training---non-autoregressive)
 
 
 ---
@@ -1443,6 +1445,69 @@ here
 - smaller the circle smaller the attention score between words
 
 
+
+[Go To Top](#content)
+
+---
+# Decoder
+
+In a Transformer, the decoder is the part of the model that generates the output sequence one token at a time, using both the previously generated tokens and information from the encoder (if an encoder exists).
+
+Imagine you're translating a sentence:
+
+- Encoder: Reads the entire English sentence and understands its meaning.
+- Decoder: Writes the hindi translation, one word at a time.
+
+For example:
+- Input (Encoder):
+    ```
+    we are friend
+    ```
+- Decoder output:
+    ```
+    <start> → हम → दोस्त → हैं → <end>
+    ```
+
+Each new word is generated based on:
+
+1. The words it has already generated.
+2. The encoder's understanding of the input sentence.
+
+<img src="./Images/transformers-encoder-decoder.png" style="width:500px">
+
+Here, Nx represent that there can be multiple encoder decoder block i.e, for Nx = 6
+
+<img src="./Images/Nx-transformer.png" style="width:500px">
+
+As you can see that there are six encoder and decoder block as Nx is 6
+
+Also:
+- all of the encoder blocks are identical to each other in terms of their architecture
+- all of the decoder blocks are identical to each other in terms of their architecture
+
+The similarity between the encoder/decoder blocks is only limited to  their architecture because of in terms of parameter (weight and biases) they are different
+
+### Components of decoder
+
+if you look at single decoder block it only consist of 3 things i.e,
+1. masked self attention 
+2. cross attention
+3. feed forward network
+
+<img src="./Images/decoder-components.png" style="width:500px">
+
+### Dual behavior of decoder
+
+as in [masked attention](#masked-self-attention) we have learn that decoder behaves like non-autoregressive at the time of training and autoregressive at the time of inference
+
+because of this dual behavior we have to look at decoder in two different perspective i.e,
+- [Decoder at training - non autoregressive](#decoder-at-training---non-autoregressive)
+- decoder at inference
+
+[Go To Top](#content)
+
+---
+# Decoder at training - non Autoregressive
 
 [Go To Top](#content)
 
