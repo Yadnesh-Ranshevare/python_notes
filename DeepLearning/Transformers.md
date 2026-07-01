@@ -10,6 +10,7 @@
 5. [Layer Normalization](#layer-normalization)
 6. [Encoder](#encoder)
 7. [Masked self attention](#masked-self-attention)
+8. [Cross Attention](#cross-attention)
 
 
 ---
@@ -1321,6 +1322,125 @@ $$
 0 & 0  & 0
 \end{bmatrix}
 $$
+
+
+
+[Go To Top](#content)
+
+---
+# Cross Attention
+Cross-attention is a mechanism in transformers where one sequence give attention to another sequence.
+
+- Self-attention: "Look at my own sequence to understand myself."
+- Cross-attention: "Look at a different sequence to gather information."
+
+### Self-Attention vs Cross-Attention
+Suppose you are translating English to hindi.
+
+Input (Encoder):
+```
+we are friends
+```
+Output being generated (Decoder):
+```
+हम ....
+```
+
+#### Self-Attention (Decoder)
+
+When generating the next hindi word, the decoder first looks at the words it has already generated:
+```
+हम → दोस्त 
+```
+It asks:\
+Which previous hindi words are important?
+
+> Self attention only gets the current output (hindi) sequence as input 
+
+#### Cross-Attention
+
+Now the decoder also needs information from the English sentence.
+
+While generating `"दोस्त"`, it asks "which English word should I focus on?"
+
+> Cross attention gets both current output (hindi) and input (english) sequence as input
+
+<img src="./Images/self-vs-cross-attention.png" style="width:500px">
+
+### How cross attention works
+The only way cross attention is different from self attention how they calculate the Query, Key and Value vector
+
+
+#### in self attention
+```
+                   ┌──> query vector 
+output embedding ──┼──> key vector 
+                   └──> value vector 
+```
+#### in cross attention
+
+```
+output embedding ────> query vector  
+
+input embedding ──┬──> key vector 
+                  └──> value vector 
+```
+
+now once we find this Query, Key and Value vector rest of the calculation is exact same as that of self attention
+
+### Why to use cross attention
+Cross-attention is used because self-attention alone cannot connect information from two different sources.
+
+Suppose you're translating: `we are friends`
+
+The decoder is generating hindi: `हम`
+
+If the decoder only uses self-attention, it can only see `हम` It has no idea what the English sentence was.
+
+Therefore to solve this problem in cross attention decoder generates a query based on what it has produced so far i.e, output sequence
+
+Then it asks the encoder:\
+"Which part of the English sentence is relevant right now?"
+
+and to do that decoder uses dot product with key vector of input sequence
+
+<img src="./Images/cross-attention.png" style="width:500px">
+
+in above image:
+- bigger the dot stronger the relation between word
+- smaller the dot lesser the relation between word
+
+### Output of self attention vs coss attention
+
+in both attention the final output vector is like:
+
+$CE_{we} = a \times E_{we} + b \times E_{are} + c \times E_{friend}$
+
+where:
+- a = attention score between word we and we (attention of word we with itself)
+- b = attention score between word we and are 
+- c = attention score between word we and friends
+
+Now,
+
+in self attention the output vector is usually look something like:
+- $CE_{we} = 0.6 \times E_{we} + 0.1 \times E_{are} + 0.3 \times E_{friends} $
+- $CE_{are} = 0.2 \times E_{we} + 0.5 \times E_{are} + 0.3 \times E_{friends} $
+- $CE_{friends} = 0.4 \times E_{we} + 0.1 \times E_{are} + 0.5 \times E_{friends} $
+
+in cross attention output vector looks like:
+- $CE_{हम } = 0.5 \times E_{we} + 0.2 \times E_{are} + 0.3 \times E_{friends} $
+- $CE_{दोस्त } = 0.1 \times E_{we} + 0.2 \times E_{are} + 0.7 \times E_{friends} $
+- $CE_{हैं} = 0.3 \times E_{we} + 0.4 \times E_{are} + 0.3 \times E_{friends} $
+
+
+understand it visually
+
+<img src="./Images/Self-vs-cross-attention-output.png" style="width:500px">
+
+here
+- large the circle higher the attention score between words
+- smaller the circle smaller the attention score between words
 
 
 
